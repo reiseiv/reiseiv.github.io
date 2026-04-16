@@ -4,16 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rei Academy</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-color: #06070d;
             --text-color: #ececf1;
             --secondary-text: #8b8e9f;
+            --heading-color: var(--text-color);
             --card-bg: rgba(255, 255, 255, 0.02);
             --nav-bg: rgba(6, 7, 13, 0.75);
             --border-color: rgba(255, 255, 255, 0.06);
             --chart-bg: #090a10;
+
+            --radius-lg: 18px;
+            --radius-md: 14px;
+            --radius-sm: 10px;
+            --ring: 0 0 0 3px rgba(0, 230, 118, 0.18);
+            --shadow-sm: 0 8px 24px rgba(0,0,0,0.06);
+            --shadow-md: 0 12px 36px rgba(0,0,0,0.10);
             
             --up-color: #00e676;
             --down-color: #c084fc;
@@ -26,6 +33,10 @@
             --vwap-line: #f59e0b;
             --red-accent: #ff3b30;
             --amt-box: rgba(192, 132, 252, 0.12);
+            --tip-bg: rgba(0, 230, 118, 0.05);
+            --tip-border: rgba(0, 230, 118, 0.2);
+            --gradient-text: linear-gradient(135deg, #ffffff 0%, #a1a1aa 100%);
+            --btn-gradient: linear-gradient(135deg, #00e676, #00b359);
         }
 
         body.light-theme {
@@ -46,127 +57,357 @@
             --vp-poc: rgba(0, 122, 255, 0.5);
             
             --vwap-line: #007aff;
-            --red-accent: #ff3b30;
             --amt-box: rgba(0, 122, 255, 0.1);
+            --tip-bg: rgba(52, 199, 89, 0.08);
+            --tip-border: rgba(52, 199, 89, 0.3);
+            --gradient-text: linear-gradient(135deg, #1d1d1f 0%, #6e6e73 100%);
+            --btn-gradient: linear-gradient(135deg, #34c759, #28a745);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-color); line-height: 1.6; overflow-x: hidden; transition: background-color 0.3s ease, color 0.3s ease; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.65;
+            overflow-x: hidden;
+            transition: background-color 0.25s ease, color 0.25s ease;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: -220px;
+            z-index: 0;
+            pointer-events: none;
+            background:
+                radial-gradient(900px circle at 15% 10%, rgba(0, 230, 118, 0.14) 0%, transparent 60%),
+                radial-gradient(700px circle at 80% 20%, rgba(192, 132, 252, 0.12) 0%, transparent 58%),
+                radial-gradient(900px circle at 50% 85%, rgba(245, 158, 11, 0.07) 0%, transparent 65%);
+            filter: blur(60px);
+            opacity: 0.9;
+            transform: translateZ(0);
+        }
+        body.light-theme::before {
+            background:
+                radial-gradient(900px circle at 15% 10%, rgba(52, 199, 89, 0.10) 0%, transparent 60%),
+                radial-gradient(700px circle at 80% 20%, rgba(0, 122, 255, 0.09) 0%, transparent 58%),
+                radial-gradient(900px circle at 50% 85%, rgba(245, 158, 11, 0.05) 0%, transparent 65%);
+            opacity: 0.85;
+            filter: blur(55px);
+        }
+        a { color: inherit; }
+        button { font: inherit; }
+
+        :focus-visible {
+            outline: 2px solid var(--up-color);
+            outline-offset: 2px;
+        }
 
         ::-webkit-scrollbar { height: 6px; width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: rgba(192, 132, 252, 0.2); border-radius: 6px; }
         ::-webkit-scrollbar-thumb:hover { background: rgba(192, 132, 252, 0.5); }
 
-        nav { position: fixed; top: 0; width: 100%; padding: 12px 32px; background: var(--nav-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--border-color); z-index: 100; display: flex; justify-content: space-between; align-items: center; transition: background 0.3s ease; }
-        .nav-logo { font-weight: 800; font-size: 1.25rem; cursor: pointer; letter-spacing: -0.5px; display: flex; align-items: center; gap: 12px; }
-        .logo-img { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border-color); box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 12px 28px;
+            background: var(--nav-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.25s ease;
+        }
+        .nav-left { display: flex; align-items: center; gap: 20px; }
+        .nav-logo { font-weight: 700; font-size: 1.25rem; cursor: pointer; letter-spacing: -0.5px; display: flex; align-items: center; gap: 12px; color: var(--text-color); }
+        .logo-img { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border-color); box-shadow: none; }
         
         .nav-right { display: flex; align-items: center; gap: 24px; }
         .made-with { font-size: 0.8rem; color: var(--secondary-text); font-weight: 500; letter-spacing: 0.2px; }
-        .theme-toggle { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); padding: 8px 16px; border-radius: 30px; cursor: pointer; font-weight: 600; font-size: 0.8rem; transition: all 0.2s ease; backdrop-filter: blur(10px); }
-        .theme-toggle:hover { transform: scale(1.05); border-color: var(--secondary-text); }
+        
+        .session-container { display: flex; gap: 12px; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .session-item { display: flex; align-items: center; gap: 6px; background: var(--card-bg); padding: 4px 10px; border-radius: 999px; border: 1px solid var(--border-color); backdrop-filter: blur(8px); }
+        .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--secondary-text); transition: 0.3s; }
+        .dot.active { background: var(--up-color); box-shadow: none; }
 
-        .container { max-width: 1000px; margin: 100px auto 60px auto; padding: 0 24px; }
-        .breadcrumbs { font-size: 0.85rem; margin-bottom: 30px; color: var(--secondary-text); font-weight: 500; display: flex; gap: 8px; align-items: center; }
+        .theme-toggle { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); padding: 8px 16px; border-radius: 999px; cursor: pointer; font-weight: 500; font-size: 0.8rem; transition: border-color 0.15s ease, transform 0.15s ease, background 0.15s ease; backdrop-filter: blur(8px); }
+        .theme-toggle:hover { transform: translateY(-1px); border-color: var(--up-color); }
+
+        .container { max-width: 1000px; margin: 96px auto 56px auto; padding: 0 24px; position: relative; z-index: 1; }
+        .breadcrumbs { font-size: 0.85rem; margin-bottom: 30px; color: var(--secondary-text); font-weight: 500; display: flex; gap: 8px; align-items: center; letter-spacing: 0.2px; }
         .breadcrumbs span { cursor: pointer; color: var(--up-color); transition: 0.2s; font-weight: 600; }
         .breadcrumbs span:hover { filter: brightness(1.2); }
 
         .view { display: none; }
-        .view.active { display: block; animation: smoothFade 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
-        @keyframes smoothFade { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+        .view.active { display: block; animation: smoothFade 0.25s ease-out; }
+        @keyframes smoothFade { from { opacity: 0; } to { opacity: 1; } }
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 20px; }
-        .folder-card { background: var(--card-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-radius: 16px; padding: 24px; cursor: pointer; border: 1px solid var(--border-color); display: flex; align-items: flex-start; gap: 18px; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 4px 24px rgba(0,0,0,0.1); }
-        .folder-card:hover { border-color: var(--up-color); transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0, 230, 118, 0.08); background: rgba(255,255,255,0.04); }
-        .folder-num { font-size: 1.2rem; font-weight: 800; color: var(--secondary-text); background: var(--border-color); width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 10px; transition: 0.3s; flex-shrink: 0; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 18px; }
+        
+        /* Adjusted grid spacing specifically for view-home to look clean and centered */
+        #view-home .grid { gap: 24px; margin-top: 40px; }
+        #view-home .folder-card { padding: 28px 24px; }
+        #view-home .community-wrapper { margin-top: 80px; }
+
+        .folder-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            transition: border-color 0.18s ease, transform 0.18s ease, background 0.18s ease;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
+        }
+        .folder-card:hover { border-color: var(--up-color); transform: translateY(-2px); background: rgba(255,255,255,0.03); box-shadow: var(--shadow-md); }
+        body.light-theme .folder-card:hover { background: rgba(255,255,255,0.95); }
+        
+        .progress-badge { position: absolute; top: 12px; right: 12px; font-size: 0.65rem; color: var(--up-color); display: none; align-items: center; gap: 4px; font-weight: 700; background: var(--up-bg); padding: 3px 8px; border-radius: 20px; }
+        .folder-card.completed .progress-badge { display: flex; }
+
+        .folder-num { font-size: 1.15rem; font-weight: 700; color: var(--secondary-text); background: var(--border-color); width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: var(--radius-sm); transition: 0.18s; flex-shrink: 0; }
         .folder-card:hover .folder-num { color: var(--bg-color); background: var(--up-color); }
-        .folder-info h3 { margin-bottom: 6px; font-size: 1.1rem; font-weight: 700; letter-spacing: -0.3px; }
+        .folder-info h3 { margin-bottom: 6px; font-size: 1.1rem; font-weight: 600; letter-spacing: -0.3px; color: var(--text-color); }
         .folder-info p { color: var(--secondary-text); font-size: 0.85rem; line-height: 1.5; font-weight: 400; }
+
+        .segment-tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            text-transform: none;
+            letter-spacing: 0.35px;
+            margin-bottom: 12px;
+            border: 1px solid var(--border-color);
+            background: rgba(255,255,255,0.02);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: none;
+        }
+        .tag-must-know {
+            background: var(--up-bg);
+            color: var(--up-color);
+            border: 1px solid color-mix(in srgb, var(--up-color) 28%, transparent);
+        }
+        .tag-advanced {
+            background: rgba(255, 153, 102, 0.08);
+            color: #ff9966;
+            border: 1px solid rgba(255, 153, 102, 0.22);
+        }
+
+        .tooltip-word { display: inline; white-space: normal; text-decoration: none !important; border-bottom: none !important; }
+        .tip-i {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            border-radius: 999px;
+            margin-left: 6px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            line-height: 1;
+            border: 1px solid var(--border-color);
+            background: rgba(255,255,255,0.02);
+            color: var(--secondary-text);
+            cursor: help;
+            user-select: none;
+            text-decoration: none !important;
+            border-bottom: none !important;
+        }
+        .tip-i-up {
+            border-color: color-mix(in srgb, var(--up-color) 35%, transparent);
+            background: var(--up-bg);
+            color: var(--up-color);
+        }
+        .tip-i-down {
+            border-color: color-mix(in srgb, var(--down-color) 35%, transparent);
+            background: var(--down-bg);
+            color: var(--down-color);
+        }
+
+        .course-section { margin-bottom: 45px; }
+        
+        .note-block {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            background: rgba(255, 255, 255, 0.02);
+            border-left: 3px solid var(--up-color);
+            padding: 18px 24px;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            margin: 25px 0;
+            font-size: 0.95rem;
+            color: var(--text-color);
+            line-height: 1.7;
+        }
+        body.light-theme .note-block { background: rgba(0, 0, 0, 0.02); }
+        .note-icon { font-size: 1.4rem; flex-shrink: 0; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
+
+        .pro-tip { background: var(--tip-bg); border: 1px solid var(--tip-border); padding: 18px 22px; border-radius: var(--radius-lg); margin: 30px 0; display: flex; gap: 16px; align-items: flex-start; }
+        .pro-tip-icon { font-size: 1.35rem; filter: none; }
+        .pro-tip-content { font-size: 0.95rem; font-weight: 500; color: var(--text-color); }
+        .pro-tip-content strong { display: block; color: var(--up-color); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; margin-bottom: 6px; font-weight: 700; }
+        
+        .course-img { max-width: 100%; height: auto; border-radius: var(--radius-lg); border: 1px solid var(--border-color); margin: 30px 0; box-shadow: none; display: block; }
 
         .community-wrapper { margin-top: 60px; padding-top: 40px; border-top: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 40px; }
         .community-footer { text-align: center; }
-        .community-footer h4 { margin-bottom: 20px; color: var(--text-color); font-weight: 700; font-size: 1.1rem; letter-spacing: -0.2px; }
+        .community-footer h4 { margin-bottom: 20px; color: var(--text-color); font-weight: 600; font-size: 1.1rem; letter-spacing: -0.2px; }
         .links-group { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
-        
-        .rei-link { 
-            font-size: 0.95rem; color: var(--text-color); font-weight: 600; text-decoration: none; 
-            border: 1px solid rgba(255, 255, 255, 0.1); padding: 12px 24px; border-radius: 14px; 
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
-            background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%); 
-            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            display: flex; align-items: center; gap: 8px;
-        }
-        body.light-theme .rei-link {
-            border: 1px solid rgba(0,0,0,0.1);
-            background: linear-gradient(145deg, rgba(255,255,255,1) 0%, rgba(240,240,245,1) 100%);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
-        .rei-link:hover { 
-            border-color: var(--up-color); color: var(--up-color); 
-            transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0, 230, 118, 0.15); 
-        }
+        .rei-link { font-size: 0.95rem; color: var(--text-color); font-weight: 500; text-decoration: none; border: 1px solid rgba(255, 255, 255, 0.1); padding: 12px 22px; border-radius: var(--radius-md); transition: border-color 0.18s ease, transform 0.18s ease, background 0.18s ease; background: linear-gradient(145deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); backdrop-filter: blur(8px); box-shadow: none; display: flex; align-items: center; gap: 8px; }
+        body.light-theme .rei-link { border: 1px solid var(--border-color); background: #fff; }
+        .rei-link:hover { border-color: var(--up-color); color: var(--up-color); transform: translateY(-2px); box-shadow: none; }
 
-        .kofi-card { background: linear-gradient(145deg, rgba(255, 94, 98, 0.05) 0%, rgba(255, 153, 102, 0.05) 100%); border: 1px solid rgba(255, 94, 98, 0.15); border-radius: 16px; padding: 32px; text-align: center; max-width: 700px; margin: 0 auto; backdrop-filter: blur(10px); box-shadow: 0 8px 32px rgba(255, 94, 98, 0.05); }
-        .kofi-card h4 { color: #ff5e62; font-size: 1.2rem; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .kofi-card p { color: var(--secondary-text); font-size: 0.9rem; line-height: 1.6; margin-bottom: 12px; }
+        .kofi-card { background: linear-gradient(145deg, rgba(255, 94, 98, 0.05) 0%, rgba(255, 153, 102, 0.05) 100%); border: 1px solid rgba(255, 94, 98, 0.15); border-radius: var(--radius-lg); padding: 30px; text-align: center; max-width: 700px; margin: 0 auto; backdrop-filter: blur(8px); }
+        .kofi-card h4 { color: #ff5e62; font-size: 1.2rem; font-weight: 600; margin-bottom: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .kofi-card p { color: var(--text-color); font-size: 0.95rem; line-height: 1.6; margin-bottom: 12px; }
         .kofi-card p:last-of-type { margin-bottom: 24px; }
-        .kofi-btn { display: inline-block; background: linear-gradient(135deg, #ff5e62, #ff9966); color: #fff; font-weight: 700; font-size: 0.9rem; text-decoration: none; padding: 12px 28px; border-radius: 30px; transition: 0.2s; box-shadow: 0 4px 15px rgba(255, 94, 98, 0.3); }
-        .kofi-btn:hover { transform: scale(1.05); box-shadow: 0 6px 20px rgba(255, 94, 98, 0.4); }
+        .kofi-btn { display: inline-block; background: linear-gradient(135deg, #ff5e62, #ff9966); color: #fff; font-weight: 600; font-size: 0.9rem; text-decoration: none; padding: 12px 28px; border-radius: 999px; transition: transform 0.15s ease; box-shadow: none; }
+        .kofi-btn:hover { transform: translateY(-1px); }
+        .kofi-heart { color: var(--red-accent); font-size: 1.15rem; font-weight: 800; margin: 2px 0 24px; line-height: 1.2; }
 
-        h2.section-title { font-size: 1.75rem; margin-bottom: 20px; color: var(--text-color); font-weight: 800; letter-spacing: -0.5px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; }
-        .course-text { font-size: 0.95rem; line-height: 1.7; color: var(--text-color); margin-bottom: 30px; background: var(--card-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding: 30px; border-radius: 16px; border: 1px solid var(--border-color); font-weight: 400; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
-        .course-text p { margin-bottom: 16px; }
+        h2.section-title { font-size: 1.85rem; margin-bottom: 20px; font-weight: 700; letter-spacing: -0.5px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; color: var(--text-color); }
+        .course-text {
+            font-size: 0.98rem;
+            line-height: 1.9;
+            color: var(--text-color);
+            margin-bottom: 30px;
+            background: var(--card-bg);
+            backdrop-filter: blur(8px);
+            padding: 30px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            font-weight: 400;
+            max-width: 880px;
+            margin-left: auto;
+            margin-right: auto;
+            text-rendering: optimizeLegibility;
+        }
+        .course-text p { margin-bottom: 20px; text-wrap: pretty; }
         .course-text p:last-child { margin-bottom: 0; }
-        .course-text strong { color: var(--up-color); font-weight: 600; }
-        .course-text ul { margin: 12px 0 20px 24px; }
-        .course-text li { margin-bottom: 8px; color: var(--secondary-text); }
-        .course-text h4 { font-size: 1.1rem; color: var(--text-color); margin: 24px 0 12px 0; font-weight: 700; letter-spacing: -0.2px; }
-        .course-text h4:first-child { margin-top: 0; }
         
-        .course-img { max-width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--border-color); margin: 20px 0; box-shadow: 0 8px 24px rgba(0,0,0,0.15); display: block; }
+        .course-text strong {
+            color: var(--text-color);
+            font-weight: 750;
+            text-decoration: none !important;
+            border-bottom: none !important;
+            background: none;
+        }
+        .course-text strong.em-up { color: var(--up-color); text-decoration: none !important; border-bottom: none !important; }
+        .course-text strong.em-down { color: var(--down-color); text-decoration: none !important; border-bottom: none !important; }
+        
+        .course-text ul { margin: 16px 0 24px 24px; }
+        .course-text li { margin-bottom: 10px; color: var(--text-color); }
+        .course-text h4 {
+            font-size: 1.15rem;
+            margin: 32px 0 16px 0;
+            font-weight: 600;
+            letter-spacing: -0.2px;
+            color: var(--text-color);
+            border-left: 3px solid color-mix(in srgb, var(--up-color) 65%, transparent);
+            padding-left: 14px;
+        }
+        .course-text h4:first-child { margin-top: 0; }
 
-        .chart-wrapper { background: var(--chart-bg); border: 1px solid var(--border-color); border-radius: 16px; margin: 30px 0; padding: 0; overflow: hidden; position: relative; width: 100%; height: 480px; box-shadow: inset 0 0 40px rgba(0,0,0,0.2); }
+        .chart-wrapper { background: var(--chart-bg); border: 1px solid var(--border-color); border-radius: var(--radius-lg); margin: 35px 0; padding: 0; overflow: hidden; position: relative; width: 100%; height: 480px; box-shadow: inset 0 0 28px rgba(0,0,0,0.08); }
         .chart-canvas { display: block; width: 100%; height: 100%; outline: none; cursor: crosshair; }
 
-        .fp-wrapper { display: flex; justify-content: center; gap: 24px; margin: 24px 0; flex-wrap: wrap; }
-        .fp-box { background: var(--card-bg); backdrop-filter: blur(12px); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: 0.85rem; box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+        .fp-wrapper { display: flex; justify-content: center; gap: 24px; margin: 30px 0; flex-wrap: wrap; }
+        .fp-box { background: var(--card-bg); backdrop-filter: blur(8px); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 22px; font-family: 'SF Mono', ui-monospace, 'JetBrains Mono', monospace; font-size: 0.85rem; box-shadow: none; }
         .fp-row { display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding: 6px 0; }
         .fp-val { width: 40px; text-align: center; }
         .fp-val.bid { color: var(--down-color); }
         .fp-val.ask { color: var(--up-color); }
-        .fp-hi { font-weight: 800; background: var(--up-bg); border-radius: 4px; }
-        .fp-hi-d { font-weight: 800; background: var(--down-bg); border-radius: 4px; }
+        .fp-hi { font-weight: 700; background: var(--up-bg); border-radius: 4px; color: var(--text-color); }
+        .fp-hi-d { font-weight: 700; background: var(--down-bg); border-radius: 4px; color: var(--text-color); }
         .fp-z { color: var(--secondary-text); opacity: 0.4; }
 
-        .dom-table { width: 100%; max-width: 450px; margin: 0 auto; border-collapse: separate; border-spacing: 0; font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: 0.85rem; border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; background: var(--card-bg); backdrop-filter: blur(12px); }
-        .dom-table th, .dom-table td { padding: 10px 14px; border-bottom: 1px solid var(--border-color); border-right: 1px solid var(--border-color); text-align: center; }
-        .dom-table th { background: rgba(255,255,255,0.03); font-weight: 600; color: var(--text-color); }
+        .dom-table { width: 100%; max-width: 450px; margin: 0 auto; border-collapse: separate; border-spacing: 0; font-family: 'SF Mono', ui-monospace, 'JetBrains Mono', monospace; font-size: 0.85rem; border: 1px solid var(--border-color); border-radius: var(--radius-lg); overflow: hidden; background: var(--card-bg); }
+        .dom-table th, .dom-table td { padding: 12px 16px; border-bottom: 1px solid var(--border-color); border-right: 1px solid var(--border-color); text-align: center; }
+        .dom-table th { background: rgba(255,255,255,0.02); font-weight: 600; color: var(--text-color); }
         .dom-table tr:last-child td { border-bottom: none; }
         .dom-table tr td:last-child { border-right: none; }
         .dom-ask { color: var(--up-color); font-weight: 500; }
         .dom-bid { color: var(--down-color); font-weight: 500; }
         
-        .cvd-box { max-width: 550px; margin: 0 auto; background: var(--card-bg); backdrop-filter: blur(12px); border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+        .cvd-box { max-width: 550px; margin: 0 auto; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 30px; box-shadow: none; }
         .cvd-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; font-weight: 600; font-size: 0.95rem; }
         .cvd-line { flex-grow: 1; height: 2px; background: var(--border-color); margin: 0 20px; position: relative; border-radius: 2px; }
         .cvd-arrow { position: absolute; right: 0; top: -7px; color: var(--up-color); font-size: 16px; background: var(--bg-color); padding: 0 4px; }
         .cvd-arrow.down { color: var(--down-color); }
 
-        .tooltip { position: fixed; display: none; padding: 14px 18px; background: rgba(15, 15, 20, 0.95); backdrop-filter: blur(10px); color: #fff; border-radius: 10px; font-size: 0.85rem; z-index: 1000; max-width: 320px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 1px solid rgba(255, 255, 255, 0.1); transform: translate(15px, 15px); pointer-events: none; line-height: 1.5; font-weight: 400; }
-        .tooltip strong { display: block; color: var(--up-color); margin-bottom: 6px; font-size: 0.95rem; font-weight: 700; letter-spacing: -0.2px; }
+        .tooltip {
+            position: fixed;
+            display: none;
+            padding: 14px 18px;
+            --tip-accent: var(--up-color);
+            background: rgba(28, 28, 30, 0.96);
+            backdrop-filter: blur(8px);
+            color: #fff;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            z-index: 1000;
+            max-width: 320px;
+            box-shadow: 0 10px 26px rgba(0,0,0,0.25);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transform: translate(12px, 12px);
+            pointer-events: none;
+            line-height: 1.5;
+            font-weight: 400;
+        }
+        .tooltip strong { display: block; color: var(--tip-accent); margin-bottom: 6px; font-size: 0.95rem; font-weight: 600; letter-spacing: -0.2px; }
+
+        .next-section-wrapper { margin-top: 50px; display: flex; justify-content: flex-end; padding-top: 30px; border-top: 1px solid var(--border-color); }
+        .next-btn { background: var(--btn-gradient); color: #000000; border: none; padding: 14px 30px; border-radius: 999px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: transform 0.18s ease, filter 0.18s ease; display: flex; align-items: center; gap: 8px; box-shadow: none; font-family: inherit; }
+        .light-theme .next-btn { color: #ffffff; }
+        .next-btn:hover { transform: translateY(-2px); filter: saturate(1.05); }
+        .next-btn span { transition: transform 0.18s; }
+        .next-btn:hover span { transform: translateX(4px); }
+
+        @media (prefers-reduced-motion: reduce) {
+            * { scroll-behavior: auto !important; }
+            .view.active { animation: none !important; }
+            * { transition-duration: 0.001ms !important; animation-duration: 0.001ms !important; }
+        }
     </style>
 </head>
 <body>
 
     <nav>
-        <div class="nav-logo" onclick="nav('home')">
-            <img src="https://i.pinimg.com/736x/5f/f7/d9/5ff7d9a02f87c055dc7d09bbfe17f80a.jpg" alt="Rei Academy Logo" class="logo-img">
-            Rei Academy
+        <div class="nav-left">
+            <div class="nav-logo" onclick="nav('home')">
+                <img src="https://i.pinimg.com/736x/5f/f7/d9/5ff7d9a02f87c055dc7d09bbfe17f80a.jpg" alt="Rei Academy Logo" class="logo-img">
+                Rei Academy
+            </div>
+            <div class="made-with">made with ❤️ - rei</div>
         </div>
         <div class="nav-right">
-            <div class="made-with">made with ❤️ - rei</div>
+            <div class="session-container">
+                <div class="session-item" id="london-session">
+                    <div class="dot"></div> LON: <span class="session-time">--:--</span>
+                </div>
+                <div class="session-item" id="ny-session">
+                    <div class="dot"></div> NY: <span class="session-time">--:--</span>
+                </div>
+            </div>
             <button class="theme-toggle" onclick="toggleTheme()" id="theme-btn">☀️ Light Mode</button>
         </div>
     </nav>
@@ -178,14 +419,38 @@
 
         <div id="view-home" class="view active">
             <div class="grid">
-                <div class="folder-card" onclick="nav('cat-mech')"><div class="folder-num">1</div><div class="folder-info"><h3>Mechanika Rynku</h3><p>Płynność, Makro, Opcje, Natura</p></div></div>
-                <div class="folder-card" onclick="nav('cat-amt')"><div class="folder-num">2</div><div class="folder-info"><h3>AMT</h3><p>Balance, Imbalance, Cykl Aukcji</p></div></div>
-                <div class="folder-card" onclick="nav('cat-vp')"><div class="folder-num">3</div><div class="folder-info"><h3>Volume Profile</h3><p>S&R, POC, Odbicia LVN</p></div></div>
-                <div class="folder-card" onclick="nav('cat-vwap')"><div class="folder-num">4</div><div class="folder-info"><h3>AVWAP</h3><p>Instytucjonalne Bands, Pullbacki</p></div></div>
-                <div class="folder-card" onclick="nav('cat-vsa')"><div class="folder-num">5</div><div class="folder-info"><h3>VSA</h3><p>Effort/Result, Climax, No Demand</p></div></div>
-                <div class="folder-card" onclick="nav('cat-of')"><div class="folder-num">6</div><div class="folder-info"><h3>Orderflow</h3><p>Absorpcja, Exhaustion, CVD</p></div></div>
-                <div class="folder-card" onclick="nav('cat-fund')"><div class="folder-num">7</div><div class="folder-info"><h3>Fundamenty Intraday</h3><p>Makro, Rekalibracja wartości</p></div></div>
-                <div class="folder-card" onclick="nav('cat-risk')"><div class="folder-num">8</div><div class="folder-info"><h3>Zarządzanie Ryzykiem</h3><p>Ucinanie z palca, Orderflow SL</p></div></div>
+                <div class="folder-card" data-cat="cat-mech" onclick="nav('cat-mech')">
+                    <div class="progress-badge">✓ PRZEROBIONE</div>
+                    <div class="folder-num">1</div><div class="folder-info"><h3>Mechanika Rynku</h3><p>Płynność, Makro, Opcje, Natura</p></div>
+                </div>
+                <div class="folder-card" data-cat="cat-amt" onclick="nav('cat-amt')">
+                    <div class="progress-badge">✓ PRZEROBIONE</div>
+                    <div class="folder-num">2</div><div class="folder-info"><h3>AMT</h3><p>Balance, Imbalance, Cykl Aukcji</p></div>
+                </div>
+                <div class="folder-card" data-cat="cat-vp" onclick="nav('cat-vp')">
+                    <div class="progress-badge">✓ PRZEROBIONE</div>
+                    <div class="folder-num">3</div><div class="folder-info"><h3>Volume Profile</h3><p>S&R, POC, Odbicia LVN</p></div>
+                </div>
+                <div class="folder-card" data-cat="cat-vwap" onclick="nav('cat-vwap')">
+                    <div class="progress-badge">✓ PRZEROBIONE</div>
+                    <div class="folder-num">4</div><div class="folder-info"><h3>AVWAP</h3><p>Instytucjonalne Bands, Pullbacki</p></div>
+                </div>
+                <div class="folder-card" data-cat="cat-vsa" onclick="nav('cat-vsa')">
+                    <div class="progress-badge">✓ PRZEROBIONE</div>
+                    <div class="folder-num">5</div><div class="folder-info"><h3>VSA</h3><p>Effort/Result, Climax, No Demand</p></div>
+                </div>
+                <div class="folder-card" data-cat="cat-of" onclick="nav('cat-of')">
+                    <div class="progress-badge">✓ PRZEROBIONE</div>
+                    <div class="folder-num">6</div><div class="folder-info"><h3>Orderflow</h3><p>Absorpcja, Exhaustion, CVD</p></div>
+                </div>
+                <div class="folder-card" data-cat="cat-fund" onclick="nav('cat-fund')">
+                    <div class="progress-badge">✓ PRZEROBIONE</div>
+                    <div class="folder-num">7</div><div class="folder-info"><h3>Fundamenty Intraday</h3><p>Makro, Rekalibracja wartości</p></div>
+                </div>
+                <div class="folder-card" data-cat="cat-risk" onclick="nav('cat-risk')">
+                    <div class="progress-badge">✓ PRZEROBIONE</div>
+                    <div class="folder-num">8</div><div class="folder-info"><h3>Zarządzanie Ryzykiem</h3><p>Ucinanie z palca, Orderflow SL</p></div>
+                </div>
             </div>
             
             <div class="community-wrapper">
@@ -202,10 +467,11 @@
                 </div>
 
                 <div class="kofi-card">
-                    <h4>☕ Wsparcie Projektu</h4>
+                    <h4><span style="-webkit-text-fill-color: initial;">☕</span> Wsparcie Projektu</h4>
                     <p>jesli darmowa wiedza wam pomogla i macie ochote wesprzec rozwoj tego projektu to wrzucam link do ko-fi</p>
                     <p>dla wspierajacych otwieram prywatne kanaly na discord ale powiem wam wprost to nie sam dostep do nich jest tu najwazniejszy</p>
-                    <p>liczy sie dla mnie wasz gest i chec docenienia mojej pracy za co z gory serdecznie dziekuje <span style="color: #ff5e62;">❤</span></p>
+                    <p>liczy sie dla mnie wasz gest i chec docenienia mojej pracy za co z gory serdecznie dziekuje</p>
+                    <div class="kofi-heart">❤</div>
                     <p>z osobami ktore dorzucaja swoja cegielke do projektu jestem tez naturalnie o wiele bardziej zaangazowany w bezposredni kontakt i poswiecam im po prostu wiecej czasu</p>
                     <a href="http://ko-fi.com/reiseiv" target="_blank" class="kofi-btn">Wesprzyj na Ko-fi</a>
                 </div>
@@ -215,195 +481,280 @@
         <div id="view-cat-mech" class="view">
             <h2 class="section-title">1. MECHANIKA RYNKU (MARKET MECHANICS)</h2>
             <div class="course-text">
-                <h4>Część 1: Mechanizm płynności i orderflow pressure</h4>
-                <p>Zanim odpalicie footprinty i vsa musicie zrozumiec dlaczego swieczka w ogole rusza sie na wykresie zapomnijcie o micie ze cena rosnie bo jest po prostu wiecej kupujacych to bzdura.</p>
-                <p>Cena rosnie tylko i wylacznie dlatego ze agresywne zlecenia market zjadaja cala dostepna plynnosc czyli zlecenia limit na danym poziomie i system musi szukac kolejnego poziomu wyzej zeby zrealizowac transakcje.</p>
-                <p>To wlasnie orderflow pressure pcha cene od jednego bloku plynnosci do drugiego kto bije mocniej i agresywniej po cenie rynkowej ten przesuwa wykres a cala reszta to tylko tlo.</p>
+                <div class="course-section">
+                    <div class="segment-tag tag-must-know">Must Know</div>
+                    <h4>Część 1: Mechanizm płynności i orderflow pressure</h4>
+                    <p>zanim odpalicie footprinty i vsa musicie zrozumiec dlaczego candle w ogole rusza sie na wykresie zapomnijcie o micie ze cena rosnie bo jest po prostu wiecej buyers to bzdura</p>
+                    <p>cena rosnie tylko i wylacznie dlatego ze agresywne <span class="tooltip-word">market orders <span class="tip-i tip-i-up" onmousemove="tt(event, 'Market Orders', 'Agresywne zlecenia realizowane natychmiast po najlepszej dostępnej cenie w orderbooku.')" onmouseleave="htt()">i</span></span> zjadaja cala dostepna <span class="tooltip-word">liquidity <span class="tip-i tip-i-up" onmousemove="tt(event, 'Liquidity (Płynność)', 'Zlecenia z limitami oczekujące w orderbooku na realizację.')" onmouseleave="htt()">i</span></span> czyli limit orders na danym poziomie i system musi szukac kolejnego poziomu wyzej zeby zrealizowac transakcje</p>
+                    <p>to wlasnie <span class="tooltip-word">orderflow pressure <span class="tip-i tip-i-up" onmousemove="tt(event, 'Orderflow Pressure', 'Presja tworzona przez agresywne zlecenia rynkowe uderzające w orderbook.')" onmouseleave="htt()">i</span></span> pcha cene od jednego bloku liquidity do drugiego kto bije mocniej i agresywniej po cenie rynkowej ten przesuwa wykres a cala reszta to tylko tlo</p>
+                </div>
 
-                <h4>Część 2: Fundamental reason</h4>
-                <p>Skoro wiemy ze to agresywne zlecenia ruszaja rynkiem to co sprawia ze duzy kapital nagle zaczyna tak mocno uderzac w zlecenia market?</p>
-                <p>Tu wchodza fundamenty ale nie nudne raporty spolek tylko grube makro cpi nfp czy fomc to sa momenty w ktorych duzi gracze dostaja nowe dane i musza natychmiast zrobic rekalibracje wartosci.</p>
-                <p>Stara cena z sekundy na sekunde przestaje byc logiczna wiec odpalaja ogromne zlecenia zeby jak najszybciej zaparkowac na nowych poziomach to wlasnie ten fundamentalny zapalnik tworzy najwieksze imbalansy na ktorych my zarabiamy.</p>
+                <div class="course-section">
+                    <h4>Część 2: Fundamental reason</h4>
+                    <p>Skoro wiemy ze to agresywne zlecenia ruszaja rynkiem to co sprawia ze duzy kapital nagle zaczyna tak mocno uderzac w zlecenia <span class="tooltip-word">market <span class="tip-i tip-i-up" onmousemove="tt(event, 'Market Orders', 'Agresywne zlecenia realizowane natychmiast po najlepszej dostępnej cenie w orderbooku.')" onmouseleave="htt()">i</span></span>?</p>
+                    <p>tu wchodzą fundamenty ale nie nudne raporty tylko grube makro jak <span class="tooltip-word">cpi <span class="tip-i tip-i-up" onmousemove="tt(event, 'CPI', 'Consumer Price Index - kluczowy raport o inflacji, wywołujący zmienność.')" onmouseleave="htt()">i</span></span> czy <span class="tooltip-word">fomc <span class="tip-i tip-i-up" onmousemove="tt(event, 'FOMC', 'Federal Open Market Committee - spotkania banku centralnego, na których ustala się np. stopy procentowe.')" onmouseleave="htt()">i</span></span>. to są momenty w których duzi gracze robią rekalibrację wartości.</p>
+                    <p>Stara cena z sekundy na sekunde przestaje byc logiczna wiec odpalaja ogromne zlecenia zeby jak najszybciej zaparkowac na nowych poziomach to wlasnie ten fundamentalny zapalnik tworzy najwieksze <span class="tooltip-word">imbalansy <span class="tip-i tip-i-down" onmousemove="tt(event, 'Imbalance', 'Gwałtowny ruch kierunkowy i brak równowagi między kupującymi a sprzedającymi.', 'var(--down-color)')" onmouseleave="htt()">i</span></span> na ktorych my zarabiamy.</p>
+                    <div class="pro-tip">
+                        <div class="pro-tip-icon">💡</div>
+                        <div class="pro-tip-content">
+                            <strong>Tip ode mnie ;p</strong>
+                            na footprintach zobaczysz wtedy imbalance szukaj momentów gdzie agresywne market buy’e wlatują w pusty orderbook. sprzedający uciekają ze swoimi zleceniami (brak limitów) więc cena nie napotyka żadnego oporu (absorpcji) i po prostu przeskakuje o kilka ticków na raz szukając kogokolwiek kto zechce przyjąć ten trade. to jest właśnie najczystsza faza imbalansu.
+                        </div>
+                    </div>
+                </div>
 
-                <h4>Część 3: Options pressure</h4>
-                <p>Na rynku jest jeszcze jedna gigantyczna sila o ktorej retail czesto nie ma pojecia to market makerzy czyli ci ktorzy wystawiaja wam opcje.</p>
-                <p>Musicie zrozumiec jedna rzecz oni nie graja kierunkowo ich zadaniem jest bycie delta neutral jesli retail kupuje tony opcji call na wzrosty to market maker musi natychmiast kupic aktywo bazowe zeby zabezpieczyc swoja pozycje czyli zrobic hedge.</p>
-                <p>To przymusowe kupowanie lub sprzedawanie przez nich tworzy sztuczna ogromna presje na cene ktora czesto dziala jak dolanie benzyny do ognia i wywala wykres zupelnie poza skale.</p>
+                <div class="course-section">
+                    <div class="segment-tag tag-advanced">Advanced</div>
+                    <h4>Część 3: Options pressure</h4>
+                    <p>Na rynku jest jeszcze jedna gigantyczna sila o ktorej retail czesto nie ma pojecia to <span class="tooltip-word">market makers <span class="tip-i tip-i-up" onmousemove="tt(event, 'Market Maker', 'Duże instytucje zapewniające płynność na rynku poprzez jednoczesne wystawianie zleceń kupna i sprzedaży.')" onmouseleave="htt()">i</span></span> czyli ci ktorzy wystawiaja wam opcje.</p>
+                    <p>Musicie zrozumiec jedna rzecz oni nie graja kierunkowo ich zadaniem jest bycie <span class="tooltip-word">delta neutral <span class="tip-i tip-i-up" onmousemove="tt(event, 'Delta Neutral', 'Strategia, w której zyski i straty z opcji oraz aktywa bazowego wzajemnie się zerują (brak ryzyka kierunkowego).')" onmouseleave="htt()">i</span></span> jesli retail kupuje tony opcji call na longi to market maker musi natychmiast kupic aktywo bazowe zeby zabezpieczyc swoja pozycje czyli zrobic <span class="tooltip-word">hedge <span class="tip-i tip-i-up" onmousemove="tt(event, 'Hedge', 'Zabezpieczenie pozycji przed ryzykiem rynkowym.')" onmouseleave="htt()">i</span></span>.</p>
+                    <p>To przymusowe kupowanie lub sprzedawanie przez nich tworzy sztuczna ogromna presje na cene ktora czesto dziala jak dolanie benzyny do ognia i wywala wykres zupelnie poza skale.</p>
+                </div>
 
-                <h4>Część 4: Natura rynku (AMT)</h4>
-                <p>Jak polaczymy te wszystkie trzy rzeczy agresywne zjadanie plynnosci rekalibracje pod makro i zabezpieczanie opcji to wychodzi nam czysta natura rynku czyli auction market theory.</p>
-                <p>Te wszystkie brutalne sily daza tak naprawde tylko do jednego chca w koncu znalezc cene przy ktorej obie strony znowu beda zgodne co do wartosci i bedą chcialy robic biznes czyli nasze fair value.</p>
-                <p>Rynek to po prostu nieustanna aukcja ktora przechodzi z nudnego balansu w agresywny imbalans zeby znowu znalezc kolejny balans i tak w kolko to jest ten ostateczny mindset z ktorym powinniscie teraz przejsc do czytania reszty kategorii.</p>
+                <div class="course-section">
+                    <h4>Część 4: Natura rynku (AMT)</h4>
+                    <p>Jak polaczymy te wszystkie trzy rzeczy agresywne zjadanie liquidity rekalibracje pod makro i zabezpieczanie opcji to wychodzi nam czysta natura rynku czyli auction market theory.</p>
+                    <p>Te wszystkie brutalne sily daza tak naprawde tylko do jednego chca w koncu znalezc cene przy ktorej obie strony znowu beda zgodne co do wartosci i bedą chcialy robic biznes czyli nasze fair value.</p>
+                    <p>Rynek to po prostu nieustanna aukcja ktora przechodzi z nudnego balansu w agresywny imbalance zeby znowu znalezc kolejny balance i tak w kolko to jest ten ostateczny mindset z ktorym powinniscie teraz przejsc do czytania reszty kategorii.</p>
+                </div>
+            </div>
+            <div class="next-section-wrapper">
+                <button class="next-btn" onclick="nav('cat-amt')">Czytaj dalej: 2. AMT <span>→</span></button>
             </div>
         </div>
 
         <div id="view-cat-amt" class="view">
             <h2 class="section-title">2. AMT (Auction Market Theory)</h2>
             <div class="course-text">
-                <p><strong>balance -> imbalance -> auction -> new balance</strong></p>
-                <p>W skrocie na wykresie wyglada to tak;</p>
-                
-                <div class="chart-wrapper">
-                    <canvas id="canvas-amt" class="chart-canvas"></canvas>
+                <div class="course-section">
+                    <p><strong class="em-up">balance</strong> -> <strong class="em-down">imbalance</strong> -> auction -> <strong class="em-up">new balance</strong></p>
+                    <p>W skrocie na wykresie wyglada to tak;</p>
+                    
+                    <div class="chart-wrapper" style="height: 420px;">
+                        <canvas id="canvas-amt" class="chart-canvas"></canvas>
+                    </div>
                 </div>
 
-                <p>Cena na dane strefy(po tym jak juz wystapily) moze reagowac;</p>
-                <ul>
-                    <li><strong>imbalance</strong> - szybko sie przemieszczac / rejection</li>
-                    <li><strong>balance</strong> - odrzucić stary balance, lub przez niego przelecieć i zrobic brakeout po ktorym najczesciej wystepuje market shift</li>
-                </ul>
-                <p>Rynek to w gruncie rzeczy wielka nieustajaca aukcja podobnie jak na zwyklej licytacji kupujacy i sprzedajacy caly czas szukaja ceny na ktora obie strony beda w stanie sie zgodzic nie ma tu zadnej magii wskaznikow to czysta mechanika popytu i podazy jesli cena w danej chwili jest uwazana za zbyt niska wkraczaja kupujacy i swoimi zleceniami podbijaja ja do gory z kolei jesli cena staje sie zbyt wysoka i uwazana za droga agresywni sprzedawcy spychaja ja w dol w ten sposob rynek ciagle testuje rozne poziomy szukajac uczciwej ceny czyli tak zwanego fair value to wlasnie tam dochodzi do najwiekszej wymiany kontraktow.</p>
-                <p>Skoro wiemy juz ze rynek caly czas szuka uczciwej ceny musimy jakos zdefiniowac gdzie ona dokladnie jest w teorii aukcji nazywamy to obszarem wartosci czyli <strong>value area</strong> jest to po prostu strefa w ktorej rynek spedza najwiecej czasu i gdzie dochodzi do wymiany okolo 70 procent calego wolumenu z danej sesji to jest nasza baza i glowny punkt odniesienia do oceny sytuacji jesli cena wyskakuje powyzej tego obszaru to znaczy ze staje sie relatywnie droga i kupujacy moga nie chciec po niej zawierac transakcji co predzej czy pozniej przyciaga agresywnych sprzedawcow z kolei gdy cena spada ponizej obszaru wartosci staje sie nagle tania i atrakcyjna co czesto zacheca do dzialania kupujacych wiec zamiast zgadywac na oslep gdzie jest gorka a gdzie dolek po prostu patrzymy jak cena zachowuje sie wzgledem tego srodkowego obszaru akceptacji.</p>
-                <p>To co do tej pory omowilismy to faza balansu czyli moment w ktorym rynek znalazl uczciwa cene i jest w rownowadze rynki jednak nie stoja w miejscu gdy pojawia sie nowa informacja lub nagla przewaga jednej ze stron cena agresywnie wybija sie z dotychczasowego obszaru wartosci to jest wlasnie faza imbalansu czyli brak rownowagi rynek przechodzi z trybu konsolidacji w tryb poszukiwania i zaczyna silnie trendowac w tej fazie zasady gry calkowicie sie zmieniaja stara uczciwa cena przestaje miec znaczenie wiec nie gramy juz na powrot do niej zamiast tego w imbalansie szukamy relatywnie odpowiedniego miejsca by wejsc w trade i plynac z pradem patrzac jak nasz pnl idzie w gore razem z cena obserwujemy jak szybko przemieszcza sie ona na nowe poziomy i czekamy az dynamika spadnie co oznacza ze uczestnicy rynku znowu znalezli akceptacje i zaczynaja budowac zupelnie nowy balans na wyzszym lub nizszym poziomie to ciagly cykl od balansu przez imbalans az do nowego balansu.</p>
-                <p>To co do tej pory przerobilismy to czysta teoria ktora tlumaczy dlaczego cena w ogole sie porusza ale zeby na tym zarabiac musimy zobaczyc te aukcje na wlasne oczy na wykresie i tu do gry wchodzi volume profile amt to nasz sposob myslenia o rynku czyli fundament a volume profile to juz konkretne narzedzie badawcze taki rentgen ktory przeswietla zwykle swiece i pokazuje nam dokladnie w ktorym miejscu ta aukcja faktycznie miala miejsce gdzie zaparkowal duzy kapital i gdzie uksztaltowal sie nasz obszar wartosci to wlasnie vp rysuje nam te wszystkie strefy balansu na ekranie zebysmy wiedzieli do czego sie odniesc i z czym handlowac jesli chcecie zobaczyc jak wyznaczac te strefy w praktyce i jak czytac ten wolumen zeby wiedziec kto w danej chwili kontroluje aukcje przechodzimy teraz do kategorii z volume profile.</p>
+                <div class="course-section">
+                    <p>Cena na dane strefy(po tym jak juz wystapily) moze reagowac;</p>
+                    <ul>
+                        <li><strong class="em-down">imbalance</strong> - szybko sie przemieszczac / rejection</li>
+                        <li><strong class="em-up">balance</strong> - odrzucic stary balance, lub przez niego przeleciec i zrobic breakout po ktorym najczesciej wystepuje market shift</li>
+                    </ul>
+                </div>
+
+                <div class="course-section">
+                    <p>rynek to jedna wielka licytacja gdzie buyers i sellers bez przerwy szukają wspólnego języka. nie ma tu magii, jest tylko supply & demand. jak cena jest za niska wkraczają agresywne market buy’e i wybijają ją wyżej, jak za wysoka – agresywni sellers spychają ją w dół. rynek testuje poziomy aż znajdzie fair value czyli miejsce gdzie obie strony chętnie wymieniają kontrakty i tam dzieje się największy obrót.</p>
+                    <p>żeby nie zgadywać gdzie jest tanio a gdzie drogo używamy value area. to strefa w której rynek mielił najdłużej i gdzie przeszło ok 70% wolumenu sesji. to nasza baza. wyjście powyżej to sygnał że robi się drogo i zaraz mogą wjechać sprzedający, spadek poniżej to okazja dla kupujących bo cena staje się atrakcyjna. zamiast wróżyć z fusów(ict) po prostu patrzymy jak cena reaguje na ten obszar akceptacji.</p>
+                </div>
+
+                <div class="course-section">
+                    <p>cała zabawa polega na cyklu balance -> imbalance -> new balance. większość czasu rynek jest w równowadze (balance) ale gdy wpadnie nowa informacja lub duży kapitał cena agresywnie wybija i zaczyna trendować (imbalance). wtedy stare fair value idzie do kosza – nie gramy na powrót tylko płyniemy z momentum aż dynamika spadnie i rynek zacznie budować nową bazę na innym poziomie.</p>
+                    <p>amt to twoja mapa i logika a volume profile to rentgen który pokazuje to wszystko na wykresie. przeskakujemy przez zwykłe świece i widzimy dokładnie gdzie faktycznie zaparkował gruby hajs i gdzie ukształtowały się strefy balansu. teraz żebyś wiedział jak to wyznaczać w praktyce i czytać kto realnie kontroluje aukcję wchodzimy prosto w kategorię volume profile.</p>
+                </div>
+            </div>
+            <div class="next-section-wrapper">
+                <button class="next-btn" onclick="nav('cat-vp')">Czytaj dalej: 3. Volume Profile <span>→</span></button>
             </div>
         </div>
 
         <div id="view-cat-vp" class="view">
             <h2 class="section-title">3. VOLUME PROFILE</h2>
             <div class="course-text">
-                <p>Volume Profile czesto ustawia sie w te 4 kształty:</p>
-                <ul>
-                    <li>P📈 - presja ceny w góre</li>
-                    <li>b📉 - presja ceny w dół</li>
-                    <li>B🌪️ - presja w obie strony xD</li>
-                    <li>D👉 - market w balance ("konsolidacja")</li>
-                </ul>
-                <p>Przykładowe setupy, z wykorzystaniem logiki auction market theory (tak w D, aż do wystąpienia breakeout możesz tradować S&R).</p>
+                <div class="course-section">
+                    <p>Volume Profile czesto ustawia sie w te 4 kształty:</p>
+                    <ul>
+                        <li>P📈 - presja ceny w góre</li>
+                        <li>b📉 - presja ceny w dół</li>
+                        <li>B🌪️ - presja w obie strony xD</li>
+                        <li>D👉 - market w balance ("konsolidacja")</li>
+                    </ul>
+                    <p>Przykładowe setupy, z wykorzystaniem logiki auction market theory (tak w D, aż do wystąpienia breakoutu możesz tradować <span class="tooltip-word">S&R <span class="tip-i tip-i-up" onmousemove="tt(event, 'S&R', 'Support & Resistance - poziomy wsparcia (gdzie cena odbija w górę) i oporu (gdzie cena zawraca w dół).')" onmouseleave="htt()">i</span></span>).</p>
+                </div>
             </div>
             
-            <h4 style="color:var(--up-color); margin-bottom: 10px;">Setup 1: Kształt D (Balance) - Tradowanie VAH / VAL</h4>
-            <div class="chart-wrapper">
+            <h4 style="color:var(--heading-color); margin-bottom: 10px;">Setup 1: Kształt D (Balance) - Tradowanie VAH / VAL</h4>
+            <div class="chart-wrapper" style="height: 400px;">
                 <canvas id="canvas-vaval" class="chart-canvas"></canvas>
             </div>
 
             <div class="course-text">
-                <p>"Mapowanie" profilem wolumenu(XD) można robić w dwa sposoby;</p>
-                <ul>
-                    <li>zaplanowane; ustawiasz na sesje/dni-wieki... - można uznać je za bardzo "znaczące"</li>
-                    <li>bieżące: ustawiasz na bieżące strefy (balance, imbalance) - też są znaczące, ale raczej nie wyłapiesz tak tradu na kolejne 3h</li>
-                </ul>
-                <p>Jeśli ktoś nie rozumie jak działa VP, i co oznaczają dane pola;</p>
-                <ul>
-                    <li><strong>VAH, VAL</strong> - poziomy oznaczające zamknięcie się strefy 68% value area - czyli 68% (znacząca większość) "tradów" została tam wykonana</li>
-                    <li><strong>POC</strong> - punkt kontroli, przyjmuje sie, że jest "fair value" danego okresu, a co za tym idzie uznaje się, że poc jest "magnesem" gdy cena odbija sie od vah/val -> testowanie vah/val to moment decyzyjny;</li>
-                    <li>wyjscie poza strefe i budowanie tam nowego wolumenu -> akceptacja nowej ceny i start imbalansu</li>
-                    <li>szybki knot(wick) poza strefe i powrot -> rejection i gramy z powrotem do srodka (najczesciej do poc)</li>
-                    <li><strong>HVN</strong> - Balance -> auction market theory</li>
-                    <li><strong>LVN</strong> - Imbalance -> auction market theory</li>
-                </ul>
-                <p>hvn i lvn - to one mowia nam jak szybko cena bedzie w danej strefie pływać</p>
-                <p>hvn czyli high volume node to te grube brzuchy na profilu gdzie zebral sie najwiekszy wolumen to sa klasyczne strefy balansu cena zachowuje sie tu jak w blocie zwalnia mieli w miejscu i spedza duzo czasu bo obie strony sa dosc zgodne co do wartosci</p>
-                <p>z kolei lvn czyli low volume node to te wciecia w profilu gdzie wolumenu prawie nie ma to strefy imbalansu w przeszlosci rynek po prostu nie akceptowal tych poziomow wiec kiedy cena tam trafia przelatuje przez nie jak przez proznie</p>
-                <p>dlatego wlasnie bardzo czesto widzimy jak rynek odrywa sie od jednego hvn blyskawicznie i agresywnie pokonuje puste lvn zeby znowu zaparkowac i szukac rownowagi na kolejnym grubym hvn</p>
-                <p>warto jeszcze dodac wazna rzecz odnosnie lvn z tych pustych stref bardzo czesto korzysta sie w mocno trendujacym rynku sluza one jako idealne miejsca do zlapania odbicia i pojscia dalej z pradem ceny dziala to tak ze gdy mamy silny ruch i rynek robi krotka korekte to wpadajac w lvn sprawdza czy wciaz nie ma tam chetnych do handlu szybki brak akceptacji powoduje odrzucenie i kontynuacje glownego trendu wiec to swietny moment zeby podpiac sie do ruchu i zarabiac na tym momentum</p>
-                <p>bardzo często z tego korzystam ^^</p>
+                <div class="course-section">
+                    <p>"Mapowanie" profilem wolumenu(XD) można robić w dwa sposoby;</p>
+                    <ul>
+                        <li>zaplanowane; ustawiasz na sesje/dni-wieki... - można uznać je za bardzo "znaczące"
+                            <div class="chart-wrapper" style="height: 280px; margin-top: 15px;">
+                                <canvas id="canvas-map1" class="chart-canvas"></canvas>
+                            </div>
+                        </li>
+                        <li>bieżące: ustawiasz na bieżące strefy (balance, imbalance) - też są znaczące, ale raczej nie wyłapiesz tak tradu na kolejne 3h
+                            <div class="chart-wrapper" style="height: 280px; margin-top: 15px;">
+                                <canvas id="canvas-map2" class="chart-canvas"></canvas>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="course-section">
+                    <p>Jeśli ktoś nie rozumie jak działa VP, i co oznaczają dane pola;</p>
+                    <ul>
+                        <li><strong class="em-up">VAH</strong>, <strong class="em-down">VAL</strong> - <span class="tooltip-word">Value Area <span class="tip-i tip-i-up" onmousemove="tt(event, 'VAH / VAL', 'Value Area High (Górna granica) i Value Area Low (Dolna granica). Wyznaczają strefę 68% wolumenu w danej sesji.', 'var(--up-color)')" onmouseleave="htt()">i</span></span></li>
+                        <li><strong class="em-up">POC</strong> - <span class="tooltip-word">Point of Control <span class="tip-i tip-i-up" onmousemove="tt(event, 'POC', 'Punkt kontroli z największym wygenerowanym wolumenem. Często działa jak magnes przyciągający cenę (Fair Value).', 'var(--up-color)')" onmouseleave="htt()">i</span></span></li>
+                        <li><strong class="em-up">HVN</strong> - <span class="tooltip-word">Balance <span class="tip-i tip-i-up" onmousemove="tt(event, 'Balance (VP)', 'Strefa balansu w Volume Profile: popyt i podaż są w miarę zgodne, więc cena zwalnia i spędza tam najwięcej czasu (HVN).', 'var(--up-color)')" onmouseleave="htt()">i</span></span></li>
+                        <li><strong class="em-down">LVN</strong> - <span class="tooltip-word">Imbalance <span class="tip-i tip-i-down" onmousemove="tt(event, 'Imbalance (VP)', 'Strefa imbalansu w Volume Profile: brak akceptacji na danych poziomach, więc cena przelatuje szybciej przez LVN w stronę kolejnego kierunku.', 'var(--down-color)')" onmouseleave="htt()">i</span></span></li>
+                    </ul>
+                    
+                    <div class="note-block">
+                        <span class="note-icon">💡</span>
+                        <div class="note-text">
+                            Gdy cena odbija sie od vah/val ➝ testowanie vah/val to <strong>moment decyzyjny</strong>;<br>
+                            wyjscie poza strefe i budowanie tam nowego volume ➝ <strong>akceptacja nowej ceny</strong> i start imbalansu.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="course-section">
+                    <div class="segment-tag tag-must-know">Must Know</div>
+                    <p>hvn i lvn - to one mowia nam jak szybko cena bedzie w danej strefie pływać</p>
+                    <p>hvn czyli high volume node to te grube brzuchy na profilu gdzie zebral sie najwiekszy volume to sa klasyczne strefy balansu cena zachowuje sie tu jak w blocie zwalnia mieli w miejscu i spedza duzo czasu bo obie strony sa dosc zgodne co do wartosci</p>
+                    <p>z kolei lvn czyli low volume node to te wciecia w profilu gdzie volume prawie nie ma to strefy imbalansu w przeszlosci rynek po prostu nie akceptowal tych poziomow wiec kiedy cena tam trafia przelatuje przez nie jak przez proznie</p>
+                    <p>dlatego wlasnie bardzo czesto widzimy jak rynek odrywa sie od jednego hvn blyskawicznie i agresywnie pokonuje puste lvn zeby znowu zaparkowac i szukac rownowagi na kolejnym grubym hvn</p>
+                    <p>warto jeszcze dodac wazna rzecz odnosnie lvn z tych pustych stref bardzo czesto korzysta sie w mocno trendujacym rynku sluza one jako idealne miejsca do zlapania pullbacka i pojscia dalej z trendem dziala to tak ze gdy mamy silny ruch i rynek robi krotki pullback to wpadajac w lvn sprawdza czy wciaz nie ma tam chetnych do handlu szybki brak akceptacji powoduje rejection i kontynuacje glownego trendu wiec to swietny moment zeby podpiac sie do ruchu i zarabiac na tym momentum</p>
+                </div>
+
+                <div class="pro-tip">
+                    <div class="pro-tip-icon">⚡</div>
+                    <div class="pro-tip-content">
+                        <strong>Tip ode mnie ;p</strong>
+                        bardzo często z tego korzystam ^^
+                    </div>
+                </div>
             </div>
 
-            <h4 style="color:var(--up-color); margin-bottom: 10px;">Setup 2: Magnes POC i powrót do HVN</h4>
-            <div class="chart-wrapper">
+            <h4 style="color:var(--heading-color); margin-bottom: 10px;">Setup 2: Magnes POC i powrót do HVN</h4>
+            <div class="chart-wrapper" style="height: 400px;">
                 <canvas id="canvas-poc" class="chart-canvas"></canvas>
             </div>
 
-            <h4 style="color:var(--up-color); margin-bottom: 10px;">Setup 3: Odbicie od LVN (Imbalance)</h4>
-            <div class="chart-wrapper">
+            <h4 style="color:var(--heading-color); margin-bottom: 10px;">Setup 3: Odbicie od LVN (Imbalance)</h4>
+            <div class="chart-wrapper" style="height: 400px;">
                 <canvas id="canvas-lvn" class="chart-canvas"></canvas>
+            </div>
+            
+            <div class="next-section-wrapper">
+                <button class="next-btn" onclick="nav('cat-vwap')">Czytaj dalej: 4. AVWAP <span>→</span></button>
             </div>
         </div>
 
         <div id="view-cat-vwap" class="view">
             <h2 class="section-title">4. AVWAP</h2>
             <div class="course-text">
-                <p>A(anchored)VWAP - Volume Weighted Average Price, jak sama nazwa wskazuje mierzy średnią cenę transakcji ważoną wolumenem</p>
-                <p>indicator instytucjonalny, korzystają z tego w bankach, algorytmy na podstawie tego tradują itd</p>
-                <p>miejsca w których "zakłada sie" VWAP, są podobne do VP - na dane sesje/dni-miesiace, w rozpoczęciu imbalance i high/low (miejsca w których, w których na rynek wszedł nowy duży kapitał/zmienił sie układ sił)</p>
-                
-                <img src="https://cdn.discordapp.com/attachments/1492548775020073152/1492549533421404170/1775921938108.png?ex=69e1ab52&is=69e059d2&hm=772ce31a9173699c022cac18393dc7e0ea89d1fa365e556461dfc2d305c9fcb6&animated=true" class="course-img" alt="VWAP Bands Reaction">
-                
-                <p>jak widać cena pięknie reaguje na VWAP band'y, i sam VWAP</p>
-                <p>z VWAP jak widać można korzystać jako narzedzia do stworzenia biasu i latwiejszego zorientowania sie, gdzie cena sie znajduje</p>
-                <p>sposoby na tradowanie VWAP to między innymi S&R i mean reversion (gdy cena znajduje sie daleko od VWAP jest wysokie prawdopodobieństwo, że do niego wróci)</p>
-                <p>często jak cena wyskoczyła poza VWAP band to pójdzie aż do drugiego</p>
-                <p>przykład użycia: AVWAP zarzucony na high, pięknie pokazuje lokalny "opór", z którego potem tworzy sie support</p>
-                
-                <img src="https://cdn.discordapp.com/attachments/1492548775020073152/1492550878832361564/1775922258659.png?ex=69e1ac93&is=69e05b13&hm=4db95c2096f67d6ca697aa654dd4b1d5183fd1fcd5ab939d183586f9054a796d&animated=true" class="course-img" alt="AVWAP Resistance to Support">
-                
-                <h4>Strategia S&R i Bias:</h4>
-                <ul>
-                    <li>cena powyżej vwap -> szukamy longów / reversion (gdy cena jest bardzo daleko lub widać exhaustion)</li>
-                    <li>cena poniżej vwap -> szukamy shortów / reversion (^)</li>
-                    <li>cena przecina vwap z dużym volume -> podmianka stron xd</li>
-                </ul>
-                <p>avwap to w jezyku teorii aukcji po prostu dynamiczna linia fair value taki poc ktory przesuwa sie razem z cena w czasie rzeczywistym a te zewnetrzne bandy pelnia funkcje dynamicznych vah i val wiec cala logika z profilu wolumenu ma tu pelne zastosowanie</p>
-                <p>co do samego traduwania mean reversion pamietajcie o jednej waznej rzeczy to dziala swietnie kiedy rynek jest w szerokim balansie i po prostu oddycha od bandy do bandy ale jesli mamy silny imbalans i pprst plynie w jednym kierunku to cena moze przebywac bardzo daleko od vwap przez cala sesje i nigdy do niego nie wrocic dlatego w trendzie vwap sluzy nam jako trampolina na korektach a nie jako cel do ktorego gramy pod prad</p>
+                <div class="course-section">
+                    <p>zwykłe średnie kroczące są spóźnione bo liczą tylko czas i cenę. dla nas liczy się <span class="tooltip-word">vwap <span class="tip-i tip-i-up" onmousemove="tt(event, 'VWAP', 'Volume Weighted Average Price - średnia cena ważona wolumenem.')" onmouseleave="htt()">i</span></span> czyli średnia cena ważona wolumenem. to jest jedyna „średnia” którą respektują instytucje bo pokazuje gdzie faktycznie handlował duży kapitał. jeśli cena jest powyżej vwap-u instytucjonalni kupujący są zadowoleni, jeśli poniżej to szukają okazji lub uciekają z pozycji. używamy <span class="tooltip-word">anchored vwap <span class="tip-i tip-i-up" onmousemove="tt(event, 'Anchored VWAP', 'Zakotwiczony VWAP, mierzony od konkretnego wydarzenia, miejsca, lub początku sesji.')" onmouseleave="htt()">i</span></span> żeby przyczepić go do konkretnych punktów zwrotnych jak fomc czy szczyt sesji i widzieć kto od tego momentu przejął kontrolę nad rynkiem.</p>
+                    
+                    <img src="https://cdn.discordapp.com/attachments/1492548775020073152/1492549533421404170/1775921938108.png?ex=69e1ab52&is=69e059d2&hm=772ce31a9173699c022cac18393dc7e0ea89d1fa365e556461dfc2d305c9fcb6&animated=true" class="course-img" alt="VWAP Bands Reaction">
+                    
+                    <p>jak widać cena pięknie reaguje na <span class="tooltip-word">VWAP band'y <span class="tip-i tip-i-up" onmousemove="tt(event, 'VWAP Bands', 'Pasma odchylenia standardowego od głównej linii VWAP. Pełnią rolę dynamicznego VAH i VAL.')" onmouseleave="htt()">i</span></span>, i sam VWAP</p>
+                    <p>sposoby na tradowanie VWAP to między innymi S&R i <span class="tooltip-word">mean reversion <span class="tip-i tip-i-up" onmousemove="tt(event, 'Mean Reversion', 'Tendencja ceny do powrotu do swojej historycznej średniej (w tym wypadku linii VWAP).')" onmouseleave="htt()">i</span></span></p>
+                    <p>przykład użycia: AVWAP zarzucony na high, pięknie pokazuje lokalny resistance, z którego potem tworzy sie support</p>
+                </div>
+                <div class="course-section">
+                    <img src="https://cdn.discordapp.com/attachments/1492548775020073152/1492550878832361564/1775922258659.png?ex=69e1ac93&is=69e05b13&hm=4db95c2096f67d6ca697aa654dd4b1d5183fd1fcd5ab939d183586f9054a796d&animated=true" class="course-img" alt="AVWAP Resistance to Support">
+                    <h4>Strategia S&R i <span class="tooltip-word">Bias <span class="tip-i tip-i-up" onmousemove="tt(event, 'Bias', 'Nasze obiektywne nastawienie do rynku w danej chwili, np. bullish (szukamy longów) lub bearish (szukamy shortów).')" onmouseleave="htt()">i</span></span>:</h4>
+                    <ul>
+                        <li>cena powyżej vwap -> szukamy longów / reversion (gdy cena jest bardzo daleko lub widać exhaustion)</li>
+                        <li>cena poniżej vwap -> szukamy shortów / reversion (^)</li>
+                        <li>cena przecina vwap z dużym volume -> podmianka stron xd</li>
+                    </ul>
+                    <div class="segment-tag tag-must-know">Must Know</div>
+                    <p>avwap to w jezyku teorii aukcji po prostu dynamiczna linia fair value taki poc ktory przesuwa sie razem z cena w czasie rzeczywistym a te zewnetrzne bandy pelnia funkcje dynamicznych vah i val wiec cala logika z profilu volume ma tu pelne zastosowanie</p>
+                    <p>co do samego tradowania mean reversion pamietajcie o jednej waznej rzeczy to dziala swietnie kiedy rynek jest w szerokim balansie i po prostu oddycha od bandy do bandy ale jesli mamy silny imbalance i pprst plynie w jednym kierunku to cena moze przebywac bardzo daleko od vwap przez cala sesje i nigdy do niego nie wrocic dlatego w trendzie vwap sluzy nam jako trampolina na pullbackach a nie jako cel do ktorego gramy counter-trend</p>
+                </div>
+                <div class="chart-wrapper" style="height: 400px;"><canvas id="canvas-vwap" class="chart-canvas"></canvas></div>
             </div>
-            
-            <div class="chart-wrapper">
-                <canvas id="canvas-vwap" class="chart-canvas"></canvas>
+            <div class="next-section-wrapper">
+                <button class="next-btn" onclick="nav('cat-vsa')">Czytaj dalej: 5. VSA <span>→</span></button>
             </div>
         </div>
 
         <div id="view-cat-vsa" class="view">
             <h2 class="section-title">5. VOLUME SPREAD ANALYSIS</h2>
             <div class="course-text">
-                <p>otwieramy nowy dzial czyli vsa volume spread analysis to genialne narzedzie ktore laczy czysty wykres swiecowy z wolumenem i uczy was patrzec na rynek przez pryzmat prawa wysilku i rezultatu</p>
-                <p>zeby to zrozumiec musimy zaczac od absolutnych podstaw zapomnijcie na chwile o standardowych formacjach swiecowych(najlepiej na zawsze swoja droga..) bo w vsa interesuja nas tylko trzy konkretne rzeczy w kazdej swiecy</p>
-                <ul>
-                    <li>po pierwsze spread ale nie ten od brokera tylko zasieg swiecy czyli odleglosc od samego dolku do samego szczytu to nam mowi jaki konkretny rezultat osiagnal rynek w danym czasie</li>
-                    <li>po drugie wolumen czyli ile kontraktow w ogole przewinelo sie na tej swiecy to mowi nam o tym jaki wysilek rynek wlozyl w ten ruch</li>
-                    <li>i po trzecie cena zamkniecia czyli gdzie ostatecznie byki(w gore) i niedzwiedzie(w dol) (ale te nazwy sa disgusting w plxd) skonczyly walke czy blisko szczytu czy w srodku czy na samym dole</li>
-                </ul>
-                <p>vsa polega na tym ze patrzac na te trzy rzeczy caly czas zadajemy sobie jedno wazne pytanie czy wysilek jaki wlozono w dany ruch jest logiczny i zgadza sie z rezultatem jaki osiagnieto na wykresie</p>
-                
-                <h4>Zdrowy Ruch i Harmonijny Trend</h4>
-                <p>zaczynamy od tego jak wyglada zdrowy rynek czyli sytuacja w ktorej wlozony effort idealnie rowna sie osiagnietemu rezultatowi</p>
-                <p>wyobrazcie sobie potezna swiece z bardzo duzym spreadem ktora zamyka sie na samym dnie a pod nia widzicie ogromny slupek volume</p>
-                <p>to jest wlasnie pelna harmonia sprzedajacy wlozyli gigantyczny wysilek w postaci masy uderzen i osiagneli adekwatny result spychajac cene mocno w dol</p>
-                <p>w takiej sytuacji wiemy ze ruch jest poparty silnym kapitalem i absolutnie nie stajemy mu na drodze zeby lapac spadajace noze</p>
-                <p>dziala to tez w druga strone maly volume czyli brak effortu powinien zawsze dawac maly spread czyli brak rezultatu</p>
-                <p>jesli rynek rysuje mala waska swieczke na bardzo niskim volume to po prostu oznacza ze chwilowo nie ma tam duzych graczy i presji z zadnej ze stron wiec cena po prostu dryfuje</p>
-                <p>rozpoznawanie tych zdrowych i logicznych zachowan to wasz podstawowy filtr ktory mowi wam kiedy trend wciaz ma paliwo do dalszej jazdy a wy mozecie spokojnie plynac z pradem</p>
-                
-                <h4>Anomalie i Hidden Selling</h4>
-                <p>skoro wiemy juz jak wyglada zdrowy ruch czas na najwazniejsza czesc vsa czyli anomalie effort vs result</p>
-                <p>wyobrazcie sobie sytuacje w ktorej widzicie gigantyczny volume czyli ogromny wysilek ale spread swiecy jest bardzo maly a cena prawie sie nie ruszyla to jest klasyczny brak rezultatu</p>
-                <p>w logice vsa oznacza to ze na tym poziomie pojawila sie ogromna bariera w postaci zlecen przeciwnej strony ktora calkowicie wchlonela ten ruch</p>
-                <p>jesli cena leci w gore na duzym wolumenie ale spread sie zaweza i zamkniecie jest w polowie to mamy do czynienia z <strong>hidden selling</strong> czyli sprzedajacy zaczeli absorbowac agresywnych kupujacych</p>
-                <p>to jest moment w ktorym profesionalni gracze zaczynaja wychodzic z pozycji albo budowac zupelnie nowy kierunek przeciwko tlumowi</p>
+                <div class="course-section">
+                    <p>otwieramy nowy dzial czyli vsa volume spread analysis to genialne narzedzie ktore laczy czysty wykres candles z volume i uczy was patrzec na rynek przez pryzmat prawa wysilku i rezultatu</p>
+                    <p>zeby to zrozumiec musimy zaczac od absolutnych podstaw zapomnijcie na chwile o standardowych formacjach świecowych(najlepiej na zawsze swoja droga..) bo w vsa interesuja nas tylko trzy konkretne rzeczy w kazdej candle</p>
+                    <ul>
+                        <li>po pierwsze spread ale nie ten od brokera tylko zasieg candle czyli odleglosc od samego low do samego high to nam mowi jaki konkretny <span class="tooltip-word">rezultat (Result) <span class="tip-i tip-i-up" onmousemove="tt(event, 'Result', 'Spread świecy - czyli faktyczny dystans, jaki pokonała cena w określonym czasie.')" onmouseleave="htt()">i</span></span> osiagnal rynek w danym czasie</li>
+                        <li>po drugie volume czyli ile kontraktow w ogole przewinelo sie na tej candle to mowi nam o tym jaki <span class="tooltip-word">wysilek (Effort) <span class="tip-i tip-i-up" onmousemove="tt(event, 'Effort', 'Wolumen - czyli ile siły włożono, aby poruszyć cenę.')" onmouseleave="htt()">i</span></span> rynek wlozyl w ten ruch</li>
+                        <li>i po trzecie cena zamkniecia czyli gdzie ostatecznie strona bullish i bearish skonczyla walke czy blisko high czy w srodku czy na samym low</li>
+                    </ul>
+                    <p>vsa polega na tym ze patrzac na te trzy rzeczy caly czas zadajemy sobie jedno wazne pytanie czy effort jaki wlozono w dany ruch jest logiczny i zgadza sie z rezultatem jaki osiagnieto na wykresie</p>
+                </div>
+
+                <div class="course-section">
+                    <h4>Zdrowy Ruch i Harmonijny Trend</h4>
+                    <p>zaczynamy od tego jak wyglada zdrowy rynek czyli sytuacja w ktorej wlozony effort idealnie rowna sie osiagnietemu rezultatowi</p>
+                    <p>wyobrazcie sobie potezna candle z bardzo duzym spreadem ktora zamyka sie na samym dnie a pod nia widzicie ogromny slupek volume</p>
+                    <p>to jest wlasnie pelna harmonia sellers wlozyli gigantyczny effort w postaci masy uderzen i osiagneli adekwatny result spychajac cene mocno w dol</p>
+                    <p>w takiej sytuacji wiemy ze ruch jest poparty silnym kapitalem i absolutnie nie stajemy mu na drodze zeby lapac falling knives</p>
+                    <p>dziala to tez w druga strone maly volume czyli brak effortu powinien zawsze dawac maly spread czyli brak rezultatu</p>
+                    <p>jesli rynek rysuje mala waska candle na bardzo niskim volume to po prostu oznacza ze chwilowo nie ma tam duzych graczy i presji z zadnej ze stron wiec cena po prostu dryfuje</p>
+                    <p>rozpoznawanie tych zdrowych i logicznych zachowan to wasz podstawowy filtr ktory mowi wam kiedy trend wciaz ma sile do dalszej jazdy a wy mozecie spokojnie plynac z trendem</p>
+                </div>
+
+                <div class="course-section">
+                    <div class="segment-tag tag-advanced">Advanced</div>
+                    <h4>Anomalie i Hidden Selling</h4>
+                    <p>skoro wiemy juz jak wyglada zdrowy ruch czas na najwazniejsza czesc vsa czyli anomalie effort vs result</p>
+                    <p>wyobrazcie sobie sytuacje w ktorej widzicie gigantyczny volume czyli ogromny effort ale spread candle jest bardzo maly a cena prawie sie nie ruszyla to jest klasyczny brak rezultatu</p>
+                    <p>w logice vsa oznacza to ze na tym poziomie pojawila sie ogromna bariera w postaci zlecen przeciwnej strony ktora calkowicie wchlonela ten ruch</p>
+                    <p>jesli cena leci w gore na duzym volume ale spread sie zaweza i zamkniecie jest w polowie to mamy do czynienia z <strong>hidden selling</strong> czyli sellers zaczeli absorbowac agresywnych buyers</p>
+                    <p>to jest moment w ktorym profesionalni gracze zaczynaja wychodzic z pozycji albo budowac zupelnie nowy kierunek przeciwko tlumowi</p>
+                </div>
             </div>
 
-            <div class="chart-wrapper">
+            <div class="chart-wrapper" style="height: 420px;">
                 <canvas id="canvas-vsa1" class="chart-canvas"></canvas>
             </div>
 
             <div class="course-text">
-                <h4>Sygnały Odwrócenia (Stopping Vol & Climax)</h4>
-                <p>przechodzimy do konkretnych setupow z vsa na pierwszy ogien idzie stopping volume i climax to sa wasze glowne sygnaly ze dany trend wlasnie dojezdza do sciany i zaraz bedzie zwrot akcji</p>
-                <p>wyobrazcie sobie silny trend spadkowy nagle pojawia sie ogromna swieca z gigantycznym volume ale zamiast zamknac sie na samym dole zostawia dlugi dolny knot(wick) i zamyka sie w polowie lub wyzej to jest wlasnie <strong>stopping volume</strong> duzy kapital wlasnie wszedl na rynek i swoimi zleceniami kupna calkowicie zaabsorbowal i zatrzymal spadki</p>
-                <p>z kolei climax to faza w ktorej retail wchodzi w najgorszym mozliwym momencie na samym szczycie trendu wzrostowego widzicie wystrzal ceny na ogromnym spreadzie i chorym volume ale nastepna swieca od razu zawraca to klasyczny <strong>buying climax</strong> duzi gracze wlasnie uzyli tej plynnosci zeby pozbyc sie swoich pozycji i ubrac tlum w drogie kontrakty to idealne miejsca zeby szukac wejscia na odwrocenie</p>
-                
-                <h4>Wysuszenie Popytu/Podaży (No Demand/Supply)</h4>
-                <p>druga strona medalu w vsa to sytuacje w ktorych na rynku doslownie brakuje jednej ze stron czyli no supply i no demand to wasze najlepsze sygnaly na bezpieczne dolaczenie do trwajacego juz trendu</p>
-                <p><strong>no demand</strong> pojawia sie w trendzie spadkowym kiedy cena probuje lekko podbic do gory ale robi to na bardzo malych swiecach z minimalnym volume to znak ze kupujacy kompletnie nie maja sily i brakuje popytu zeby odwrocic rynek po takim tescie cena zazwyczaj bardzo szybko wraca do spadkow</p>
-                <p>odwrotnie dziala <strong>no supply</strong> w trendzie wzrostowym mamy krotka korekte w dol ale swiece sa waskie a volume drastycznie spada to pokazuje ze sprzedajacy nie maja juz amunicji rynek zostal wysuszony z podazy i wystarczy mala iskra ze strony kupujacych zeby cena znowu wystrzelila w gore to sa momenty w ktorych rynek po prostu mowi wam ze droga najmniejszego oporu pozostaje niezmieniona</p>
+                <div class="course-section">
+                    <h4>Sygnały Odwrócenia (Stopping Vol & Climax)</h4>
+                    <p>przechodzimy do konkretnych setupow z vsa na pierwszy ogien idzie stopping volume i climax to sa wasze glowne sygnaly ze dany trend wlasnie dojezdza do sciany i zaraz bedzie reversal</p>
+                    <p>wyobrazcie sobie silny downtrend nagle pojawia sie ogromna candle z gigantycznym volume ale zamiast zamknac sie na samym low zostawia dlugi dolny wick i zamyka sie w polowie lub wyzej to jest wlasnie <strong>stopping volume</strong> duzy kapital wlasnie wszedl na rynek i swoimi zleceniami buy calkowicie zaabsorbowal i zatrzymal spadki</p>
+                    <p>z kolei climax to faza w ktorej retail wchodzi w najgorszym mozliwym momencie na samym szczycie uptrendu widzicie wystrzal ceny na ogromnym spreadzie i chorym volume ale nastepna candle od razu robi reversal to klasyczny <strong>buying climax</strong> duzi gracze wlasnie uzyli tej liquidity zeby pozbyc sie swoich pozycji i ubrac tlum w drogie kontrakty to idealne miejsca zeby szukac wejscia na reversal</p>
+                </div>
+
+                <div class="course-section">
+                    <h4>Wysuszenie Popytu/Podaży (No Demand/Supply)</h4>
+                    <p>druga strona medalu w vsa to sytuacje w ktorych na rynku doslownie brakuje jednej ze stron czyli no supply i no demand to wasze najlepsze sygnaly na bezpieczne dolaczenie do trwajacego juz trendu</p>
+                    <p><strong>no demand</strong> pojawia sie w downtrendzie kiedy cena probuje lekko podbic do gory ale robi to na bardzo malych candles z minimalnym volume to znak ze buyers kompletnie nie maja sily i brakuje demand zeby zrobic reversal po takim tescie cena zazwyczaj bardzo szybko wraca do spadkow</p>
+                    <p>odwrotnie dziala <strong>no supply</strong> w uptrendzie mamy krotki pullback w dol ale candles sa waskie a volume drastycznie spada to pokazuje ze sellers nie maja juz sily rynek zostal wysuszony z supply i wystarczy mala iskra ze strony buyers zeby cena znowu wystrzelila w gore to sa momenty w ktorych rynek po prostu mowi wam ze droga najmniejszego oporu pozostaje niezmieniona</p>
+                </div>
             </div>
 
-            <div class="chart-wrapper">
+            <div class="chart-wrapper" style="height: 420px;">
                 <canvas id="canvas-vsa2" class="chart-canvas"></canvas>
+            </div>
+            
+            <div class="next-section-wrapper">
+                <button class="next-btn" onclick="nav('cat-of')">Czytaj dalej: 6. Orderflow <span>→</span></button>
             </div>
         </div>
 
         <div id="view-cat-of" class="view">
             <h2 class="section-title">6. ORDERFLOW & DELTA</h2>
             <div class="course-text">
-                <h4>Absorpcja & Exhaustion</h4>
-                <p><strong>absorpcja</strong> to moment, w którym rynek testuje opór/support pojawia się strona przeciwna, która ich absorbuje - bardzo często można zauważyć przez znacznie zwiększony wolumen -> w skrócie walczą o to czy cena pójdzie w góre czy w dół (2 strony mogą wygrać) | nie dodałem absorpcja występuje gdy: zlecenia pasywne (limit order'y) wchłaniają zlecenia agresywne "market order'y", i absorpcja bardzo często prowadzi do fałszywego wybicia (failed auction)</p>
-                <p>w skrócie <strong>exhaustion</strong> to, wyczerpanie agresywnej, dominującej strony -> może oznaczać, że cena pójdzie w drugim kierunku (wyczerpała się jedna strona, wiec nie będą pchać pod prąd), lub utworzy sie nowy balance</p>
+                <div class="course-section">
+                    <h4>Absorpcja & Exhaustion</h4>
+                    <p><strong>absorpcja</strong> to moment, w którym rynek testuje resistance/support pojawia się przeciwna strona, która ich absorbuje - bardzo często można zauważyć przez znacznie zwiększony volume -> w skrócie walczą o to czy cena pójdzie w góre czy w dół (2 strony mogą wygrać) | nie dodałem absorpcja występuje gdy: zlecenia pasywne (limit orders) wchłaniają zlecenia agresywne "market orders", i absorpcja bardzo często prowadzi do fałszywego wybicia (failed auction)</p>
+                    <p>w skrócie <strong>exhaustion</strong> to, wyczerpanie agresywnej, dominującej strony -> może oznaczać, że cena pójdzie w drugim kierunku (wyczerpała się jedna strona, wiec nie będą pchać counter-trend), lub utworzy sie nowy balance</p>
+                </div>
             </div>
-
+            
             <div class="fp-wrapper">
                 <div class="fp-box">
-                    <div style="text-align:center; font-weight:700; margin-bottom:10px; color:var(--text-color);">Absorpcja Limitami</div>
+                    <div style="text-align:center; font-weight:700; margin-bottom:10px; color:var(--heading-color);">Absorpcja Limitami</div>
                     <div style="width:2px; height:20px; background:var(--border-color); margin:0 auto;"></div>
                     <div class="fp-row"><div class="fp-val bid">12</div><div class="fp-val ask">25</div></div>
                     <div class="fp-row"><div class="fp-val bid">45</div><div class="fp-val ask">32</div></div>
@@ -415,7 +766,7 @@
                 </div>
 
                 <div class="fp-box">
-                    <div style="text-align:center; font-weight:700; margin-bottom:10px; color:var(--text-color);">Exhaustion (Wyczerpanie)</div>
+                    <div style="text-align:center; font-weight:700; margin-bottom:10px; color:var(--heading-color);">Exhaustion (Wyczerpanie)</div>
                     <div style="width:2px; height:30px; background:var(--border-color); margin:0 auto;"></div>
                     <div class="fp-row" style="border:1px dashed var(--red-accent); border-radius:4px;" onmousemove="tt(event, 'Exhaustion', 'Dokładnie ZERO na Asku na samym szczycie. Popyt wysechł.')" onmouseleave="htt()">
                         <div class="fp-val bid">12</div><div class="fp-val ask fp-z">0</div>
@@ -428,96 +779,152 @@
             </div>
 
             <div class="course-text">
-                <h4>Imbalance & Diagonal Reading</h4>
-                <p>imbalance na footprint można zobaczyć po znaczącej różnicy między bid and ask np;</p>
-                
-                <div style="display:flex; justify-content:center; margin:20px 0;">
-                    <div style="background:var(--card-bg); border:1px solid var(--border-color); border-radius:8px; padding:15px; font-family:monospace; display:inline-block;">
-                        <div style="display:flex; align-items:center; gap:20px;">
-                            <div>
-                                <div style="display:flex; justify-content:space-between; width:120px; padding:4px; border-bottom:1px solid rgba(255,255,255,0.05);"><span style="color:var(--down-color);">0</span> <span style="color:var(--up-color); font-weight:800; background:var(--up-bg); padding:0 4px; border-radius:2px;">54</span></div>
-                                <div style="display:flex; justify-content:space-between; width:120px; padding:4px; border-bottom:1px solid rgba(255,255,255,0.05);"><span style="color:var(--down-color);">10</span> <span style="color:var(--up-color); font-weight:800; background:var(--up-bg); padding:0 4px; border-radius:2px;">63</span></div>
-                                <div style="display:flex; justify-content:space-between; width:120px; padding:4px;"><span style="color:var(--down-color);">3</span> <span style="color:var(--up-color);">47</span></div>
-                            </div>
-                            <div style="color:var(--secondary-text); font-size:0.85rem; max-width:200px;">
-                                ⤴ (czytamy to po skosie, wytłumaczę poniżej dlaczego)
+                <div class="course-section">
+                    <h4>Imbalance & Diagonal Reading</h4>
+                    <p>imbalance na footprint można zobaczyć po znaczącej różnicy między bid and ask np;</p>
+                    
+                    <div style="display:flex; justify-content:center; margin:20px 0;">
+                        <div style="background:var(--card-bg); border:1px solid var(--border-color); border-radius:12px; padding:15px; font-family: ui-monospace, 'SF Mono', 'JetBrains Mono', monospace; display:inline-block;">
+                            <div style="display:flex; align-items:center; gap:20px;">
+                                <div>
+                                    <div style="display:flex; justify-content:space-between; width:120px; padding:4px; border-bottom:1px solid rgba(255,255,255,0.05);"><span style="color:var(--down-color);">0</span> <span style="color:var(--up-color); font-weight:700; background:var(--up-bg); padding:0 4px; border-radius:2px; color:var(--heading-color);">54</span></div>
+                                    <div style="display:flex; justify-content:space-between; width:120px; padding:4px; border-bottom:1px solid rgba(255,255,255,0.05);"><span style="color:var(--down-color);">10</span> <span style="color:var(--up-color); font-weight:700; background:var(--up-bg); padding:0 4px; border-radius:2px; color:var(--heading-color);">63</span></div>
+                                    <div style="display:flex; justify-content:space-between; width:120px; padding:4px;"><span style="color:var(--down-color);">3</span> <span style="color:var(--up-color);">47</span></div>
+                                </div>
+                                <div style="color:var(--secondary-text); font-size:0.85rem; max-width:200px;">
+                                    ⤴ (czytamy to po skosie, wytłumaczę poniżej dlaczego)
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <p>pojawienie sie silnego imbalance możemy uznać za breakout/kontynuacje trendu</p>
-                <p>jeśli strefa wraca do wcześniejszego imbalance możemy uznać go za strefe przyszłego rejection - możliwe że osoby, które odpowiadają za ten breakeout będą bronić swoich zleceń, jeśli cena nadal jest bardzo atrakcyjna dla kupujących</p>
-                
-                <p>jak widzicie na rysunku ceny bid/ask występują na ukos:</p>
-                
-                <div style="margin:25px auto; max-width:550px;">
-                    <table class="dom-table">
-                        <tr><th colspan="3" style="background:rgba(255,255,255,0.05);">Drabina DOM (Depth of Market)</th></tr>
-                        <tr><td style="color:var(--secondary-text);">Price</td><td class="dom-bid">BID (Buy Limits)</td><td class="dom-ask">ASK (Sell Limits)</td></tr>
-                        <tr><td>105</td><td></td><td class="dom-ask">50</td></tr>
-                        <tr><td>104</td><td></td><td class="dom-ask">30 ⤴ <span style="font-size:0.75rem; color:var(--secondary-text);">(Mkt Buy uderza tu)</span></td></tr>
-                        <tr style="border-top:2px solid var(--border-color); border-bottom:2px solid var(--border-color);"><td colspan="3" style="font-weight:700;">--- SPREAD ---</td></tr>
-                        <tr><td>103</td><td class="dom-bid">25 ⤵ <span style="font-size:0.75rem; color:var(--secondary-text);">(Mkt Sell uderza tu)</span></td><td></td></tr>
-                        <tr><td>102</td><td class="dom-bid">40</td><td></td></tr>
-                    </table>
-                    <p style="text-align:center; font-size:0.85rem; color:var(--secondary-text); margin-top:10px;">
-                        Kupujesz z Marketu -> zabierasz płynność z ASK poziomu wyżej.<br>
-                        Sprzedajesz z Marketu -> zabierasz płynność z BID poziomu niżej. Dlatego czytamy po skosie!
-                    </p>
-                </div>
-
-                <h4>Delta i CVD Divergence</h4>
-                <p>kolejnym waznym elementem ukladanki na footprincie jest delta czyli po prostu roznica miedzy agresywnymi kupujacymi a sprzedajacymi w danej swiecy lub na konkretnym poziomie cenowym</p>
-                <p>delta na plus oznacza ze wiecej bylo uderzen market order w strone ask czyli dominowali agresywni kupujacy a delta na minus ze wiecej uderzen poszlo w bid czyli cisneli agresywni sprzedawcy</p>
-                <p>i tutaj laczy sie to idealnie z nasza absorpcja bo to wlasnie z delty wyciagamy najwazniejsze wnioski kto tak naprawde wygrywa te walke</p>
-                <p>jesli widzisz ogromna dodatnia delte czyli masa ludzi kupuje agresywnie po cenie rynkowej ale swieca nie potrafi zamknac sie wyzej albo wrecz zostawia dlugi gorny knot(wick) i spada to masz twardy dowod ze cale to agresywne kupno zostalo zablokowane i wchloniete przez grube zlecenia pasywne limit sell</p>
-                <p>to jest wlasnie ten moment w ktorym retail kupuje na samej gorce a wiekszy kapital ich absorbuje co najczesciej konczy sie falszywym wybiciem i mocnym zjazdem w dol(i na tym zarabiamy)</p>
-                <p>skoro mamy juz wyjasniona zwykla delte na pojedynczych swiecach to musimy spojrzec na szerszy obraz i do tego sluzy <strong>cvd czyli skumulowana delta wolumenu</strong></p>
-                <p>to nic innego jak dodawanie do siebie delty z kolejnych swiec dzieki czemu zamiast szumu widzimy ogolny trend agresji na rynku</p>
-                <p>najwieksza przewaga cvd pojawia sie wtedy gdy rozjezdza sie z cena czyli tworzy dywergencje</p>
-
-                <div class="cvd-box">
-                    <div class="cvd-row">
-                        <span style="color:var(--up-color);">Cena idzie w górę</span>
-                        <div class="cvd-line"><span class="cvd-arrow">↗</span></div>
-                        <span style="font-size:1.5rem;">📈</span>
+                    <p>pojawienie sie silnego imbalance możemy uznać za breakout/kontynuacje trendu</p>
+                    <p>jeśli strefa wraca do wcześniejszego imbalance możemy uznać go za strefe przyszłego rejection - możliwe że osoby, które odpowiadają za ten breakeout będą bronić swoich zleceń, jeśli cena nadal jest bardzo atrakcyjna dla buyers</p>
+                    
+                    <p>jak widzicie na rysunku ceny bid/ask występują na ukos:</p>
+                    
+                    <div style="margin:25px auto; max-width:550px;">
+                        <table class="dom-table">
+                            <tr><th colspan="3">Drabina DOM (Depth of Market)</th></tr>
+                            <tr><td style="color:var(--secondary-text);">Price</td><td class="dom-bid">BID (Buy Limits)</td><td class="dom-ask">ASK (Sell Limits)</td></tr>
+                            <tr><td>105</td><td></td><td class="dom-ask">50</td></tr>
+                            <tr><td>104</td><td></td><td class="dom-ask">30 ⤴ <span style="font-size:0.75rem; color:var(--secondary-text);">(Mkt Buy uderza tu)</span></td></tr>
+                            <tr style="border-top:2px solid var(--border-color); border-bottom:2px solid var(--border-color);"><td colspan="3" style="font-weight:700;">--- SPREAD ---</td></tr>
+                            <tr><td>103</td><td class="dom-bid">25 ⤵ <span style="font-size:0.75rem; color:var(--secondary-text);">(Mkt Sell uderza tu)</span></td><td></td></tr>
+                            <tr><td>102</td><td class="dom-bid">40</td><td></td></tr>
+                        </table>
+                        <p style="text-align:center; font-size:0.85rem; color:var(--secondary-text); margin-top:10px;">
+                            Kupujesz z Marketu -> zabierasz liquidity z ASK poziomu wyżej.<br>
+                            Sprzedajesz z Marketu -> zabierasz liquidity z BID poziomu niżej. Dlatego czytamy po skosie!
+                        </p>
                     </div>
-                    <div class="cvd-row">
-                        <span style="color:var(--down-color);">CVD spada (Agresorzy sprzedają)</span>
-                        <div class="cvd-line"><span class="cvd-arrow down">↘</span></div>
-                        <span style="font-size:1.5rem;">📉</span>
-                    </div>
-                    <div style="text-align:center; font-size:0.85rem; color:var(--secondary-text); margin-top:10px;">Klasyczna dywergencja wyprzedzająca załamanie trendu.</div>
                 </div>
 
-                <p>wyobrazcie sobie ze cena robi nowy szczyt idzie wyzej ale na cvd widzicie ze linia spada czyli robi nizszy szczyt</p>
-                <p>to oznacza ze ten nowy ruch do gory na cenie nie jest juz poparty agresywnym kupnem z rynku a wrecz przeciwnie dominowac zaczynaja agresywni sprzedawcy</p>
-                <p>to klasyczny znak wyczerpania i idealne potwierdzenie dla naszej absorpcji o ktorej pisalem wczesniej swietny moment zeby szukac wejscia na odwrocenie</p>
+                <div class="course-section">
+                    <div class="segment-tag tag-advanced">Advanced</div>
+                    <h4>Delta i CVD Divergence</h4>
+                    <p>kolejnym waznym elementem ukladanki na footprincie jest <span class="tooltip-word">delta <span class="tip-i tip-i-up" onmousemove="tt(event, 'Delta', 'Różnica między agresywnym kupnem (Market Buy) a agresywną sprzedażą (Market Sell).')" onmouseleave="htt()">i</span></span> czyli po prostu roznica miedzy agresywnymi buyers a sellers w danej candle lub na konkretnym poziomie cenowym</p>
+                    
+                    <div class="fp-wrapper">
+                        <div class="fp-box" style="width: 260px;">
+                            <div style="text-align:center; font-weight:700; margin-bottom:10px; color:var(--heading-color);">Delta = Ask - Bid</div>
+                            <div style="width:2px; height:15px; background:var(--border-color); margin:0 auto;"></div>
+                            
+                            <div class="fp-row" style="border-bottom: 1px solid rgba(255,255,255,0.05); padding: 8px 0;">
+                                <div class="fp-val bid">15</div>
+                                <div style="color:var(--secondary-text);">x</div>
+                                <div class="fp-val ask">45</div>
+                                <div style="width: 50px; text-align:right; color:var(--up-color); font-weight:700;">+30</div>
+                            </div>
+                            
+                            <div class="fp-row" style="border-bottom: 1px solid rgba(255,255,255,0.05); padding: 8px 0;">
+                                <div class="fp-val bid">120</div>
+                                <div style="color:var(--secondary-text);">x</div>
+                                <div class="fp-val ask">20</div>
+                                <div style="width: 50px; text-align:right; color:var(--down-color); font-weight:700;">-100</div>
+                            </div>
+                            
+                            <div class="fp-row" style="padding: 8px 0;">
+                                <div class="fp-val bid">50</div>
+                                <div style="color:var(--secondary-text);">x</div>
+                                <div class="fp-val ask">60</div>
+                                <div style="width: 50px; text-align:right; color:var(--up-color); font-weight:700;">+10</div>
+                            </div>
+                            
+                            <div style="width:2px; height:15px; background:var(--border-color); margin:0 auto;"></div>
+                            <div style="margin-top:10px; padding-top:15px; border-top:1px dashed var(--border-color); text-align:center;">
+                                <span style="color:var(--secondary-text); font-size:0.8rem; text-transform:uppercase; letter-spacing:0.5px;">Delta całkowita świecy:</span><br>
+                                <strong style="color:var(--down-color); font-size:1.2rem; display:block; margin-top:4px;">-60</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p>delta na plus oznacza ze wiecej bylo uderzen market order w strone ask czyli dominowali agresywni buyers a delta na minus ze wiecej uderzen poszlo w bid czyli cisneli agresywni sellers</p>
+                    <p>i tutaj laczy sie to idealnie z nasza absorpcja bo to wlasnie z delty wyciagamy najwazniejsze wnioski kto tak naprawde wygrywa te walke</p>
+                    <p>jesli widzisz ogromna dodatnia delte czyli masa ludzi kupuje agresywnie po cenie rynkowej ale candle nie potrafi zamknac sie wyzej albo wrecz zostawia dlugi gorny wick i spada to masz twardy dowod ze cale to agresywne kupno zostalo zablokowane i wchloniete przez grube zlecenia pasywne limit sell</p>
+                    <p>to jest wlasnie ten moment w ktorym retail kupuje na samym high a wiekszy kapital ich absorbuje co najczesciej konczy sie failed auction i mocnym dropem w dol(i na tym zarabiamy)</p>
+                    <p>skoro mamy juz wyjasniona zwykla delte na pojedynczych candles to musimy spojrzec na szerszy obraz i do tego sluzy <strong><span class="tooltip-word">cvd <span class="tip-i tip-i-up" onmousemove="tt(event, 'CVD', 'Cumulative Volume Delta - skumulowana delta ze wszystkich świec. Pokazuje szerszy trend agresji na rynku.')" onmouseleave="htt()">i</span></span> czyli skumulowana delta volume</strong></p>
+                    <p>to nic innego jak dodawanie do siebie delty z kolejnych candles dzieki czemu zamiast noise widzimy ogolny trend agresji na rynku</p>
+                    <p>najwieksza przewaga cvd pojawia sie wtedy gdy rozjezdza sie z cena czyli tworzy dywergencje</p>
+
+                    <div class="cvd-box">
+                        <div class="cvd-row">
+                            <span style="color:var(--up-color);">Cena idzie w górę</span>
+                            <div class="cvd-line"><span class="cvd-arrow">↗</span></div>
+                            <span style="font-size:1.5rem;">📈</span>
+                        </div>
+                        <div class="cvd-row">
+                            <span style="color:var(--down-color);">CVD spada (Agresorzy sprzedają)</span>
+                            <div class="cvd-line"><span class="cvd-arrow down">↘</span></div>
+                            <span style="font-size:1.5rem;">📉</span>
+                        </div>
+                        <div style="text-align:center; font-size:0.85rem; color:var(--secondary-text); margin-top:10px;">Klasyczna dywergencja wyprzedzająca załamanie trendu.</div>
+                    </div>
+
+                    <p>wyobrazcie sobie ze cena robi nowe high idzie wyzej ale na cvd widzicie ze linia spada czyli robi nizsze high</p>
+                    <p>to oznacza ze ten nowy ruch do gory na cenie nie jest juz poparty agresywnym kupnem z rynku a wrecz przeciwnie dominowac zaczynaja agresywni sellers</p>
+                    <p>to klasyczny znak exhaustion i idealne potwierdzenie dla naszej absorpcji o ktorej pisalem wczesniej swietny moment zeby szukac wejscia na reversal</p>
+                </div>
+            </div>
+            
+            <div class="next-section-wrapper">
+                <button class="next-btn" onclick="nav('cat-fund')">Czytaj dalej: 7. Fundamenty <span>→</span></button>
             </div>
         </div>
 
         <div id="view-cat-fund" class="view">
             <h2 class="section-title">7. FUNDAMENTY POD INTRADAY</h2>
             <div class="course-text">
-                <p>fundamenty w daytradingu to nie jest czytanie sprawozdan finansowych spolek to po prostu kalendarz makroekonomiczny i swiadomosc kiedy na rynek wpadnie huragan</p>
-                <p>codziennie rano waszym pierwszym krokiem powinno byc sprawdzenie kalendarza na przyklad na forexfactory interesuja nas tylko te najwazniejsze wydarzenia zaznaczone na czerwono jak cpi nfp czy decyzje fomc</p>
-                <p>te dane to zapalnik ktory uruchamia algorytmy i wpuszcza wielki kapital i tu pojawia sie najwazniejsza zasada nie stajemy na autostradzie pod prad</p>
-                <p>granie dokladnie w minucie publikacji to czysty hazard plynnosc znika z arkusza zebranie zlecenia po waszej cenie jest praktycznie niemozliwe a poslizg cenowy moze wyczyscic wam konto w ulamek sekundy</p>
-                <p>dlatego profesjonalne podejscie wyglada tak ze przed waznymi danymi zamykacie pozycje albo maksymalnie scinacie ryzyko</p>
-                <p>potem patrzycie jak rynek wariuje czekacie az minie pierwszy chaos i emocje opadna gdy algorytmy zrobia swoje i rynek zacznie budowac nowy balans lub wyrazny imbalans dopiero wtedy wchodzimy do gry na naszych warunkach</p>
+                <div class="course-section">
+                    <p>fundamenty w daytradingu to nie jest czytanie sprawozdan finansowych spolek to po prostu kalendarz makroekonomiczny i swiadomosc kiedy na rynek wpadnie huragan</p>
+                    <p>codziennie rano waszym pierwszym krokiem powinno byc sprawdzenie kalendarza na przyklad na forexfactory interesuja nas tylko te najwazniejsze wydarzenia zaznaczone na czerwono jak <span class="tooltip-word">cpi <span class="tip-i tip-i-up" onmousemove="tt(event, 'CPI', 'Consumer Price Index - raport o inflacji, wywołujący często potężną zmienność.')" onmouseleave="htt()">i</span></span> <span class="tooltip-word">nfp <span class="tip-i tip-i-up" onmousemove="tt(event, 'NFP', 'Non-Farm Payrolls - kluczowe dane z amerykańskiego rynku pracy publikowane raz w miesiącu.')" onmouseleave="htt()">i</span></span> czy decyzje fomc</p>
+                    <p>te dane to zapalnik ktory uruchamia algorytmy i wpuszcza wielki kapital i tu pojawia sie najwazniejsza zasada nie stajemy na autostradzie pod prad</p>
+                    <div class="segment-tag tag-must-know">Must Know</div>
+                    <p>granie dokladnie w minucie publikacji to czysty hazard liquidity znika z orderbooka zebranie zlecenia po waszej cenie jest praktycznie niemozliwe a slippage moze wyczyscic wam konto w ulamek sekundy</p>
+                    <p>dlatego profesjonalne podejscie wyglada tak ze przed waznymi danymi zamykacie pozycje albo maksymalnie scinacie ryzyko</p>
+                    <p>potem patrzycie jak rynek wariuje czekacie az minie pierwszy chaos i emocje opadna gdy algorytmy zrobia swoje i rynek zacznie budowac nowy balans lub wyrazny imbalans dopiero wtedy wchodzimy do gry na naszych warunkach</p>
+                </div>
+            </div>
+            <div class="next-section-wrapper">
+                <button class="next-btn" onclick="nav('cat-risk')">Czytaj dalej: 8. Zarządzanie Ryzykiem <span>→</span></button>
             </div>
         </div>
 
         <div id="view-cat-risk" class="view">
-            <h2 class="section-title">8. ZARZADZANIE RYZYKIEM</h2>
+            <h2 class="section-title">8. ZARZĄDZANIE RYZYKIEM</h2>
             <div class="course-text">
-                <p>polecam przeczytać po zapoznaniu sie z wcześniejszymi kanałami, zawiera ... które były tam wyjaśnione</p>
-                <p>przejdzmy teraz do tematu ktory chroni wasz kapital czyli zarzadzanie ryzykiem pod ✨ orderflow ✨ zapomnijcie o sztywnym ustawianiu stop lossa na podstawie stalego procentu konta bo rynek zupelnie nie wie ile macie pieniedzy i w ogole go to nie obchodzi w orderflow stop lossa stawiamy tam gdzie nasza teza na trade zostaje ostatecznie zlamana</p>
-                <p>wyglada to tak ze chowacie sie za struktura na przyklad tuz za grubym hvn albo pod poziomem na ktorym wczesniej mieliscie twarda absorpcje jesli cena tam wraca i agresywnie przebija ten poziom to znaczy ze sciana ktora miala was bronic wlasnie runela wieksi gracze skapitulowali i nie ma sensu dluzej trzymac tej pozycji nadziejami</p>
-                <p>druga kluczowa sprawa to ucinanie strat z palca majac footprint i delte widzicie intencje na zywo jesli wchodzicie w longa po ladnej absorpcji ale nagle w nastepnej swiecy delta robi sie drastycznie ujemna i puszczaja kolejne poziomy nie czekacie az cena doczlapie sie do waszego twardego stop lossa po prostu ucinacie trade z palca bo warunki rynkowe wlasnie ulegly zmianie to jest najwieksza przewaga orderflow widzicie kiedy uciekac zanim rynek zabierze wam caly zaplanowany do straty kapital</p>
-                <p>w skrócie stop lose za strukturą, która was ✨ chroni ✨</p>
-                <p>może to być big trades, absorpcja, lvn, hvn czy jakakolwiek inna rzecz (która pasuje.)</p>
+                <div class="course-section">
+                    <p>polecam przeczytać po zapoznaniu sie z wcześniejszymi kanałami, zawiera ... które były tam wyjaśnione</p>
+                    <p>przejdzmy teraz do tematu ktory chroni wasz kapital czyli zarzadzanie ryzykiem pod ✨ orderflow ✨ zapomnijcie o sztywnym ustawianiu stop lossa na podstawie stalego procentu konta bo rynek zupelnie nie wie ile macie pieniedzy i w ogole go to nie obchodzi w orderflow stop lossa stawiamy tam gdzie nasza teza na trade zostaje ostatecznie invalidated</p>
+                    <p>wyglada to tak ze chowacie sie za struktura na przyklad tuz za grubym hvn albo pod poziomem na ktorym wczesniej mieliscie twarda absorpcje jesli cena tam wraca i agresywnie przebija ten poziom to znaczy ze sciana ktora miala was bronic wlasnie runela wieksi gracze skapitulowali i nie ma sensu dluzej trzymac tej pozycji nadziejami</p>
+                    <div class="segment-tag tag-must-know">Must Know</div>
+                    <p>druga kluczowa sprawa to ucinanie strat (cutting losses) z palca majac footprint i delte widzicie intencje na zywo jesli wchodzicie w longa po ladnej absorpcji ale nagle w nastepnej candle delta robi sie drastycznie ujemna i puszczaja kolejne poziomy nie czekacie az cena doczlapie sie do waszego twardego stop lossa po prostu ucinacie trade z palca bo warunki rynkowe wlasnie ulegly zmianie to jest najwieksza przewaga orderflow widzicie kiedy uciekac zanim rynek zabierze wam caly zaplanowany do straty kapital</p>
+                    <p>w skrócie stop lose za strukturą, która was ✨ chroni ✨</p>
+                    <p>może to być big trades, absorpcja, lvn, hvn czy jakakolwiek inna rzecz (która pasuje.)</p>
+                </div>
+            </div>
+            <div class="next-section-wrapper">
+                <button class="next-btn" onclick="nav('home')" style="background: var(--card-bg); border: 1px solid var(--border-color); color: var(--heading-color); box-shadow: none;">Wróć do Katalogu Głównego</button>
             </div>
         </div>
 
@@ -539,442 +946,201 @@
         const cssVar = (name) => getComputedStyle(document.body).getPropertyValue(name).trim();
         const tooltip = document.getElementById('tooltip');
         
-        function tt(e, title, text) {
-            tooltip.style.display = 'block'; tooltip.innerHTML = `<strong>${title}</strong>${text}`;
+        function tt(e, title, text, accent) {
+            tooltip.style.display = 'block';
+            tooltip.style.setProperty('--tip-accent', accent || 'var(--up-color)');
+            tooltip.innerHTML = `<strong>${title}</strong>${text}`;
             tooltip.style.left = (e.clientX + 15) + 'px'; tooltip.style.top = (e.clientY + 15) + 'px';
         }
         function htt() { tooltip.style.display = 'none'; }
 
+        function updateSessions() {
+            const now = new Date();
+            const localH = now.getHours();
+            const localM = now.getMinutes();
+            const sessions = [
+                { openH: 9, openM: 0, closeH: 17, closeM: 30, el: document.getElementById('london-session') },
+                { openH: 15, openM: 30, closeH: 22, closeM: 0, el: document.getElementById('ny-session') }
+            ];
+            sessions.forEach(s => {
+                if(!s.el) return;
+                const currentTime = localH * 60 + localM;
+                const openTime = s.openH * 60 + s.openM;
+                const closeTime = s.closeH * 60 + s.closeM;
+                const isOpen = currentTime >= openTime && currentTime < closeTime;
+                const dot = s.el.querySelector('.dot');
+                const timeSpan = s.el.querySelector('.session-time');
+                dot.classList.toggle('active', isOpen);
+                let targetTime = isOpen ? closeTime : openTime;
+                if (!isOpen && currentTime > closeTime) targetTime += 24 * 60;
+                let diffMins = targetTime - currentTime;
+                timeSpan.innerText = isOpen ? `Zamyka za ${Math.floor(diffMins / 60)}h ${diffMins % 60}m` : `Otwiera za ${Math.floor(diffMins / 60)}h ${diffMins % 60}m`;
+            });
+        }
+        setInterval(updateSessions, 60000);
+
+        function updateProgressUI() {
+            const progress = JSON.parse(localStorage.getItem('rei_academy_progress') || '[]');
+            document.querySelectorAll('.folder-card').forEach(card => {
+                if(progress.includes(card.dataset.cat)) card.classList.add('completed');
+            });
+        }
+
         class ChartEngine {
             constructor(canvasId, ohlcvData, options = {}) {
                 this.canvas = document.getElementById(canvasId);
+                if(!this.canvas) return;
                 this.ctx = this.canvas.getContext('2d');
                 this.data = ohlcvData;
                 this.options = Object.assign({ vpVisible: true, showVWAP: false, highlights: {}, annotations: [] }, options);
-                
-                this.candles = [];
-                this.vp = {};
-                this.vwapLine = [];
-                this.maxVP = 0;
-                this.maxVol = 0;
-                this.minP = Infinity;
-                this.maxP = -Infinity;
-                
+                this.candles = []; this.vp = {}; this.vwapLine = []; this.maxVP = 0; this.maxVol = 0; this.minP = Infinity; this.maxP = -Infinity;
                 this.processTicks();
-                
                 this.resizeObserver = new ResizeObserver(() => this.render());
                 this.resizeObserver.observe(this.canvas.parentElement);
-                
                 this.canvas.addEventListener('mousemove', (e) => this.handleHover(e));
                 this.canvas.addEventListener('mouseleave', () => { htt(); this.hoverIndex = -1; this.render(); });
                 this.hoverIndex = -1;
             }
-
             processTicks() {
                 let cumPV = 0, cumV = 0;
-                
-                this.data.forEach((d, i) => {
+                this.data.forEach((d) => {
                     const [o, h, l, c, v] = d;
-                    
-                    if(h > this.maxP) this.maxP = h;
-                    if(l < this.minP) this.minP = l;
-                    if(v > this.maxVol) this.maxVol = v;
-
+                    if(h > this.maxP) this.maxP = h; if(l < this.minP) this.minP = l; if(v > this.maxVol) this.maxVol = v;
                     const path = c >= o ? [o, l, h, c] : [o, h, l, c];
-                    const steps = 10;
-                    const volPerStep = v / steps;
-                    
+                    const steps = 10; const volPerStep = v / steps;
                     for(let p = 0; p < path.length - 1; p++) {
                         let p1 = path[p], p2 = path[p+1];
                         let pSteps = Math.ceil(steps / 3);
                         for(let s = 1; s <= pSteps; s++) {
                             let tickP = p1 + (p2 - p1) * (s/pSteps);
-                            
-                            cumPV += tickP * volPerStep;
-                            cumV += volPerStep;
-                            
+                            cumPV += tickP * volPerStep; cumV += volPerStep;
                             let priceBucket = Math.round(tickP);
                             this.vp[priceBucket] = (this.vp[priceBucket] || 0) + volPerStep;
                             if(this.vp[priceBucket] > this.maxVP) this.maxVP = this.vp[priceBucket];
                         }
                     }
-                    
                     this.candles.push({ o, h, l, c, v });
                     this.vwapLine.push(cumV > 0 ? cumPV / cumV : c);
                 });
             }
-
             render() {
                 const rect = this.canvas.parentElement.getBoundingClientRect();
+                if(rect.width === 0 || rect.height === 0) return;
                 const dpr = window.devicePixelRatio || 1;
-                this.canvas.width = rect.width * dpr;
-                this.canvas.height = rect.height * dpr;
+                this.canvas.width = rect.width * dpr; this.canvas.height = rect.height * dpr;
                 this.ctx.scale(dpr, dpr);
-                
-                const w = rect.width;
-                const h = rect.height;
-                const ctx = this.ctx;
-                
+                const w = rect.width, h = rect.height, ctx = this.ctx;
                 ctx.clearRect(0, 0, w, h);
-
                 const vpWidth = this.options.vpVisible ? Math.min(200, w * 0.25) : 10;
-                const volHeight = 60;
-                const padTop = 30;
-                const padBottom = 20 + volHeight;
-                const drawW = w - vpWidth - 20;
-                const drawH = h - padTop - padBottom;
-                
+                const volHeight = 60, padTop = 30, padBottom = 20 + volHeight;
+                const drawW = w - vpWidth - 20, drawH = h - padTop - padBottom;
                 const rangeP = this.maxP - this.minP || 1;
                 const mapY = (price) => h - padBottom - ((price - this.minP) / rangeP) * drawH;
                 const stepX = drawW / Math.max(this.candles.length, 10);
                 const mapX = (index) => vpWidth + 10 + (index * stepX) + (stepX/2);
-                
-                const cUp = cssVar('--up-color');
-                const cDown = cssVar('--down-color');
-                const cGrid = cssVar('--border-color');
-                const cVP = cssVar('--vp-color');
-                const cPOC = cssVar('--vp-poc');
-                
-                ctx.strokeStyle = cGrid;
-                ctx.lineWidth = 1;
-                for(let i=0; i<=5; i++) {
-                    let py = padTop + (drawH/5)*i;
-                    ctx.beginPath(); ctx.moveTo(vpWidth, py); ctx.lineTo(w, py); ctx.stroke();
-                }
-
+                const cUp = cssVar('--up-color'), cDown = cssVar('--down-color'), cGrid = cssVar('--border-color'), cVP = cssVar('--vp-color'), cPOC = cssVar('--vp-poc');
+                ctx.strokeStyle = cGrid; ctx.lineWidth = 1;
+                for(let i=0; i<=5; i++) { let py = padTop + (drawH/5)*i; ctx.beginPath(); ctx.moveTo(vpWidth, py); ctx.lineTo(w, py); ctx.stroke(); }
                 const cW = Math.max(stepX * 0.6, 2);
-
                 if (this.options.annotations) {
                     this.options.annotations.forEach(ann => {
                         if (ann.type === 'zone') {
-                            let y1 = mapY(ann.p1);
-                            let y2 = mapY(ann.p2);
-                            let zoneY = Math.min(y1, y2);
-                            let zoneH = Math.abs(y1 - y2);
-                            
-                            let x1 = ann.startIdx !== undefined ? mapX(ann.startIdx) - cW : vpWidth;
-                            let x2 = ann.endIdx !== undefined ? mapX(ann.endIdx) + cW : w;
-                            let wZone = x2 - x1;
-
-                            ctx.fillStyle = cssVar(ann.bgVar);
-                            ctx.fillRect(x1, zoneY, wZone, zoneH);
-                            
-                            if(ann.text) {
-                                ctx.fillStyle = cssVar(ann.textVar);
-                                ctx.font = '600 12px Inter';
-                                ctx.fillText(ann.text, x1 + 10, zoneY + 16);
-                            }
-                            
-                            ctx.strokeStyle = cssVar(ann.textVar);
-                            ctx.lineWidth = 1;
-                            ctx.strokeRect(x1, zoneY, wZone, zoneH);
+                            let y1 = mapY(ann.p1), y2 = mapY(ann.p2), zoneY = Math.min(y1, y2), zoneH = Math.abs(y1 - y2);
+                            let x1 = ann.startIdx !== undefined ? mapX(ann.startIdx) - cW : vpWidth, x2 = ann.endIdx !== undefined ? mapX(ann.endIdx) + cW : w;
+                            ctx.fillStyle = cssVar(ann.bgVar); ctx.fillRect(x1, zoneY, x2-x1, zoneH);
+                            if(ann.text) { ctx.fillStyle = cssVar(ann.textVar); ctx.font = '600 12px -apple-system, sans-serif'; ctx.fillText(ann.text, x1 + 10, zoneY + 16); }
+                            ctx.strokeStyle = cssVar(ann.textVar); ctx.strokeRect(x1, zoneY, x2-x1, zoneH);
                         }
-                        
                         if (ann.type === 'text') {
-                            ctx.fillStyle = ann.color || cUp;
-                            ctx.font = ann.font || 'bold 12px Inter';
-                            const tx = mapX(ann.i) + (ann.offsetX || 0);
-                            const ty = mapY(ann.p) + (ann.offsetY || 0);
-                            
-                            ctx.save();
-                            ctx.translate(tx, ty);
-                            if (ann.angle) ctx.rotate(ann.angle * Math.PI / 180);
-                            ctx.fillText(ann.text, 0, 0);
-                            ctx.restore();
+                            ctx.fillStyle = ann.color || cUp; ctx.font = ann.font || 'bold 12px -apple-system, sans-serif';
+                            ctx.save(); ctx.translate(mapX(ann.i) + (ann.offsetX || 0), mapY(ann.p) + (ann.offsetY || 0));
+                            if (ann.angle) ctx.rotate(ann.angle * Math.PI / 180); ctx.fillText(ann.text, 0, 0); ctx.restore();
                         }
-
                         if (ann.type === 'arrow') {
-                            const ax1 = mapX(ann.i1), ay1 = mapY(ann.p1);
-                            const ax2 = mapX(ann.i2), ay2 = mapY(ann.p2);
-                            
-                            ctx.beginPath();
-                            ctx.moveTo(ax1, ay1);
-                            const cpX = ax1 + (ax2 - ax1) / 2;
-                            const cpY = Math.min(ay1, ay2) - 30;
-                            ctx.quadraticCurveTo(cpX, cpY, ax2, ay2);
-                            ctx.strokeStyle = ann.color || '#00aaff';
-                            ctx.lineWidth = 3;
-                            ctx.stroke();
-                            
-                            const angle = Math.atan2(ay2 - cpY, ax2 - cpX);
-                            ctx.beginPath();
-                            ctx.moveTo(ax2, ay2);
-                            ctx.lineTo(ax2 - 12 * Math.cos(angle - Math.PI / 6), ay2 - 12 * Math.sin(angle - Math.PI / 6));
-                            ctx.lineTo(ax2 - 12 * Math.cos(angle + Math.PI / 6), ay2 - 12 * Math.sin(angle + Math.PI / 6));
-                            ctx.fillStyle = ann.color || '#00aaff';
-                            ctx.fill();
+                            const ax1 = mapX(ann.i1), ay1 = mapY(ann.p1), ax2 = mapX(ann.i2), ay2 = mapY(ann.p2);
+                            ctx.beginPath(); ctx.moveTo(ax1, ay1); ctx.quadraticCurveTo(ax1 + (ax2 - ax1) / 2, Math.min(ay1, ay2) - 30, ax2, ay2);
+                            ctx.strokeStyle = ann.color || '#00aaff'; ctx.lineWidth = 3; ctx.stroke();
                         }
                     });
                 }
-
                 if (this.options.vpVisible) {
-                    let pocPrice = null;
-                    let maxVPVal = 0;
-                    
-                    for(const [priceStr, vol] of Object.entries(this.vp)) {
-                        const price = parseFloat(priceStr);
-                        if (vol > maxVPVal) { maxVPVal = vol; pocPrice = price; }
-                        
-                        const y = mapY(price);
-                        const barW = (vol / this.maxVP) * vpWidth * 0.9;
-                        
-                        ctx.fillStyle = cVP;
-                        ctx.fillRect(0, y - 1.5, barW, 3);
+                    let pocPrice = null, maxVPVal = 0;
+                    for(const [pS, v] of Object.entries(this.vp)) { if (v > maxVPVal) { maxVPVal = v; pocPrice = parseFloat(pS); } }
+                    for(const [pS, v] of Object.entries(this.vp)) {
+                        const y = mapY(parseFloat(pS)), barW = (v / this.maxVP) * vpWidth * 0.9;
+                        ctx.fillStyle = cVP; ctx.fillRect(0, y - 1.5, barW, 3);
                     }
-                    
                     if (pocPrice !== null) {
-                        const y = mapY(pocPrice);
-                        ctx.fillStyle = cPOC;
-                        ctx.fillRect(0, y - 2, vpWidth, 4);
-                        ctx.strokeStyle = cPOC;
-                        ctx.lineWidth = 1;
-                        ctx.setLineDash([4, 4]);
-                        ctx.beginPath(); ctx.moveTo(vpWidth, y); ctx.lineTo(w, y); ctx.stroke();
-                        ctx.setLineDash([]);
+                        const y = mapY(pocPrice); ctx.fillStyle = cPOC; ctx.fillRect(0, y - 2, vpWidth, 4);
+                        ctx.strokeStyle = cPOC; ctx.setLineDash([4, 4]); ctx.beginPath(); ctx.moveTo(vpWidth, y); ctx.lineTo(w, y); ctx.stroke(); ctx.setLineDash([]);
                     }
                 }
-
                 if (this.options.showVWAP) {
-                    const cVWAP = cssVar('--vwap-line');
-                    ctx.beginPath();
-                    this.vwapLine.forEach((val, i) => {
-                        const cx = mapX(i);
-                        const cy = mapY(val);
-                        if(i === 0) ctx.moveTo(cx, cy); else ctx.lineTo(cx, cy);
-                    });
-                    ctx.strokeStyle = cVWAP;
-                    ctx.lineWidth = 3;
-                    ctx.stroke();
+                    ctx.beginPath(); this.vwapLine.forEach((val, i) => { const cx = mapX(i), cy = mapY(val); if(i === 0) ctx.moveTo(cx, cy); else ctx.lineTo(cx, cy); });
+                    ctx.strokeStyle = cssVar('--vwap-line'); ctx.lineWidth = 3; ctx.stroke();
                 }
-
                 this.candles.forEach((c, i) => {
-                    const cx = mapX(i);
-                    const isUp = c.c >= c.o;
-                    const color = isUp ? cUp : cDown;
-                    
-                    const vH = (c.v / this.maxVol) * volHeight;
-                    ctx.fillStyle = color;
-                    ctx.globalAlpha = 0.5;
-                    ctx.fillRect(cx - cW/2, h - padBottom + 5 + (volHeight - vH), cW, vH);
-                    ctx.globalAlpha = 1.0;
-                    
+                    const cx = mapX(i), isUp = c.c >= c.o, color = isUp ? cUp : cDown;
+                    const vH = (c.v / this.maxVol) * volHeight; ctx.fillStyle = color; ctx.globalAlpha = 0.5;
+                    ctx.fillRect(cx - cW/2, h - padBottom + 5 + (volHeight - vH), cW, vH); ctx.globalAlpha = 1.0;
                     const hl = this.options.highlights[i];
                     if (hl || this.hoverIndex === i) {
-                        ctx.shadowColor = color;
-                        ctx.shadowBlur = 10;
-                        if (hl && hl.border) {
-                            ctx.strokeStyle = color;
-                            ctx.setLineDash([4, 4]);
-                            ctx.strokeRect(cx - cW/2 - 4, mapY(c.h) - 4, cW + 8, Math.abs(mapY(c.l) - mapY(c.h)) + 8);
-                            ctx.setLineDash([]);
-                        }
+                        ctx.shadowColor = color; ctx.shadowBlur = 10;
+                        if (hl && hl.border) { ctx.strokeStyle = color; ctx.setLineDash([4, 4]); ctx.strokeRect(cx - cW/2 - 4, mapY(c.h) - 4, cW + 8, Math.abs(mapY(c.l) - mapY(c.h)) + 8); ctx.setLineDash([]); }
                     }
-                    
-                    ctx.strokeStyle = color;
-                    ctx.lineWidth = 1.5;
-                    ctx.beginPath();
-                    ctx.moveTo(cx, mapY(c.h));
-                    ctx.lineTo(cx, mapY(c.l));
-                    ctx.stroke();
-                    
-                    const bTop = mapY(Math.max(c.o, c.c));
-                    const bBot = mapY(Math.min(c.o, c.c));
-                    const bH = Math.max(bBot - bTop, 2);
-                    ctx.fillStyle = color;
-                    ctx.fillRect(cx - cW/2, bTop, cW, bH);
-                    
-                    ctx.shadowBlur = 0;
+                    ctx.strokeStyle = color; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(cx, mapY(c.h)); ctx.lineTo(cx, mapY(c.l)); ctx.stroke();
+                    const bT = mapY(Math.max(c.o, c.c)), bB = mapY(Math.min(c.o, c.c));
+                    ctx.fillStyle = color; ctx.fillRect(cx - cW/2, bT, cW, Math.max(bB - bT, 2)); ctx.shadowBlur = 0;
                 });
             }
-
             handleHover(e) {
-                const rect = this.canvas.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                
+                const rect = this.canvas.getBoundingClientRect(); const x = e.clientX - rect.left;
                 const vpWidth = this.options.vpVisible ? Math.min(200, rect.width * 0.25) : 10;
-                const drawW = rect.width - vpWidth - 20;
-                const stepX = drawW / Math.max(this.candles.length, 10);
-                
-                const index = Math.round((x - vpWidth - 10 - (stepX/2)) / stepX);
-                
-                if (index >= 0 && index < this.candles.length) {
-                    if (this.hoverIndex !== index) {
-                        this.hoverIndex = index;
-                        this.render();
-                        const hl = this.options.highlights[index];
-                        if (hl) {
-                            tt(e, hl.t, hl.d);
-                        } else {
-                            htt();
-                        }
-                    } else if (this.options.highlights[index]) {
-                        tooltip.style.left = (e.clientX + 15) + 'px';
-                        tooltip.style.top = (e.clientY + 15) + 'px';
-                    }
-                } else {
-                    this.hoverIndex = -1;
-                    this.render();
-                    htt();
-                }
+                const drawW = rect.width - vpWidth - 20, stepX = drawW / Math.max(this.candles.length, 10);
+                const idx = Math.round((x - vpWidth - 10 - (stepX/2)) / stepX);
+                if (idx >= 0 && idx < this.candles.length) {
+                    if (this.hoverIndex !== idx) { this.hoverIndex = idx; this.render(); const hl = this.options.highlights[idx]; if (hl) tt(e, hl.t, hl.d); else htt(); }
+                } else { this.hoverIndex = -1; this.render(); htt(); }
             }
         }
 
-        const dataAMT = [
-            [350, 355, 345, 352, 50], [352, 360, 350, 355, 40], [355, 358, 348, 350, 60],
-            [350, 362, 345, 358, 55], [358, 365, 350, 352, 45], [352, 355, 342, 348, 70],
-            [348, 352, 345, 350, 50], [350, 358, 348, 355, 40],
-            [355, 380, 355, 378, 150], [378, 395, 375, 392, 180], [392, 405, 390, 402, 160],
-            [402, 408, 398, 405, 60], [405, 410, 400, 402, 50], [402, 405, 395, 398, 70],
-            [398, 402, 395, 400, 55], [400, 408, 398, 405, 40], [405, 412, 402, 408, 65],
-            [408, 410, 395, 398, 80], [398, 405, 395, 402, 50],
-            [402, 405, 385, 388, 170], [388, 390, 370, 372, 190], [372, 375, 362, 365, 160],
-            [365, 370, 360, 368, 50], [368, 372, 362, 365, 40], [365, 368, 358, 362, 60],
-            [362, 365, 360, 364, 45], [364, 370, 362, 368, 55], [368, 375, 365, 366, 50]
-        ];
-
-        const dataVA = [
-            [150,155,145,152, 100],
-            [152,158,150,155, 110],
-            [155,165,152,160, 80],
-            [160,168,158,165, 60],
-            [165,168,155,158, 70],
-            [158,160,148,150, 120],
-            [150,152,142,145, 80],
-            [145,148,135,140, 60],
-            [140,145,138,142, 50],
-            [142,155,140,152, 100],
-            [152,155,128,135, 90],
-            [135,148,132,145, 70],
-            [145,160,142,155, 80],
-            [155,175,152,165, 85],
-            [165,168,150,155, 75]
-        ];
-        
-        const dataPOC = [
-            [240,245,230,235, 40], [235,240,220,225, 45], [225,230,210,215, 50],
-            [215,220,190,195, 60], [195,200,180,185, 65], [185,190,160,165, 70],
-            [165,175,155,160, 80], [160,165,150,158, 85], [158,160,145,150, 90],
-            [150,155,148,152, 95], [152,160,148,158, 85], [158,162,145,150, 90],
-            [150,155,145,152, 80], [152,165,150,160, 70], [160,170,155,165, 60]
-        ];
-
-        const dataLVN = [
-            [100,110,95,105, 40], [105,115,100,112, 50], [112,120,110,118, 60],
-            [118,140,115,135, 70], [135,160,130,155, 80], [155,185,150,180, 90],
-            [180,210,175,205, 85], [205,230,200,225, 80], [225,228,215,220, 50],
-            [220,225,210,215, 45], [215,220,205,210, 40], [210,215,195,200, 50],
-            [200,205,185,190, 55], [190,195,175,180, 60], [180,185,165,170, 65],
-            [170,175,155,160, 70], [160,165,145,150, 75], [150,170,140,165, 95],
-            [165,180,160,175, 80], [175,190,170,185, 75], [185,210,180,205, 70]
-        ];
-
-        const dataVWAP = [
-            [100,105,98,102, 100], [102,110,100,108, 150], [108,115,105,112, 120],
-            [112,120,110,118, 180], [118,125,115,122, 140], [122,118,112,115, 90],
-            [115,118,110,112, 110], [112,125,110,123, 200], [123,130,120,128, 160],
-            [128,135,125,132, 140], [132,125,120,122, 100], [122,125,118,120, 90],
-            [120,135,118,132, 220], [132,140,130,138, 150], [138,145,135,142, 130]
-        ];
-
-        const dataVSA1 = [
-            [200,205,190,195, 50], [195,200,180,185, 60], [185,190,160,165, 70],
-            [165,170,140,145, 90], [145,155,140,150, 40], [150,160,145,155, 45],
-            [155,160,145,150, 85], [150,155,140,145, 90], [145,165,140,160, 60],
-            [160,180,155,175, 70], [175,200,170,195, 80], [195,230,190,225, 95],
-            [225,260,220,255, 100], [255,260,230,235, 90], [235,240,210,215, 85]
-        ];
-
-        const dataVSA2 = [
-            [100,115,95,110, 50], [110,125,105,120, 60], [120,135,115,130, 55],
-            [130,135,120,125, 45], [125,140,120,135, 50], [135,145,130,140, 40],
-            [140,145,135,142, 20], [142,145,138,140, 15], [140,142,135,138, 10],
-            [138,140,120,125, 70], [125,130,100,105, 80], [105,110,80,85, 90],
-            [85,90,60,65, 95], [65,70,30,45, 100],
-            [45,60,40,55, 50], [55,70,50,65, 60], [65,70,55,60, 20],
-            [60,75,55,70, 50], [70,90,65,85, 60]
-        ];
+        const dataAMT = [[350,355,345,352,50],[352,360,350,355,40],[355,358,348,350,60],[350,362,345,358,55],[358,365,350,352,45],[352,355,342,348,70],[348,352,345,350,50],[350,358,348,355,40],[355,380,355,378,150],[378,395,375,392,180],[392,405,390,402,160],[402,408,398,405,60],[405,410,400,402,50],[402,405,395,398,70],[398,402,395,400,55],[400,408,398,405,40],[405,412,402,408,65],[408,410,395,398,80],[398,405,395,402,50],[402,405,385,388,170],[388,390,370,372,190],[372,375,362,365,160],[365,370,360,368,50],[368,372,362,365,40],[365,368,358,362,60],[362,365,360,364,45],[364,370,362,368,55],[368,375,365,366,50]];
+        const dataVA = [[150,155,145,152,100],[152,158,150,155,110],[155,165,152,160,80],[160,168,158,165,60],[165,168,155,158,70],[158,160,148,150,120],[150,152,142,145,80],[145,148,135,140,60],[140,145,138,142,50],[142,155,140,152,100],[152,155,128,135,90],[135,148,132,145,70],[145,160,142,155,80],[155,175,152,165,85],[165,168,150,155,75]];
+        const dataPOC = [[240,245,230,235,40],[235,240,220,225,45],[225,230,210,215,50],[215,220,190,195,60],[195,200,180,185,65],[185,190,160,165,70],[165,175,155,160,80],[160,165,150,158,85],[158,160,145,150,90],[150,155,148,152,95],[152,160,148,158,85],[158,162,145,150,90],[150,155,145,152,80],[152,165,150,160,70],[160,170,155,165,60]];
+        const dataLVN = [[100,110,95,105,40],[105,115,100,112,50],[112,120,110,118,60],[118,140,115,135,70],[135,160,130,155,80],[155,185,150,180,90],[180,210,175,205,85],[205,230,200,225,80],[225,228,215,220,50],[220,225,210,215,45],[215,220,205,210,40],[210,215,195,200,50],[200,205,185,190,55],[190,195,175,180,60],[180,185,165,170,65],[170,175,155,160,70],[160,165,145,150,75],[150,170,140,165,95],[165,180,160,175,80],[175,190,170,185,75]];
+        const dataVWAP = [[100,105,98,102,100],[102,110,100,108,150],[108,115,105,112,120],[112,120,110,118,180],[118,125,115,122,140],[122,118,112,115,90],[115,118,110,112,110],[112,125,110,123,200],[123,130,120,128,160],[128,135,125,132,140],[132,125,120,122,100],[122,125,118,120,90],[120,135,118,132,220],[132,140,130,138,150],[138,145,135,142,130]];
+        const dataVSA1 = [[200,205,190,195,50],[195,200,180,185,60],[185,190,160,165,70],[165,170,140,145,90],[145,155,140,150,40],[150,160,145,155,45],[155,160,145,150,85],[150,155,140,145,90],[145,165,140,160,60],[160,180,155,175,70],[175,200,170,195,80],[195,230,190,225,95],[225,260,220,255,100],[255,260,230,235,90],[235,240,210,215,85]];
+        const dataVSA2 = [[100,115,95,110,50],[110,125,105,120,60],[120,135,115,130,55],[130,135,120,125,45],[125,140,120,135,50],[135,145,130,140,40],[140,145,135,142,20],[142,145,138,140,15],[140,142,135,138,10],[138,140,120,125,70],[125,130,100,105,80],[105,110,80,85,90],[85,90,60,65,95],[65,70,30,45,100],[45,60,40,55,50],[55,70,50,65,60],[65,70,55,60,20],[60,75,55,70,50],[70,90,65,85,60]];
+        const dataMap1 = [[200, 210, 195, 205, 80], [205, 215, 200, 210, 90], [210, 220, 205, 215, 110], [215, 225, 210, 218, 130], [218, 222, 205, 212, 100], [212, 218, 200, 205, 120], [205, 215, 195, 208, 90], [208, 212, 190, 195, 70]];
+        const dataMap2 = [[150, 155, 145, 152, 60], [152, 158, 150, 155, 80], [155, 160, 152, 158, 70], [158, 162, 155, 160, 75], [160, 185, 158, 180, 150], [180, 195, 175, 190, 140]];
 
         let charts = [];
-        
         document.addEventListener("DOMContentLoaded", () => {
-            
-            charts.push(new ChartEngine('canvas-amt', dataAMT, {
-                vpVisible: false,
-                annotations: [
-                    {type: 'zone', p1: 342, p2: 365, startIdx: 0, endIdx: 7, text: 'Fair Value ($35,000)', bgVar: '--amt-box', textVar: '--text-color'},
-                    {type: 'zone', p1: 395, p2: 412, startIdx: 11, endIdx: 18, text: 'Fair Value ($40,000)', bgVar: '--amt-box', textVar: '--text-color'},
-                    {type: 'zone', p1: 358, p2: 375, startIdx: 22, endIdx: 27, text: 'Fair Value ($36,500)', bgVar: '--amt-box', textVar: '--text-color'},
-                    
-                    {type: 'arrow', i1: 6, p1: 385, i2: 8, p2: 365, color: '#00aaff'},
-                    {type: 'text', text: 'Market Event', i: 5, p: 395, color: '#00aaff', font: '800 16px Inter'},
-                    
-                    {type: 'arrow', i1: 20, p1: 430, i2: 20, p2: 395, color: '#00aaff'},
-                    {type: 'text', text: 'Market Event', i: 20, p: 440, color: '#00aaff', font: '800 16px Inter'},
-                    
-                    {type: 'text', text: 'Buy Imbalance', i: 8, p: 380, color: '#00e676', font: '800 13px Inter', angle: -65},
-                    {type: 'text', text: 'Sell Imbalance', i: 19, p: 380, color: '#ff3b30', font: '800 13px Inter', angle: 65}
-                ]
-            }));
-
-            charts.push(new ChartEngine('canvas-vaval', dataVA, {
-                highlights: { 
-                    10: {t:'Odbicie od VAL', d:'Wsparcie zadziałało (Volume w brzuchu).', border:true}, 
-                    13: {t:'Odrzucenie VAH', d:'knot(wick) uderza w krawędź i wraca.', border:true}
-                },
-                annotations: [
-                    {type: 'zone', p1: 165, p2: 168, text: 'VAH (Opór)', bgVar: '--up-bg', textVar: '--up-color'},
-                    {type: 'zone', p1: 135, p2: 132, text: 'VAL (Wsparcie)', bgVar: '--up-bg', textVar: '--up-color'}
-                ]
-            }));
-
-            charts.push(new ChartEngine('canvas-poc', dataPOC, {
-                highlights: { 9: {t:'Magnes POC', d:'Wyhamowanie na High Volume Node (HVN).', border:true} }
-            }));
-
-            charts.push(new ChartEngine('canvas-lvn', dataLVN, {
-                highlights: { 17: {t:'Test LVN', d:'knot(wick) wchodzi w pustkę i gwałtownie odbija.', border:true} },
-                annotations: [
-                    {type: 'zone', p1: 140, p2: 150, text: 'Strefa LVN (Brak Akceptacji)', bgVar: '--down-bg', textVar: '--red-accent'}
-                ]
-            }));
-
-            charts.push(new ChartEngine('canvas-vwap', dataVWAP, {
-                vpVisible: false, showVWAP: true,
-                highlights: {
-                    5: {t:'Pullback do VWAP', d:'Cena odnajduje fair value wg VWAP.', border:true},
-                    11: {t:'Pullback do VWAP', d:'Kolejny udany retest instytucjonalnej linii.', border:true}
-                }
-            }));
-
-            charts.push(new ChartEngine('canvas-vsa1', dataVSA1, {
-                vpVisible: false,
-                highlights: { 
-                    3: {t:'Zdrowy Ruch', d:'Effort = Result. Duży knot(wick), duży vol.', border:true}, 
-                    6: {t:'Hidden Selling', d:'Wąski spread, potężny wolumen.', border:true}, 
-                    12: {t:'Buying Climax', d:'Wystrzał przed zjazdem.', border:true} 
-                }
-            }));
-
-            charts.push(new ChartEngine('canvas-vsa2', dataVSA2, {
-                vpVisible: false,
-                highlights: { 
-                    8: {t:'No Demand', d:'Wąski spread, znikomy wol.', border:true}, 
-                    13: {t:'Stopping Volume', d:'Długi knot(wick) zaabsorbował sprzedaż.', border:true}, 
-                    16: {t:'No Supply', d:'Korekta w dół, podaż wyschła.', border:true} 
-                }
-            }));
-            
+            updateSessions(); updateProgressUI();
+            charts.push(new ChartEngine('canvas-amt', dataAMT, { vpVisible: false, annotations: [
+                {type: 'zone', p1: 342, p2: 365, startIdx: 0, endIdx: 7, text: 'Fair Value ($35,000)', bgVar: '--amt-box', textVar: '--heading-color'},
+                {type: 'zone', p1: 395, p2: 412, startIdx: 11, endIdx: 18, text: 'Fair Value ($40,000)', bgVar: '--amt-box', textVar: '--heading-color'},
+                {type: 'zone', p1: 358, p2: 375, startIdx: 22, endIdx: 27, text: 'Fair Value ($36,500)', bgVar: '--amt-box', textVar: '--heading-color'},
+                {type: 'arrow', i1: 6, p1: 385, i2: 8, p2: 365, color: '#007aff'}, {type: 'text', text: 'Market Event', i: 5, p: 395, color: '#007aff', font: '800 16px -apple-system, sans-serif'},
+                {type: 'text', text: 'Buy Imbalance', i: 8, p: 380, color: '#32d74b', font: '800 13px -apple-system, sans-serif', angle: -65}
+            ]}));
+            charts.push(new ChartEngine('canvas-vaval', dataVA, { highlights: { 10: {t:'Odbicie od VAL', d:'Wsparcie zadziałało (Volume w brzuchu).', border:true}, 13: {t:'Odrzucenie VAH', d:'knot(wick) uderza w krawędź i wraca.', border:true} }, annotations: [ {type: 'zone', p1: 165, p2: 168, text: 'VAH (Opór)', bgVar: '--up-bg', textVar: '--up-color'}, {type: 'zone', p1: 135, p2: 132, text: 'VAL (Wsparcie)', bgVar: '--up-bg', textVar: '--up-color'} ] }));
+            charts.push(new ChartEngine('canvas-poc', dataPOC, { highlights: { 9: {t:'Magnes POC', d:'Wyhamowanie na High Volume Node (HVN).', border:true} } }));
+            charts.push(new ChartEngine('canvas-lvn', dataLVN, { highlights: { 17: {t:'Test LVN', d:'knot(wick) wchodzi w pustkę i gwałtownie odbija.', border:true} }, annotations: [ {type: 'zone', p1: 140, p2: 150, text: 'Strefa LVN (Brak Akceptacji)', bgVar: '--down-bg', textVar: '--red-accent'} ] }));
+            charts.push(new ChartEngine('canvas-vwap', dataVWAP, { vpVisible: false, showVWAP: true, highlights: { 5: {t:'Pullback do VWAP', d:'Cena odnajduje fair value wg VWAP.', border:true}, 11: {t:'Pullback do VWAP', d:'Kolejny udany retest instytucjonalnej linii.', border:true} } }));
+            charts.push(new ChartEngine('canvas-vsa1', dataVSA1, { vpVisible: false, highlights: { 3: {t:'Zdrowy Ruch', d:'Effort = Result. Duży knot, duży vol.', border:true}, 6: {t:'Hidden Selling', d:'Wąski spread, potężny wolumen.', border:true}, 12: {t:'Buying Climax', d:'Wystrzał przed zjazdem.', border:true} } }));
+            charts.push(new ChartEngine('canvas-vsa2', dataVSA2, { vpVisible: false, highlights: { 8: {t:'No Demand', d:'Wąski spread, znikomy wol.', border:true}, 13: {t:'Stopping Volume', d:'Długi knot zaabsorbował sprzedaż.', border:true}, 16: {t:'No Supply', d:'Korekta w dół, podaż wyschła.', border:true} } }));
+            charts.push(new ChartEngine('canvas-map1', dataMap1, { highlights: { 3: {t:'Session Profile', d:'Profil zaplanowany na całą sesję. Silne, historyczne S&R.', border:true} }, annotations: [{type: 'zone', p1: 225, p2: 190, startIdx: 0, endIdx: 7, text: 'Zaplanowane Mapowanie (Sesja)', bgVar: '--amt-box', textVar: '--heading-color'}] }));
+            charts.push(new ChartEngine('canvas-map2', dataMap2, { highlights: { 4: {t:'Micro Balance', d:'Bieżące mapowanie lokalnego balansu i wyłapanie breakoutu.', border:true} }, annotations: [{type: 'zone', p1: 162, p2: 150, startIdx: 0, endIdx: 3, text: 'Bieżące Mapowanie (Lokalne)', bgVar: '--up-bg', textVar: '--up-color'}] }));
             charts.forEach(c => c.render());
         });
 
         function toggleTheme() {
-            isLight = !isLight; 
-            document.body.classList.toggle('light-theme', isLight);
+            isLight = !isLight; document.body.classList.toggle('light-theme', isLight);
             document.getElementById('theme-btn').innerHTML = isLight ? '🌙 Dark Mode' : '☀️ Light Mode';
             charts.forEach(c => c.render());
         }
 
-        const breadcrumbsEl = document.getElementById('breadcrumbs');
         const viewsData = {
             'home': { title: 'Katalog Główny', parent: null },
             'cat-mech': { title: 'Mechanika Rynku', parent: 'home' },
@@ -984,18 +1150,20 @@
             'cat-vsa': { title: 'VSA', parent: 'home' },
             'cat-of': { title: 'Orderflow', parent: 'home' },
             'cat-fund': { title: 'Fundamenty', parent: 'home' },
-            'cat-risk': { title: 'Zarządzanie Ryzykiem', parent: 'home' }
+            'cat-risk': { title: 'Ryzyko', parent: 'home' }
         };
 
         function nav(viewId) {
             document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
             const viewEl = document.getElementById('view-' + viewId);
             if(viewEl) viewEl.classList.add('active');
-            
+            if(viewId !== 'home') {
+                const prog = JSON.parse(localStorage.getItem('rei_academy_progress') || '[]');
+                if(!prog.includes(viewId)) { prog.push(viewId); localStorage.setItem('rei_academy_progress', JSON.stringify(prog)); updateProgressUI(); }
+            }
             let path = []; let current = viewId;
             while(current) { path.unshift(`<span onclick="nav('${current}')">${viewsData[current].title}</span>`); current = viewsData[current].parent; }
-            breadcrumbsEl.innerHTML = "📍 " + path.join(" > ");
-            
+            document.getElementById('breadcrumbs').innerHTML = "📍 " + path.join(" > ");
             window.scrollTo(0,0);
             setTimeout(() => { charts.forEach(c => c.render()); }, 50);
         }
