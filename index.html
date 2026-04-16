@@ -64,6 +64,12 @@
             --btn-gradient: linear-gradient(135deg, #34c759, #28a745);
         }
 
+        /* Sekcja CSS dotycząca zmiany języka */
+        body.lang-en .pl { display: none !important; }
+        body.lang-pl .en { display: none !important; }
+        /* Upewnienie się, że zachowanie flex w spanach z przyciskami 'Next' nie psuje się */
+        .next-btn span.pl, .next-btn span.en { display: flex; align-items: center; gap: 8px; }
+
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -102,45 +108,36 @@
         a { color: inherit; }
         button { font: inherit; }
 
-        :focus-visible {
-            outline: 2px solid var(--up-color);
-            outline-offset: 2px;
-        }
-
+        :focus-visible { outline: 2px solid var(--up-color); outline-offset: 2px; }
         ::-webkit-scrollbar { height: 6px; width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: rgba(192, 132, 252, 0.2); border-radius: 6px; }
         ::-webkit-scrollbar-thumb:hover { background: rgba(192, 132, 252, 0.5); }
 
         nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            padding: 12px 28px;
-            background: var(--nav-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border-color);
-            z-index: 100;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: background 0.25s ease;
+            position: fixed; top: 0; width: 100%; padding: 12px 28px; background: var(--nav-bg);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color); z-index: 100;
+            display: flex; justify-content: space-between; align-items: center; transition: background 0.25s ease;
         }
         .nav-left { display: flex; align-items: center; gap: 20px; }
         .nav-logo { font-weight: 700; font-size: 1.25rem; cursor: pointer; letter-spacing: -0.5px; display: flex; align-items: center; gap: 12px; color: var(--text-color); }
         .logo-img { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border-color); box-shadow: none; }
         
-        .nav-right { display: flex; align-items: center; gap: 24px; }
+        .nav-right { display: flex; align-items: center; gap: 12px; }
         .made-with { font-size: 0.8rem; color: var(--secondary-text); font-weight: 500; letter-spacing: 0.2px; }
         
-        .session-container { display: flex; gap: 12px; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .session-container { display: flex; gap: 12px; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-right: 12px; }
         .session-item { display: flex; align-items: center; gap: 6px; background: var(--card-bg); padding: 4px 10px; border-radius: 999px; border: 1px solid var(--border-color); backdrop-filter: blur(8px); }
         .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--secondary-text); transition: 0.3s; }
         .dot.active { background: var(--up-color); box-shadow: none; }
 
-        .theme-toggle { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); padding: 8px 16px; border-radius: 999px; cursor: pointer; font-weight: 500; font-size: 0.8rem; transition: border-color 0.15s ease, transform 0.15s ease, background 0.15s ease; backdrop-filter: blur(8px); }
-        .theme-toggle:hover { transform: translateY(-1px); border-color: var(--up-color); }
+        .theme-toggle, .lang-toggle { 
+            background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); 
+            padding: 8px 16px; border-radius: 999px; cursor: pointer; font-weight: 500; font-size: 0.8rem; 
+            transition: border-color 0.15s ease, transform 0.15s ease, background 0.15s ease; backdrop-filter: blur(8px); 
+        }
+        .theme-toggle:hover, .lang-toggle:hover { transform: translateY(-1px); border-color: var(--up-color); }
 
         .container { max-width: 1000px; margin: 96px auto 56px auto; padding: 0 24px; position: relative; z-index: 1; }
         .breadcrumbs { font-size: 0.85rem; margin-bottom: 30px; color: var(--secondary-text); font-weight: 500; display: flex; gap: 8px; align-items: center; letter-spacing: 0.2px; }
@@ -152,27 +149,15 @@
         @keyframes smoothFade { from { opacity: 0; } to { opacity: 1; } }
 
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 18px; }
-        
-        /* Adjusted grid spacing specifically for view-home to look clean and centered */
         #view-home .grid { gap: 24px; margin-top: 40px; }
         #view-home .folder-card { padding: 28px 24px; }
         #view-home .community-wrapper { margin-top: 80px; }
 
         .folder-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border-radius: var(--radius-lg);
-            padding: 20px;
-            cursor: pointer;
-            border: 1px solid var(--border-color);
-            display: flex;
-            align-items: flex-start;
-            gap: 16px;
-            transition: border-color 0.18s ease, transform 0.18s ease, background 0.18s ease;
-            box-shadow: var(--shadow-sm);
-            position: relative;
-            overflow: hidden;
+            background: var(--card-bg); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            border-radius: var(--radius-lg); padding: 20px; cursor: pointer; border: 1px solid var(--border-color);
+            display: flex; align-items: flex-start; gap: 16px; transition: border-color 0.18s ease, transform 0.18s ease, background 0.18s ease;
+            box-shadow: var(--shadow-sm); position: relative; overflow: hidden;
         }
         .folder-card:hover { border-color: var(--up-color); transform: translateY(-2px); background: rgba(255,255,255,0.03); box-shadow: var(--shadow-md); }
         body.light-theme .folder-card:hover { background: rgba(255,255,255,0.95); }
@@ -186,77 +171,30 @@
         .folder-info p { color: var(--secondary-text); font-size: 0.85rem; line-height: 1.5; font-weight: 400; }
 
         .segment-tag {
-            display: inline-flex;
-            align-items: center;
-            padding: 4px 10px;
-            border-radius: 999px;
-            font-size: 0.72rem;
-            font-weight: 800;
-            text-transform: none;
-            letter-spacing: 0.35px;
-            margin-bottom: 12px;
-            border: 1px solid var(--border-color);
-            background: rgba(255,255,255,0.02);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            box-shadow: none;
+            display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 999px;
+            font-size: 0.72rem; font-weight: 800; text-transform: none; letter-spacing: 0.35px;
+            margin-bottom: 12px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.02);
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: none;
         }
-        .tag-must-know {
-            background: var(--up-bg);
-            color: var(--up-color);
-            border: 1px solid color-mix(in srgb, var(--up-color) 28%, transparent);
-        }
-        .tag-advanced {
-            background: rgba(255, 153, 102, 0.08);
-            color: #ff9966;
-            border: 1px solid rgba(255, 153, 102, 0.22);
-        }
+        .tag-must-know { background: var(--up-bg); color: var(--up-color); border: 1px solid color-mix(in srgb, var(--up-color) 28%, transparent); }
+        .tag-advanced { background: rgba(255, 153, 102, 0.08); color: #ff9966; border: 1px solid rgba(255, 153, 102, 0.22); }
 
         .tooltip-word { display: inline; white-space: normal; text-decoration: none !important; border-bottom: none !important; }
         .tip-i {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 18px;
-            height: 18px;
-            border-radius: 999px;
-            margin-left: 6px;
-            font-size: 0.72rem;
-            font-weight: 800;
-            line-height: 1;
-            border: 1px solid var(--border-color);
-            background: rgba(255,255,255,0.02);
-            color: var(--secondary-text);
-            cursor: help;
-            user-select: none;
-            text-decoration: none !important;
-            border-bottom: none !important;
+            display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px;
+            border-radius: 999px; margin-left: 6px; font-size: 0.72rem; font-weight: 800; line-height: 1;
+            border: 1px solid var(--border-color); background: rgba(255,255,255,0.02); color: var(--secondary-text);
+            cursor: help; user-select: none; text-decoration: none !important; border-bottom: none !important;
         }
-        .tip-i-up {
-            border-color: color-mix(in srgb, var(--up-color) 35%, transparent);
-            background: var(--up-bg);
-            color: var(--up-color);
-        }
-        .tip-i-down {
-            border-color: color-mix(in srgb, var(--down-color) 35%, transparent);
-            background: var(--down-bg);
-            color: var(--down-color);
-        }
+        .tip-i-up { border-color: color-mix(in srgb, var(--up-color) 35%, transparent); background: var(--up-bg); color: var(--up-color); }
+        .tip-i-down { border-color: color-mix(in srgb, var(--down-color) 35%, transparent); background: var(--down-bg); color: var(--down-color); }
 
         .course-section { margin-bottom: 45px; }
         
         .note-block {
-            display: flex;
-            align-items: flex-start;
-            gap: 16px;
-            background: rgba(255, 255, 255, 0.02);
-            border-left: 3px solid var(--up-color);
-            padding: 18px 24px;
-            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-            margin: 25px 0;
-            font-size: 0.95rem;
-            color: var(--text-color);
-            line-height: 1.7;
+            display: flex; align-items: flex-start; gap: 16px; background: rgba(255, 255, 255, 0.02);
+            border-left: 3px solid var(--up-color); padding: 18px 24px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            margin: 25px 0; font-size: 0.95rem; color: var(--text-color); line-height: 1.7;
         }
         body.light-theme .note-block { background: rgba(0, 0, 0, 0.02); }
         .note-icon { font-size: 1.4rem; flex-shrink: 0; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
@@ -286,44 +224,23 @@
 
         h2.section-title { font-size: 1.85rem; margin-bottom: 20px; font-weight: 700; letter-spacing: -0.5px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; color: var(--text-color); }
         .course-text {
-            font-size: 0.98rem;
-            line-height: 1.9;
-            color: var(--text-color);
-            margin-bottom: 30px;
-            background: var(--card-bg);
-            backdrop-filter: blur(8px);
-            padding: 30px;
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--border-color);
-            font-weight: 400;
-            max-width: 880px;
-            margin-left: auto;
-            margin-right: auto;
-            text-rendering: optimizeLegibility;
+            font-size: 0.98rem; line-height: 1.9; color: var(--text-color); margin-bottom: 30px;
+            background: var(--card-bg); backdrop-filter: blur(8px); padding: 30px;
+            border-radius: var(--radius-lg); border: 1px solid var(--border-color); font-weight: 400;
+            max-width: 880px; margin-left: auto; margin-right: auto; text-rendering: optimizeLegibility;
         }
         .course-text p { margin-bottom: 20px; text-wrap: pretty; }
         .course-text p:last-child { margin-bottom: 0; }
         
-        .course-text strong {
-            color: var(--text-color);
-            font-weight: 750;
-            text-decoration: none !important;
-            border-bottom: none !important;
-            background: none;
-        }
-        .course-text strong.em-up { color: var(--up-color); text-decoration: none !important; border-bottom: none !important; }
-        .course-text strong.em-down { color: var(--down-color); text-decoration: none !important; border-bottom: none !important; }
+        .course-text strong { color: var(--text-color); font-weight: 750; text-decoration: none !important; border-bottom: none !important; background: none; }
+        .course-text strong.em-up { color: var(--up-color); }
+        .course-text strong.em-down { color: var(--down-color); }
         
         .course-text ul { margin: 16px 0 24px 24px; }
         .course-text li { margin-bottom: 10px; color: var(--text-color); }
         .course-text h4 {
-            font-size: 1.15rem;
-            margin: 32px 0 16px 0;
-            font-weight: 600;
-            letter-spacing: -0.2px;
-            color: var(--text-color);
-            border-left: 3px solid color-mix(in srgb, var(--up-color) 65%, transparent);
-            padding-left: 14px;
+            font-size: 1.15rem; margin: 32px 0 16px 0; font-weight: 600; letter-spacing: -0.2px;
+            color: var(--text-color); border-left: 3px solid color-mix(in srgb, var(--up-color) 65%, transparent); padding-left: 14px;
         }
         .course-text h4:first-child { margin-top: 0; }
 
@@ -355,28 +272,15 @@
         .cvd-arrow.down { color: var(--down-color); }
 
         .tooltip {
-            position: fixed;
-            display: none;
-            padding: 14px 18px;
-            --tip-accent: var(--up-color);
-            background: rgba(28, 28, 30, 0.96);
-            backdrop-filter: blur(8px);
-            color: #fff;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            z-index: 1000;
-            max-width: 320px;
-            box-shadow: 0 10px 26px rgba(0,0,0,0.25);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transform: translate(12px, 12px);
-            pointer-events: none;
-            line-height: 1.5;
-            font-weight: 400;
+            position: fixed; display: none; padding: 14px 18px; --tip-accent: var(--up-color);
+            background: rgba(28, 28, 30, 0.96); backdrop-filter: blur(8px); color: #fff; border-radius: 12px;
+            font-size: 0.85rem; z-index: 1000; max-width: 320px; box-shadow: 0 10px 26px rgba(0,0,0,0.25);
+            border: 1px solid rgba(255, 255, 255, 0.1); transform: translate(12px, 12px); pointer-events: none; line-height: 1.5; font-weight: 400;
         }
         .tooltip strong { display: block; color: var(--tip-accent); margin-bottom: 6px; font-size: 0.95rem; font-weight: 600; letter-spacing: -0.2px; }
 
         .next-section-wrapper { margin-top: 50px; display: flex; justify-content: flex-end; padding-top: 30px; border-top: 1px solid var(--border-color); }
-        .next-btn { background: var(--btn-gradient); color: #000000; border: none; padding: 14px 30px; border-radius: 999px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: transform 0.18s ease, filter 0.18s ease; display: flex; align-items: center; gap: 8px; box-shadow: none; font-family: inherit; }
+        .next-btn { background: var(--btn-gradient); color: #000000; border: none; padding: 14px 30px; border-radius: 999px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: transform 0.18s ease, filter 0.18s ease; box-shadow: none; font-family: inherit; }
         .light-theme .next-btn { color: #ffffff; }
         .next-btn:hover { transform: translateY(-2px); filter: saturate(1.05); }
         .next-btn span { transition: transform 0.18s; }
@@ -389,7 +293,7 @@
         }
     </style>
 </head>
-<body>
+<body class="lang-pl">
 
     <nav>
         <div class="nav-left">
@@ -408,54 +312,93 @@
                     <div class="dot"></div> NY: <span class="session-time">--:--</span>
                 </div>
             </div>
-            <button class="theme-toggle" onclick="toggleTheme()" id="theme-btn">☀️ Light Mode</button>
+            <button class="lang-toggle" onclick="toggleLang()">
+                <span class="pl">🇬🇧 EN</span><span class="en">🇵🇱 PL</span>
+            </button>
+            <button class="theme-toggle" onclick="toggleTheme()" id="theme-btn">
+                <span class="pl">☀️ Jasny Motyw</span><span class="en">☀️ Light Mode</span>
+            </button>
         </div>
     </nav>
 
     <div id="tooltip" class="tooltip"></div>
 
     <div class="container">
-        <div class="breadcrumbs" id="breadcrumbs">📍 Katalog Główny</div>
+        <div class="breadcrumbs" id="breadcrumbs">
+            <span class="pl">📍 Katalog Główny</span><span class="en">📍 Main Catalog</span>
+        </div>
 
         <div id="view-home" class="view active">
             <div class="grid">
                 <div class="folder-card" data-cat="cat-mech" onclick="nav('cat-mech')">
-                    <div class="progress-badge">✓ PRZEROBIONE</div>
-                    <div class="folder-num">1</div><div class="folder-info"><h3>Mechanika Rynku</h3><p>Płynność, Makro, Opcje, Natura</p></div>
+                    <div class="progress-badge"><span class="pl">✓ PRZEROBIONE</span><span class="en">✓ COMPLETED</span></div>
+                    <div class="folder-num">1</div>
+                    <div class="folder-info">
+                        <h3><span class="pl">Mechanika Rynku</span><span class="en">Market Mechanics</span></h3>
+                        <p><span class="pl">Płynność, Makro, Opcje, Natura</span><span class="en">Liquidity, Macro, Options, Nature</span></p>
+                    </div>
                 </div>
                 <div class="folder-card" data-cat="cat-amt" onclick="nav('cat-amt')">
-                    <div class="progress-badge">✓ PRZEROBIONE</div>
-                    <div class="folder-num">2</div><div class="folder-info"><h3>AMT</h3><p>Balance, Imbalance, Cykl Aukcji</p></div>
+                    <div class="progress-badge"><span class="pl">✓ PRZEROBIONE</span><span class="en">✓ COMPLETED</span></div>
+                    <div class="folder-num">2</div>
+                    <div class="folder-info">
+                        <h3><span class="pl">AMT</span><span class="en">AMT</span></h3>
+                        <p><span class="pl">Balance, Imbalance, Cykl Aukcji</span><span class="en">Balance, Imbalance, Auction Cycle</span></p>
+                    </div>
                 </div>
                 <div class="folder-card" data-cat="cat-vp" onclick="nav('cat-vp')">
-                    <div class="progress-badge">✓ PRZEROBIONE</div>
-                    <div class="folder-num">3</div><div class="folder-info"><h3>Volume Profile</h3><p>S&R, POC, Odbicia LVN</p></div>
+                    <div class="progress-badge"><span class="pl">✓ PRZEROBIONE</span><span class="en">✓ COMPLETED</span></div>
+                    <div class="folder-num">3</div>
+                    <div class="folder-info">
+                        <h3><span class="pl">Volume Profile</span><span class="en">Volume Profile</span></h3>
+                        <p><span class="pl">S&R, POC, Odbicia LVN</span><span class="en">S&R, POC, LVN Rejections</span></p>
+                    </div>
                 </div>
                 <div class="folder-card" data-cat="cat-vwap" onclick="nav('cat-vwap')">
-                    <div class="progress-badge">✓ PRZEROBIONE</div>
-                    <div class="folder-num">4</div><div class="folder-info"><h3>AVWAP</h3><p>Instytucjonalne Bands, Pullbacki</p></div>
+                    <div class="progress-badge"><span class="pl">✓ PRZEROBIONE</span><span class="en">✓ COMPLETED</span></div>
+                    <div class="folder-num">4</div>
+                    <div class="folder-info">
+                        <h3><span class="pl">AVWAP</span><span class="en">AVWAP</span></h3>
+                        <p><span class="pl">Instytucjonalne Bands, Pullbacki</span><span class="en">Institutional Bands, Pullbacks</span></p>
+                    </div>
                 </div>
                 <div class="folder-card" data-cat="cat-vsa" onclick="nav('cat-vsa')">
-                    <div class="progress-badge">✓ PRZEROBIONE</div>
-                    <div class="folder-num">5</div><div class="folder-info"><h3>VSA</h3><p>Effort/Result, Climax, No Demand</p></div>
+                    <div class="progress-badge"><span class="pl">✓ PRZEROBIONE</span><span class="en">✓ COMPLETED</span></div>
+                    <div class="folder-num">5</div>
+                    <div class="folder-info">
+                        <h3><span class="pl">VSA</span><span class="en">VSA</span></h3>
+                        <p><span class="pl">Effort/Result, Climax, No Demand</span><span class="en">Effort/Result, Climax, No Demand</span></p>
+                    </div>
                 </div>
                 <div class="folder-card" data-cat="cat-of" onclick="nav('cat-of')">
-                    <div class="progress-badge">✓ PRZEROBIONE</div>
-                    <div class="folder-num">6</div><div class="folder-info"><h3>Orderflow</h3><p>Absorpcja, Exhaustion, CVD</p></div>
+                    <div class="progress-badge"><span class="pl">✓ PRZEROBIONE</span><span class="en">✓ COMPLETED</span></div>
+                    <div class="folder-num">6</div>
+                    <div class="folder-info">
+                        <h3><span class="pl">Orderflow</span><span class="en">Orderflow</span></h3>
+                        <p><span class="pl">Absorpcja, Exhaustion, CVD</span><span class="en">Absorption, Exhaustion, CVD</span></p>
+                    </div>
                 </div>
                 <div class="folder-card" data-cat="cat-fund" onclick="nav('cat-fund')">
-                    <div class="progress-badge">✓ PRZEROBIONE</div>
-                    <div class="folder-num">7</div><div class="folder-info"><h3>Fundamenty Intraday</h3><p>Makro, Rekalibracja wartości</p></div>
+                    <div class="progress-badge"><span class="pl">✓ PRZEROBIONE</span><span class="en">✓ COMPLETED</span></div>
+                    <div class="folder-num">7</div>
+                    <div class="folder-info">
+                        <h3><span class="pl">Fundamenty Intraday</span><span class="en">Intraday Fundamentals</span></h3>
+                        <p><span class="pl">Makro, Rekalibracja wartości</span><span class="en">Macro, Value Recalibration</span></p>
+                    </div>
                 </div>
                 <div class="folder-card" data-cat="cat-risk" onclick="nav('cat-risk')">
-                    <div class="progress-badge">✓ PRZEROBIONE</div>
-                    <div class="folder-num">8</div><div class="folder-info"><h3>Zarządzanie Ryzykiem</h3><p>Ucinanie z palca, Orderflow SL</p></div>
+                    <div class="progress-badge"><span class="pl">✓ PRZEROBIONE</span><span class="en">✓ COMPLETED</span></div>
+                    <div class="folder-num">8</div>
+                    <div class="folder-info">
+                        <h3><span class="pl">Zarządzanie Ryzykiem</span><span class="en">Risk Management</span></h3>
+                        <p><span class="pl">Ucinanie z palca, Orderflow SL</span><span class="en">Manual Cutting, Orderflow SL</span></p>
+                    </div>
                 </div>
             </div>
             
             <div class="community-wrapper">
                 <div class="community-footer">
-                    <h4>Nasze Community</h4>
+                    <h4><span class="pl">Nasze Community</span><span class="en">Our Community</span></h4>
                     <div class="links-group">
                         <a href="https://dsc.gg/rei" target="_blank" class="rei-link">
                             <span style="font-size: 1.1rem;">👾</span> dsc.gg/rei
@@ -467,59 +410,97 @@
                 </div>
 
                 <div class="kofi-card">
-                    <h4><span style="-webkit-text-fill-color: initial;">☕</span> Wsparcie Projektu</h4>
-                    <p>jesli darmowa wiedza wam pomogla i macie ochote wesprzec rozwoj tego projektu to wrzucam link do ko-fi</p>
-                    <p>dla wspierajacych otwieram prywatne kanaly na discord ale powiem wam wprost to nie sam dostep do nich jest tu najwazniejszy</p>
-                    <p>liczy sie dla mnie wasz gest i chec docenienia mojej pracy za co z gory serdecznie dziekuje</p>
+                    <h4><span style="-webkit-text-fill-color: initial;">☕</span> <span class="pl">Wsparcie Projektu</span><span class="en">Support the Project</span></h4>
+                    <p class="pl">jesli darmowa wiedza wam pomogla i macie ochote wesprzec rozwoj tego projektu to wrzucam link do ko-fi</p>
+                    <p class="en">if this free knowledge helped you and you feel like supporting the development of this project, here is the ko-fi link</p>
+                    
+                    <p class="pl">dla wspierajacych otwieram prywatne kanaly na discord ale powiem wam wprost to nie sam dostep do nich jest tu najwazniejszy</p>
+                    <p class="en">for supporters I open private discord channels, but frankly, access to them isn't the most important part here</p>
+                    
+                    <p class="pl">liczy sie dla mnie wasz gest i chec docenienia mojej pracy za co z gory serdecznie dziekuje</p>
+                    <p class="en">what matters to me is your gesture and willingness to appreciate my work, for which I sincerely thank you in advance</p>
+                    
                     <div class="kofi-heart">❤</div>
-                    <p>z osobami ktore dorzucaja swoja cegielke do projektu jestem tez naturalnie o wiele bardziej zaangazowany w bezposredni kontakt i poswiecam im po prostu wiecej czasu</p>
-                    <a href="http://ko-fi.com/reiseiv" target="_blank" class="kofi-btn">Wesprzyj na Ko-fi</a>
+                    
+                    <p class="pl">z osobami ktore dorzucaja swoja cegielke do projektu jestem tez naturalnie o wiele bardziej zaangazowany w bezposredni kontakt i poswiecam im po prostu wiecej czasu</p>
+                    <p class="en">I am also naturally much more engaged in direct contact with people who add their brick to the project, and I simply dedicate more time to them</p>
+                    
+                    <a href="http://ko-fi.com/reiseiv" target="_blank" class="kofi-btn"><span class="pl">Wesprzyj na Ko-fi</span><span class="en">Support on Ko-fi</span></a>
                 </div>
             </div>
         </div>
 
         <div id="view-cat-mech" class="view">
-            <h2 class="section-title">1. MECHANIKA RYNKU (MARKET MECHANICS)</h2>
+            <h2 class="section-title"><span class="pl">1. MECHANIKA RYNKU</span><span class="en">1. MARKET MECHANICS</span></h2>
             <div class="course-text">
                 <div class="course-section">
                     <div class="segment-tag tag-must-know">Must Know</div>
-                    <h4>Część 1: Mechanizm płynności i orderflow pressure</h4>
-                    <p>zanim odpalicie footprinty i vsa musicie zrozumiec dlaczego candle w ogole rusza sie na wykresie zapomnijcie o micie ze cena rosnie bo jest po prostu wiecej buyers to bzdura</p>
-                    <p>cena rosnie tylko i wylacznie dlatego ze agresywne <span class="tooltip-word">market orders <span class="tip-i tip-i-up" onmousemove="tt(event, 'Market Orders', 'Agresywne zlecenia realizowane natychmiast po najlepszej dostępnej cenie w orderbooku.')" onmouseleave="htt()">i</span></span> zjadaja cala dostepna <span class="tooltip-word">liquidity <span class="tip-i tip-i-up" onmousemove="tt(event, 'Liquidity (Płynność)', 'Zlecenia z limitami oczekujące w orderbooku na realizację.')" onmouseleave="htt()">i</span></span> czyli limit orders na danym poziomie i system musi szukac kolejnego poziomu wyzej zeby zrealizowac transakcje</p>
-                    <p>to wlasnie <span class="tooltip-word">orderflow pressure <span class="tip-i tip-i-up" onmousemove="tt(event, 'Orderflow Pressure', 'Presja tworzona przez agresywne zlecenia rynkowe uderzające w orderbook.')" onmouseleave="htt()">i</span></span> pcha cene od jednego bloku liquidity do drugiego kto bije mocniej i agresywniej po cenie rynkowej ten przesuwa wykres a cala reszta to tylko tlo</p>
+                    <h4><span class="pl">Część 1: Mechanizm płynności i orderflow pressure</span><span class="en">Part 1: Liquidity mechanism and orderflow pressure</span></h4>
+                    
+                    <p class="pl">zanim odpalicie footprinty i vsa musicie zrozumiec dlaczego candle w ogole rusza sie na wykresie zapomnijcie o micie ze cena rosnie bo jest po prostu wiecej buyers to bzdura</p>
+                    <p class="en">before you fire up footprints and vsa you must understand why a candle even moves on the chart forget the myth that price goes up simply because there are more buyers that's nonsense</p>
+                    
+                    <p class="pl">cena rosnie tylko i wylacznie dlatego ze agresywne <span class="tooltip-word">market orders <span class="tip-i tip-i-up" onmousemove="tt(event, 'Market Orders', 'Agresywne zlecenia realizowane natychmiast po najlepszej dostępnej cenie w orderbooku.')" onmouseleave="htt()">i</span></span> zjadaja cala dostepna <span class="tooltip-word">liquidity <span class="tip-i tip-i-up" onmousemove="tt(event, 'Liquidity (Płynność)', 'Zlecenia z limitami oczekujące w orderbooku na realizację.')" onmouseleave="htt()">i</span></span> czyli limit orders na danym poziomie i system musi szukac kolejnego poziomu wyzej zeby zrealizowac transakcje</p>
+                    <p class="en">price rises solely because aggressive <span class="tooltip-word">market orders <span class="tip-i tip-i-up" onmousemove="tt(event, 'Market Orders', 'Aggressive orders executed immediately at the best available price in the orderbook.')" onmouseleave="htt()">i</span></span> eat all available <span class="tooltip-word">liquidity <span class="tip-i tip-i-up" onmousemove="tt(event, 'Liquidity', 'Limit orders waiting in the orderbook to be executed.')" onmouseleave="htt()">i</span></span>, meaning limit orders at a given level, and the system must look for the next level higher to execute transactions</p>
+                    
+                    <p class="pl">to wlasnie <span class="tooltip-word">orderflow pressure <span class="tip-i tip-i-up" onmousemove="tt(event, 'Orderflow Pressure', 'Presja tworzona przez agresywne zlecenia rynkowe uderzające w orderbook.')" onmouseleave="htt()">i</span></span> pcha cene od jednego bloku liquidity do drugiego kto bije mocniej i agresywniej po cenie rynkowej ten przesuwa wykres a cala reszta to tylko tlo</p>
+                    <p class="en">this <span class="tooltip-word">orderflow pressure <span class="tip-i tip-i-up" onmousemove="tt(event, 'Orderflow Pressure', 'Pressure created by aggressive market orders hitting the orderbook.')" onmouseleave="htt()">i</span></span> pushes the price from one liquidity block to another whoever hits harder and more aggressively at market price moves the chart and the rest is just background</p>
                 </div>
 
                 <div class="course-section">
-                    <h4>Część 2: Fundamental reason</h4>
-                    <p>Skoro wiemy ze to agresywne zlecenia ruszaja rynkiem to co sprawia ze duzy kapital nagle zaczyna tak mocno uderzac w zlecenia <span class="tooltip-word">market <span class="tip-i tip-i-up" onmousemove="tt(event, 'Market Orders', 'Agresywne zlecenia realizowane natychmiast po najlepszej dostępnej cenie w orderbooku.')" onmouseleave="htt()">i</span></span>?</p>
-                    <p>tu wchodzą fundamenty ale nie nudne raporty tylko grube makro jak <span class="tooltip-word">cpi <span class="tip-i tip-i-up" onmousemove="tt(event, 'CPI', 'Consumer Price Index - kluczowy raport o inflacji, wywołujący zmienność.')" onmouseleave="htt()">i</span></span> czy <span class="tooltip-word">fomc <span class="tip-i tip-i-up" onmousemove="tt(event, 'FOMC', 'Federal Open Market Committee - spotkania banku centralnego, na których ustala się np. stopy procentowe.')" onmouseleave="htt()">i</span></span>. to są momenty w których duzi gracze robią rekalibrację wartości.</p>
-                    <p>Stara cena z sekundy na sekunde przestaje byc logiczna wiec odpalaja ogromne zlecenia zeby jak najszybciej zaparkowac na nowych poziomach to wlasnie ten fundamentalny zapalnik tworzy najwieksze <span class="tooltip-word">imbalansy <span class="tip-i tip-i-down" onmousemove="tt(event, 'Imbalance', 'Gwałtowny ruch kierunkowy i brak równowagi między kupującymi a sprzedającymi.', 'var(--down-color)')" onmouseleave="htt()">i</span></span> na ktorych my zarabiamy.</p>
+                    <h4><span class="pl">Część 2: Fundamental reason</span><span class="en">Part 2: Fundamental reason</span></h4>
+                    
+                    <p class="pl">Skoro wiemy ze to agresywne zlecenia ruszaja rynkiem to co sprawia ze duzy kapital nagle zaczyna tak mocno uderzac w zlecenia <span class="tooltip-word">market <span class="tip-i tip-i-up" onmousemove="tt(event, 'Market Orders', 'Agresywne zlecenia realizowane natychmiast po najlepszej dostępnej cenie w orderbooku.')" onmouseleave="htt()">i</span></span>?</p>
+                    <p class="en">Since we know that aggressive orders move the market, what makes big capital suddenly hit <span class="tooltip-word">market <span class="tip-i tip-i-up" onmousemove="tt(event, 'Market Orders', 'Aggressive orders executed immediately at the best available price in the orderbook.')" onmouseleave="htt()">i</span></span> orders so hard?</p>
+                    
+                    <p class="pl">tu wchodzą fundamenty ale nie nudne raporty tylko grube makro jak <span class="tooltip-word">cpi <span class="tip-i tip-i-up" onmousemove="tt(event, 'CPI', 'Consumer Price Index - kluczowy raport o inflacji, wywołujący zmienność.')" onmouseleave="htt()">i</span></span> czy <span class="tooltip-word">fomc <span class="tip-i tip-i-up" onmousemove="tt(event, 'FOMC', 'Federal Open Market Committee - spotkania banku centralnego, na których ustala się np. stopy procentowe.')" onmouseleave="htt()">i</span></span>. to są momenty w których duzi gracze robią rekalibrację wartości.</p>
+                    <p class="en">this is where fundamentals come in, but not boring reports, rather heavy macro like <span class="tooltip-word">cpi <span class="tip-i tip-i-up" onmousemove="tt(event, 'CPI', 'Consumer Price Index - key inflation report causing volatility.')" onmouseleave="htt()">i</span></span> or <span class="tooltip-word">fomc <span class="tip-i tip-i-up" onmousemove="tt(event, 'FOMC', 'Federal Open Market Committee - central bank meetings that set interest rates.')" onmouseleave="htt()">i</span></span>. these are moments when big players recalibrate value.</p>
+                    
+                    <p class="pl">Stara cena z sekundy na sekunde przestaje byc logiczna wiec odpalaja ogromne zlecenia zeby jak najszybciej zaparkowac na nowych poziomach to wlasnie ten fundamentalny zapalnik tworzy najwieksze <span class="tooltip-word">imbalansy <span class="tip-i tip-i-down" onmousemove="tt(event, 'Imbalance', 'Gwałtowny ruch kierunkowy i brak równowagi między kupującymi a sprzedającymi.', 'var(--down-color)')" onmouseleave="htt()">i</span></span> na ktorych my zarabiamy.</p>
+                    <p class="en">the old price instantly stops making logical sense so they fire massive orders to park at new levels as quickly as possible. this fundamental trigger creates the biggest <span class="tooltip-word">imbalances <span class="tip-i tip-i-down" onmousemove="tt(event, 'Imbalance', 'Rapid directional move and lack of equilibrium between buyers and sellers.', 'var(--down-color)')" onmouseleave="htt()">i</span></span> on which we profit.</p>
+                    
                     <div class="pro-tip">
                         <div class="pro-tip-icon">💡</div>
                         <div class="pro-tip-content">
-                            <strong>Tip ode mnie ;p</strong>
-                            na footprintach zobaczysz wtedy imbalance szukaj momentów gdzie agresywne market buy’e wlatują w pusty orderbook. sprzedający uciekają ze swoimi zleceniami (brak limitów) więc cena nie napotyka żadnego oporu (absorpcji) i po prostu przeskakuje o kilka ticków na raz szukając kogokolwiek kto zechce przyjąć ten trade. to jest właśnie najczystsza faza imbalansu.
+                            <strong><span class="pl">Tip ode mnie ;p</span><span class="en">Tip from me ;p</span></strong>
+                            <span class="pl">na footprintach zobaczysz wtedy imbalance szukaj momentów gdzie agresywne market buy’e wlatują w pusty orderbook. sprzedający uciekają ze swoimi zleceniami (brak limitów) więc cena nie napotyka żadnego oporu (absorpcji) i po prostu przeskakuje o kilka ticków na raz szukając kogokolwiek kto zechce przyjąć ten trade. to jest właśnie najczystsza faza imbalansu.</span>
+                            <span class="en">on footprints you'll see an imbalance then. look for moments where aggressive market buys fly into an empty orderbook. sellers flee with their orders (no limits) so the price meets no resistance (absorption) and simply jumps several ticks at once looking for anyone willing to take the trade. this is the purest phase of an imbalance.</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="course-section">
                     <div class="segment-tag tag-advanced">Advanced</div>
-                    <h4>Część 3: Options pressure</h4>
-                    <p>Na rynku jest jeszcze jedna gigantyczna sila o ktorej retail czesto nie ma pojecia to <span class="tooltip-word">market makers <span class="tip-i tip-i-up" onmousemove="tt(event, 'Market Maker', 'Duże instytucje zapewniające płynność na rynku poprzez jednoczesne wystawianie zleceń kupna i sprzedaży.')" onmouseleave="htt()">i</span></span> czyli ci ktorzy wystawiaja wam opcje.</p>
-                    <p>Musicie zrozumiec jedna rzecz oni nie graja kierunkowo ich zadaniem jest bycie <span class="tooltip-word">delta neutral <span class="tip-i tip-i-up" onmousemove="tt(event, 'Delta Neutral', 'Strategia, w której zyski i straty z opcji oraz aktywa bazowego wzajemnie się zerują (brak ryzyka kierunkowego).')" onmouseleave="htt()">i</span></span> jesli retail kupuje tony opcji call na longi to market maker musi natychmiast kupic aktywo bazowe zeby zabezpieczyc swoja pozycje czyli zrobic <span class="tooltip-word">hedge <span class="tip-i tip-i-up" onmousemove="tt(event, 'Hedge', 'Zabezpieczenie pozycji przed ryzykiem rynkowym.')" onmouseleave="htt()">i</span></span>.</p>
-                    <p>To przymusowe kupowanie lub sprzedawanie przez nich tworzy sztuczna ogromna presje na cene ktora czesto dziala jak dolanie benzyny do ognia i wywala wykres zupelnie poza skale.</p>
+                    <h4><span class="pl">Część 3: Options pressure</span><span class="en">Part 3: Options pressure</span></h4>
+                    
+                    <p class="pl">Na rynku jest jeszcze jedna gigantyczna sila o ktorej retail czesto nie ma pojecia to <span class="tooltip-word">market makers <span class="tip-i tip-i-up" onmousemove="tt(event, 'Market Maker', 'Duże instytucje zapewniające płynność na rynku poprzez jednoczesne wystawianie zleceń kupna i sprzedaży.')" onmouseleave="htt()">i</span></span> czyli ci ktorzy wystawiaja wam opcje.</p>
+                    <p class="en">there is another gigantic force on the market that retail often has no idea about, it's <span class="tooltip-word">market makers <span class="tip-i tip-i-up" onmousemove="tt(event, 'Market Maker', 'Large institutions providing liquidity to the market by simultaneously placing buy and sell orders.')" onmouseleave="htt()">i</span></span>, the ones who write options for you.</p>
+                    
+                    <p class="pl">Musicie zrozumiec jedna rzecz oni nie graja kierunkowo ich zadaniem jest bycie <span class="tooltip-word">delta neutral <span class="tip-i tip-i-up" onmousemove="tt(event, 'Delta Neutral', 'Strategia, w której zyski i straty z opcji oraz aktywa bazowego wzajemnie się zerują (brak ryzyka kierunkowego).')" onmouseleave="htt()">i</span></span> jesli retail kupuje tony opcji call na longi to market maker musi natychmiast kupic aktywo bazowe zeby zabezpieczyc swoja pozycje czyli zrobic <span class="tooltip-word">hedge <span class="tip-i tip-i-up" onmousemove="tt(event, 'Hedge', 'Zabezpieczenie pozycji przed ryzykiem rynkowym.')" onmouseleave="htt()">i</span></span>.</p>
+                    <p class="en">you must understand one thing, they don't play directionally, their job is to be <span class="tooltip-word">delta neutral <span class="tip-i tip-i-up" onmousemove="tt(event, 'Delta Neutral', 'A strategy where profits and losses from options and the underlying asset cancel each other out (no directional risk).')" onmouseleave="htt()">i</span></span>. if retail buys tons of call options for longs, the market maker must immediately buy the underlying asset to secure their position, i.e., make a <span class="tooltip-word">hedge <span class="tip-i tip-i-up" onmousemove="tt(event, 'Hedge', 'Securing a position against market risk.')" onmouseleave="htt()">i</span></span>.</p>
+                    
+                    <p class="pl">To przymusowe kupowanie lub sprzedawanie przez nich tworzy sztuczna ogromna presje na cene ktora czesto dziala jak dolanie benzyny do ognia i wywala wykres zupelnie poza skale.</p>
+                    <p class="en">this forced buying or selling by them creates an artificial huge pressure on the price which often acts like adding fuel to the fire and blows the chart completely off the scale.</p>
                 </div>
 
                 <div class="course-section">
-                    <h4>Część 4: Natura rynku (AMT)</h4>
-                    <p>Jak polaczymy te wszystkie trzy rzeczy agresywne zjadanie liquidity rekalibracje pod makro i zabezpieczanie opcji to wychodzi nam czysta natura rynku czyli auction market theory.</p>
-                    <p>Te wszystkie brutalne sily daza tak naprawde tylko do jednego chca w koncu znalezc cene przy ktorej obie strony znowu beda zgodne co do wartosci i bedą chcialy robic biznes czyli nasze fair value.</p>
-                    <p>Rynek to po prostu nieustanna aukcja ktora przechodzi z nudnego balansu w agresywny imbalance zeby znowu znalezc kolejny balance i tak w kolko to jest ten ostateczny mindset z ktorym powinniscie teraz przejsc do czytania reszty kategorii.</p>
+                    <h4><span class="pl">Część 4: Natura rynku (AMT)</span><span class="en">Part 4: Nature of the market (AMT)</span></h4>
+                    
+                    <p class="pl">Jak polaczymy te wszystkie trzy rzeczy agresywne zjadanie liquidity rekalibracje pod makro i zabezpieczanie opcji to wychodzi nam czysta natura rynku czyli auction market theory.</p>
+                    <p class="en">when we combine all these three things: aggressive eating of liquidity, macro recalibration, and options hedging, we get the pure nature of the market, i.e., auction market theory.</p>
+                    
+                    <p class="pl">Te wszystkie brutalne sily daza tak naprawde tylko do jednego chca w koncu znalezc cene przy ktorej obie strony znowu beda zgodne co do wartosci i bedą chcialy robic biznes czyli nasze fair value.</p>
+                    <p class="en">all these brutal forces actually aim for only one thing, they want to finally find a price where both sides will agree on value again and will want to do business, which is our fair value.</p>
+                    
+                    <p class="pl">Rynek to po prostu nieustanna aukcja ktora przechodzi z nudnego balansu w agresywny imbalance zeby znowu znalezc kolejny balance i tak w kolko to jest ten ostateczny mindset z ktorym powinniscie teraz przejsc do czytania reszty kategorii.</p>
+                    <p class="en">the market is simply a continuous auction that goes from a boring balance to an aggressive imbalance to find the next balance again and so on. this is the ultimate mindset with which you should now move on to reading the rest of the categories.</p>
                 </div>
             </div>
             <div class="next-section-wrapper">
-                <button class="next-btn" onclick="nav('cat-amt')">Czytaj dalej: 2. AMT <span>→</span></button>
+                <button class="next-btn" onclick="nav('cat-amt')">
+                    <span class="pl">Czytaj dalej: 2. AMT <span>→</span></span>
+                    <span class="en">Read more: 2. AMT <span>→</span></span>
+                </button>
             </div>
         </div>
 
@@ -528,7 +509,9 @@
             <div class="course-text">
                 <div class="course-section">
                     <p><strong class="em-up">balance</strong> -> <strong class="em-down">imbalance</strong> -> auction -> <strong class="em-up">new balance</strong></p>
-                    <p>W skrocie na wykresie wyglada to tak;</p>
+                    
+                    <p class="pl">W skrocie na wykresie wyglada to tak;</p>
+                    <p class="en">In short, on the chart it looks like this;</p>
                     
                     <div class="chart-wrapper" style="height: 420px;">
                         <canvas id="canvas-amt" class="chart-canvas"></canvas>
@@ -536,25 +519,35 @@
                 </div>
 
                 <div class="course-section">
-                    <p>Cena na dane strefy(po tym jak juz wystapily) moze reagowac;</p>
+                    <p class="pl">Cena na dane strefy(po tym jak juz wystapily) moze reagowac;</p>
+                    <p class="en">Price can react to these zones (after they have formed) by;</p>
                     <ul>
-                        <li><strong class="em-down">imbalance</strong> - szybko sie przemieszczac / rejection</li>
-                        <li><strong class="em-up">balance</strong> - odrzucic stary balance, lub przez niego przeleciec i zrobic breakout po ktorym najczesciej wystepuje market shift</li>
+                        <li><strong class="em-down">imbalance</strong> - <span class="pl">szybko sie przemieszczac / rejection</span><span class="en">moving quickly / rejection</span></li>
+                        <li><strong class="em-up">balance</strong> - <span class="pl">odrzucic stary balance, lub przez niego przeleciec i zrobic breakout po ktorym najczesciej wystepuje market shift</span><span class="en">rejecting the old balance, or flying through it and making a breakout after which a market shift usually occurs</span></li>
                     </ul>
                 </div>
 
                 <div class="course-section">
-                    <p>rynek to jedna wielka licytacja gdzie buyers i sellers bez przerwy szukają wspólnego języka. nie ma tu magii, jest tylko supply & demand. jak cena jest za niska wkraczają agresywne market buy’e i wybijają ją wyżej, jak za wysoka – agresywni sellers spychają ją w dół. rynek testuje poziomy aż znajdzie fair value czyli miejsce gdzie obie strony chętnie wymieniają kontrakty i tam dzieje się największy obrót.</p>
-                    <p>żeby nie zgadywać gdzie jest tanio a gdzie drogo używamy value area. to strefa w której rynek mielił najdłużej i gdzie przeszło ok 70% wolumenu sesji. to nasza baza. wyjście powyżej to sygnał że robi się drogo i zaraz mogą wjechać sprzedający, spadek poniżej to okazja dla kupujących bo cena staje się atrakcyjna. zamiast wróżyć z fusów(ict) po prostu patrzymy jak cena reaguje na ten obszar akceptacji.</p>
+                    <p class="pl">rynek to jedna wielka licytacja gdzie buyers i sellers bez przerwy szukają wspólnego języka. nie ma tu magii, jest tylko supply & demand. jak cena jest za niska wkraczają agresywne market buy’e i wybijają ją wyżej, jak za wysoka – agresywni sellers spychają ją w dół. rynek testuje poziomy aż znajdzie fair value czyli miejsce gdzie obie strony chętnie wymieniają kontrakty i tam dzieje się największy obrót.</p>
+                    <p class="en">the market is one big auction where buyers and sellers are constantly looking for common ground. there is no magic here, there is only supply & demand. if the price is too low, aggressive market buys step in and push it higher, if too high – aggressive sellers push it down. the market tests levels until it finds fair value, which is a place where both sides eagerly exchange contracts and where the highest volume occurs.</p>
+                    
+                    <p class="pl">żeby nie zgadywać gdzie jest tanio a gdzie drogo używamy value area. to strefa w której rynek mielił najdłużej i gdzie przeszło ok 70% wolumenu sesji. to nasza baza. wyjście powyżej to sygnał że robi się drogo i zaraz mogą wjechać sprzedający, spadek poniżej to okazja dla kupujących bo cena staje się atrakcyjna. zamiast wróżyć z fusów(ict) po prostu patrzymy jak cena reaguje na ten obszar akceptacji.</p>
+                    <p class="en">to avoid guessing where it is cheap and where it is expensive, we use value area. this is the zone where the market chopped the longest and where about 70% of the session's volume passed. this is our base. going above is a signal that it is getting expensive and sellers might step in soon, dropping below is an opportunity for buyers because the price becomes attractive. instead of reading tea leaves (ict), we simply watch how the price reacts to this area of acceptance.</p>
                 </div>
 
                 <div class="course-section">
-                    <p>cała zabawa polega na cyklu balance -> imbalance -> new balance. większość czasu rynek jest w równowadze (balance) ale gdy wpadnie nowa informacja lub duży kapitał cena agresywnie wybija i zaczyna trendować (imbalance). wtedy stare fair value idzie do kosza – nie gramy na powrót tylko płyniemy z momentum aż dynamika spadnie i rynek zacznie budować nową bazę na innym poziomie.</p>
-                    <p>amt to twoja mapa i logika a volume profile to rentgen który pokazuje to wszystko na wykresie. przeskakujemy przez zwykłe świece i widzimy dokładnie gdzie faktycznie zaparkował gruby hajs i gdzie ukształtowały się strefy balansu. teraz żebyś wiedział jak to wyznaczać w praktyce i czytać kto realnie kontroluje aukcję wchodzimy prosto w kategorię volume profile.</p>
+                    <p class="pl">cała zabawa polega na cyklu balance -> imbalance -> new balance. większość czasu rynek jest w równowadze (balance) ale gdy wpadnie nowa informacja lub duży kapitał cena agresywnie wybija i zaczyna trendować (imbalance). wtedy stare fair value idzie do kosza – nie gramy na powrót tylko płyniemy z momentum aż dynamika spadnie i rynek zacznie budować nową bazę na innym poziomie.</p>
+                    <p class="en">the whole game is about the balance -> imbalance -> new balance cycle. most of the time the market is in equilibrium (balance) but when new info or big capital drops in, the price aggressively breaks out and starts trending (imbalance). then the old fair value goes to the trash – we don't play for a return, we ride the momentum until dynamics drop and the market starts building a new base at a different level.</p>
+                    
+                    <p class="pl">amt to twoja mapa i logika a volume profile to rentgen który pokazuje to wszystko na wykresie. przeskakujemy przez zwykłe świece i widzimy dokładnie gdzie faktycznie zaparkował gruby hajs i gdzie ukształtowały się strefy balansu. teraz żebyś wiedział jak to wyznaczać w praktyce i czytać kto realnie kontroluje aukcję wchodzimy prosto w kategorię volume profile.</p>
+                    <p class="en">amt is your map and logic and volume profile is the x-ray that shows all of this on the chart. we skip past regular candles and see exactly where the smart money parked and where the balance zones formed. now so you know how to map this in practice and read who actually controls the auction, we jump straight into the volume profile category.</p>
                 </div>
             </div>
             <div class="next-section-wrapper">
-                <button class="next-btn" onclick="nav('cat-vp')">Czytaj dalej: 3. Volume Profile <span>→</span></button>
+                <button class="next-btn" onclick="nav('cat-vp')">
+                    <span class="pl">Czytaj dalej: 3. Volume Profile <span>→</span></span>
+                    <span class="en">Read more: 3. Volume Profile <span>→</span></span>
+                </button>
             </div>
         </div>
 
@@ -562,32 +555,38 @@
             <h2 class="section-title">3. VOLUME PROFILE</h2>
             <div class="course-text">
                 <div class="course-section">
-                    <p>Volume Profile czesto ustawia sie w te 4 kształty:</p>
+                    <p class="pl">Volume Profile czesto ustawia sie w te 4 kształty:</p>
+                    <p class="en">Volume Profile often shapes up into these 4 patterns:</p>
                     <ul>
-                        <li>P📈 - presja ceny w góre</li>
-                        <li>b📉 - presja ceny w dół</li>
-                        <li>B🌪️ - presja w obie strony xD</li>
-                        <li>D👉 - market w balance ("konsolidacja")</li>
+                        <li>P📈 - <span class="pl">presja ceny w góre</span><span class="en">price pressure up</span></li>
+                        <li>b📉 - <span class="pl">presja ceny w dół</span><span class="en">price pressure down</span></li>
+                        <li>B🌪️ - <span class="pl">presja w obie strony xD</span><span class="en">pressure both ways xD</span></li>
+                        <li>D👉 - <span class="pl">market w balance ("konsolidacja")</span><span class="en">market in balance ("consolidation")</span></li>
                     </ul>
-                    <p>Przykładowe setupy, z wykorzystaniem logiki auction market theory (tak w D, aż do wystąpienia breakoutu możesz tradować <span class="tooltip-word">S&R <span class="tip-i tip-i-up" onmousemove="tt(event, 'S&R', 'Support & Resistance - poziomy wsparcia (gdzie cena odbija w górę) i oporu (gdzie cena zawraca w dół).')" onmouseleave="htt()">i</span></span>).</p>
+                    <p class="pl">Przykładowe setupy, z wykorzystaniem logiki auction market theory (tak w D, aż do wystąpienia breakoutu możesz tradować <span class="tooltip-word">S&R <span class="tip-i tip-i-up" onmousemove="tt(event, 'S&R', 'Support & Resistance - poziomy wsparcia (gdzie cena odbija w górę) i oporu (gdzie cena zawraca w dół).')" onmouseleave="htt()">i</span></span>).</p>
+                    <p class="en">Example setups, using auction market theory logic (yes in D shape, until a breakout occurs you can trade <span class="tooltip-word">S&R <span class="tip-i tip-i-up" onmousemove="tt(event, 'S&R', 'Support & Resistance - levels where price bounces up or rejects down.')" onmouseleave="htt()">i</span></span>).</p>
                 </div>
             </div>
             
-            <h4 style="color:var(--heading-color); margin-bottom: 10px;">Setup 1: Kształt D (Balance) - Tradowanie VAH / VAL</h4>
+            <h4 style="color:var(--heading-color); margin-bottom: 10px;">
+                <span class="pl">Setup 1: Kształt D (Balance) - Tradowanie VAH / VAL</span>
+                <span class="en">Setup 1: D Shape (Balance) - Trading VAH / VAL</span>
+            </h4>
             <div class="chart-wrapper" style="height: 400px;">
                 <canvas id="canvas-vaval" class="chart-canvas"></canvas>
             </div>
 
             <div class="course-text">
                 <div class="course-section">
-                    <p>"Mapowanie" profilem wolumenu(XD) można robić w dwa sposoby;</p>
+                    <p class="pl">"Mapowanie" profilem wolumenu(XD) można robić w dwa sposoby;</p>
+                    <p class="en">"Mapping" with volume profile(XD) can be done in two ways;</p>
                     <ul>
-                        <li>zaplanowane; ustawiasz na sesje/dni-wieki... - można uznać je za bardzo "znaczące"
+                        <li><span class="pl">zaplanowane; ustawiasz na sesje/dni-wieki... - można uznać je za bardzo "znaczące"</span><span class="en">planned; you anchor it to sessions/days-ages... - they can be considered very "significant"</span>
                             <div class="chart-wrapper" style="height: 280px; margin-top: 15px;">
                                 <canvas id="canvas-map1" class="chart-canvas"></canvas>
                             </div>
                         </li>
-                        <li>bieżące: ustawiasz na bieżące strefy (balance, imbalance) - też są znaczące, ale raczej nie wyłapiesz tak tradu na kolejne 3h
+                        <li><span class="pl">bieżące: ustawiasz na bieżące strefy (balance, imbalance) - też są znaczące, ale raczej nie wyłapiesz tak tradu na kolejne 3h</span><span class="en">current: you anchor it to current zones (balance, imbalance) - also significant, but you probably won't catch a 3h long trade this way</span>
                             <div class="chart-wrapper" style="height: 280px; margin-top: 15px;">
                                 <canvas id="canvas-map2" class="chart-canvas"></canvas>
                             </div>
@@ -596,53 +595,90 @@
                 </div>
 
                 <div class="course-section">
-                    <p>Jeśli ktoś nie rozumie jak działa VP, i co oznaczają dane pola;</p>
+                    <p class="pl">Jeśli ktoś nie rozumie jak działa VP, i co oznaczają dane pola;</p>
+                    <p class="en">If someone doesn't understand how VP works, and what these terms mean;</p>
                     <ul>
-                        <li><strong class="em-up">VAH</strong>, <strong class="em-down">VAL</strong> - <span class="tooltip-word">Value Area <span class="tip-i tip-i-up" onmousemove="tt(event, 'VAH / VAL', 'Value Area High (Górna granica) i Value Area Low (Dolna granica). Wyznaczają strefę 68% wolumenu w danej sesji.', 'var(--up-color)')" onmouseleave="htt()">i</span></span></li>
-                        <li><strong class="em-up">POC</strong> - <span class="tooltip-word">Point of Control <span class="tip-i tip-i-up" onmousemove="tt(event, 'POC', 'Punkt kontroli z największym wygenerowanym wolumenem. Często działa jak magnes przyciągający cenę (Fair Value).', 'var(--up-color)')" onmouseleave="htt()">i</span></span></li>
-                        <li><strong class="em-up">HVN</strong> - <span class="tooltip-word">Balance <span class="tip-i tip-i-up" onmousemove="tt(event, 'Balance (VP)', 'Strefa balansu w Volume Profile: popyt i podaż są w miarę zgodne, więc cena zwalnia i spędza tam najwięcej czasu (HVN).', 'var(--up-color)')" onmouseleave="htt()">i</span></span></li>
-                        <li><strong class="em-down">LVN</strong> - <span class="tooltip-word">Imbalance <span class="tip-i tip-i-down" onmousemove="tt(event, 'Imbalance (VP)', 'Strefa imbalansu w Volume Profile: brak akceptacji na danych poziomach, więc cena przelatuje szybciej przez LVN w stronę kolejnego kierunku.', 'var(--down-color)')" onmouseleave="htt()">i</span></span></li>
+                        <li class="pl"><strong class="em-up">VAH</strong>, <strong class="em-down">VAL</strong> - <span class="tooltip-word">Value Area <span class="tip-i tip-i-up" onmousemove="tt(event, 'VAH / VAL', 'Value Area High (Górna granica) i Value Area Low (Dolna granica). Wyznaczają strefę 68% wolumenu w danej sesji.', 'var(--up-color)')" onmouseleave="htt()">i</span></span></li>
+                        <li class="en"><strong class="em-up">VAH</strong>, <strong class="em-down">VAL</strong> - <span class="tooltip-word">Value Area <span class="tip-i tip-i-up" onmousemove="tt(event, 'VAH / VAL', 'Value Area High and Value Area Low. They mark the 68% volume zone in a given session.', 'var(--up-color)')" onmouseleave="htt()">i</span></span></li>
+                        
+                        <li class="pl"><strong class="em-up">POC</strong> - <span class="tooltip-word">Point of Control <span class="tip-i tip-i-up" onmousemove="tt(event, 'POC', 'Punkt kontroli z największym wygenerowanym wolumenem. Często działa jak magnes przyciągający cenę (Fair Value).', 'var(--up-color)')" onmouseleave="htt()">i</span></span></li>
+                        <li class="en"><strong class="em-up">POC</strong> - <span class="tooltip-word">Point of Control <span class="tip-i tip-i-up" onmousemove="tt(event, 'POC', 'Point of control with the highest generated volume. Often acts as a magnet for price (Fair Value).', 'var(--up-color)')" onmouseleave="htt()">i</span></span></li>
+                        
+                        <li class="pl"><strong class="em-up">HVN</strong> - <span class="tooltip-word">Balance <span class="tip-i tip-i-up" onmousemove="tt(event, 'Balance (VP)', 'Strefa balansu w Volume Profile: popyt i podaż są w miarę zgodne, więc cena zwalnia i spędza tam najwięcej czasu (HVN).', 'var(--up-color)')" onmouseleave="htt()">i</span></span></li>
+                        <li class="en"><strong class="em-up">HVN</strong> - <span class="tooltip-word">Balance <span class="tip-i tip-i-up" onmousemove="tt(event, 'Balance (VP)', 'Balance zone in Volume Profile: supply and demand are mostly in agreement, so price slows down and spends the most time there (High Volume Node).', 'var(--up-color)')" onmouseleave="htt()">i</span></span></li>
+                        
+                        <li class="pl"><strong class="em-down">LVN</strong> - <span class="tooltip-word">Imbalance <span class="tip-i tip-i-down" onmousemove="tt(event, 'Imbalance (VP)', 'Strefa imbalansu w Volume Profile: brak akceptacji na danych poziomach, więc cena przelatuje szybciej przez LVN w stronę kolejnego kierunku.', 'var(--down-color)')" onmouseleave="htt()">i</span></span></li>
+                        <li class="en"><strong class="em-down">LVN</strong> - <span class="tooltip-word">Imbalance <span class="tip-i tip-i-down" onmousemove="tt(event, 'Imbalance (VP)', 'Imbalance zone in Volume Profile: lack of acceptance at these levels, so price flies faster through LVN towards the next direction.', 'var(--down-color)')" onmouseleave="htt()">i</span></span></li>
                     </ul>
                     
-                    <div class="note-block">
+                    <div class="note-block pl">
                         <span class="note-icon">💡</span>
                         <div class="note-text">
                             Gdy cena odbija sie od vah/val ➝ testowanie vah/val to <strong>moment decyzyjny</strong>;<br>
                             wyjscie poza strefe i budowanie tam nowego volume ➝ <strong>akceptacja nowej ceny</strong> i start imbalansu.
                         </div>
                     </div>
+                    <div class="note-block en">
+                        <span class="note-icon">💡</span>
+                        <div class="note-text">
+                            When price bounces off vah/val ➝ testing vah/val is a <strong>decision moment</strong>;<br>
+                            exiting the zone and building new volume there ➝ <strong>acceptance of new price</strong> and start of an imbalance.
+                        </div>
+                    </div>
                 </div>
 
                 <div class="course-section">
                     <div class="segment-tag tag-must-know">Must Know</div>
-                    <p>hvn i lvn - to one mowia nam jak szybko cena bedzie w danej strefie pływać</p>
-                    <p>hvn czyli high volume node to te grube brzuchy na profilu gdzie zebral sie najwiekszy volume to sa klasyczne strefy balansu cena zachowuje sie tu jak w blocie zwalnia mieli w miejscu i spedza duzo czasu bo obie strony sa dosc zgodne co do wartosci</p>
-                    <p>z kolei lvn czyli low volume node to te wciecia w profilu gdzie volume prawie nie ma to strefy imbalansu w przeszlosci rynek po prostu nie akceptowal tych poziomow wiec kiedy cena tam trafia przelatuje przez nie jak przez proznie</p>
-                    <p>dlatego wlasnie bardzo czesto widzimy jak rynek odrywa sie od jednego hvn blyskawicznie i agresywnie pokonuje puste lvn zeby znowu zaparkowac i szukac rownowagi na kolejnym grubym hvn</p>
-                    <p>warto jeszcze dodac wazna rzecz odnosnie lvn z tych pustych stref bardzo czesto korzysta sie w mocno trendujacym rynku sluza one jako idealne miejsca do zlapania pullbacka i pojscia dalej z trendem dziala to tak ze gdy mamy silny ruch i rynek robi krotki pullback to wpadajac w lvn sprawdza czy wciaz nie ma tam chetnych do handlu szybki brak akceptacji powoduje rejection i kontynuacje glownego trendu wiec to swietny moment zeby podpiac sie do ruchu i zarabiac na tym momentum</p>
+                    <p class="pl">hvn i lvn - to one mowia nam jak szybko cena bedzie w danej strefie pływać</p>
+                    <p class="en">hvn and lvn - they tell us how fast the price will swim in a given zone</p>
+                    
+                    <p class="pl">hvn czyli high volume node to te grube brzuchy na profilu gdzie zebral sie najwiekszy volume to sa klasyczne strefy balansu cena zachowuje sie tu jak w blocie zwalnia mieli w miejscu i spedza duzo czasu bo obie strony sa dosc zgodne co do wartosci</p>
+                    <p class="en">hvn meaning high volume node are those fat bellies on the profile where the biggest volume gathered. these are classic balance zones. price acts here like in mud, slows down, chops in place and spends a lot of time because both sides are quite agreed on value.</p>
+                    
+                    <p class="pl">z kolei lvn czyli low volume node to te wciecia w profilu gdzie volume prawie nie ma to strefy imbalansu w przeszlosci rynek po prostu nie akceptowal tych poziomow wiec kiedy cena tam trafia przelatuje przez nie jak przez proznie</p>
+                    <p class="en">on the other hand lvn meaning low volume node are those indentations in the profile where there is almost no volume. these are imbalance zones. in the past the market simply did not accept these levels so when price gets there it flies through them like through a vacuum.</p>
+                    
+                    <p class="pl">dlatego wlasnie bardzo czesto widzimy jak rynek odrywa sie od jednego hvn blyskawicznie i agresywnie pokonuje puste lvn zeby znowu zaparkowac i szukac rownowagi na kolejnym grubym hvn</p>
+                    <p class="en">that's exactly why we very often see the market detach from one hvn, lightning-fast and aggressively overcome an empty lvn, just to park again and look for equilibrium at the next fat hvn.</p>
+                    
+                    <p class="pl">warto jeszcze dodac wazna rzecz odnosnie lvn z tych pustych stref bardzo czesto korzysta sie w mocno trendujacym rynku sluza one jako idealne miejsca do zlapania pullbacka i pojscia dalej z trendem dziala to tak ze gdy mamy silny ruch i rynek robi krotki pullback to wpadajac w lvn sprawdza czy wciaz nie ma tam chetnych do handlu szybki brak akceptacji powoduje rejection i kontynuacje glownego trendu wiec to swietny moment zeby podpiac sie do ruchu i zarabiac na tym momentum</p>
+                    <p class="en">it's worth adding an important thing regarding lvn. these empty zones are very often used in a strongly trending market. they serve as ideal places to catch a pullback and go further with the trend. it works like this: when we have a strong move and the market makes a short pullback, falling into lvn it checks if there are still no willing traders there. a quick lack of acceptance causes a rejection and continuation of the main trend, so it's a great moment to hook onto the move and profit on that momentum.</p>
                 </div>
 
                 <div class="pro-tip">
                     <div class="pro-tip-icon">⚡</div>
-                    <div class="pro-tip-content">
+                    <div class="pro-tip-content pl">
                         <strong>Tip ode mnie ;p</strong>
                         bardzo często z tego korzystam ^^
+                    </div>
+                    <div class="pro-tip-content en">
+                        <strong>Tip from me ;p</strong>
+                        i use this very often ^^
                     </div>
                 </div>
             </div>
 
-            <h4 style="color:var(--heading-color); margin-bottom: 10px;">Setup 2: Magnes POC i powrót do HVN</h4>
+            <h4 style="color:var(--heading-color); margin-bottom: 10px;">
+                <span class="pl">Setup 2: Magnes POC i powrót do HVN</span>
+                <span class="en">Setup 2: POC Magnet and return to HVN</span>
+            </h4>
             <div class="chart-wrapper" style="height: 400px;">
                 <canvas id="canvas-poc" class="chart-canvas"></canvas>
             </div>
 
-            <h4 style="color:var(--heading-color); margin-bottom: 10px;">Setup 3: Odbicie od LVN (Imbalance)</h4>
+            <h4 style="color:var(--heading-color); margin-bottom: 10px;">
+                <span class="pl">Setup 3: Odbicie od LVN (Imbalance)</span>
+                <span class="en">Setup 3: LVN Bounce (Imbalance)</span>
+            </h4>
             <div class="chart-wrapper" style="height: 400px;">
                 <canvas id="canvas-lvn" class="chart-canvas"></canvas>
             </div>
             
             <div class="next-section-wrapper">
-                <button class="next-btn" onclick="nav('cat-vwap')">Czytaj dalej: 4. AVWAP <span>→</span></button>
+                <button class="next-btn" onclick="nav('cat-vwap')">
+                    <span class="pl">Czytaj dalej: 4. AVWAP <span>→</span></span>
+                    <span class="en">Read more: 4. AVWAP <span>→</span></span>
+                </button>
             </div>
         </div>
 
@@ -650,30 +686,49 @@
             <h2 class="section-title">4. AVWAP</h2>
             <div class="course-text">
                 <div class="course-section">
-                    <p>zwykłe średnie kroczące są spóźnione bo liczą tylko czas i cenę. dla nas liczy się <span class="tooltip-word">vwap <span class="tip-i tip-i-up" onmousemove="tt(event, 'VWAP', 'Volume Weighted Average Price - średnia cena ważona wolumenem.')" onmouseleave="htt()">i</span></span> czyli średnia cena ważona wolumenem. to jest jedyna „średnia” którą respektują instytucje bo pokazuje gdzie faktycznie handlował duży kapitał. jeśli cena jest powyżej vwap-u instytucjonalni kupujący są zadowoleni, jeśli poniżej to szukają okazji lub uciekają z pozycji. używamy <span class="tooltip-word">anchored vwap <span class="tip-i tip-i-up" onmousemove="tt(event, 'Anchored VWAP', 'Zakotwiczony VWAP, mierzony od konkretnego wydarzenia, miejsca, lub początku sesji.')" onmouseleave="htt()">i</span></span> żeby przyczepić go do konkretnych punktów zwrotnych jak fomc czy szczyt sesji i widzieć kto od tego momentu przejął kontrolę nad rynkiem.</p>
+                    <p class="pl">zwykłe średnie kroczące są spóźnione bo liczą tylko czas i cenę. dla nas liczy się <span class="tooltip-word">vwap <span class="tip-i tip-i-up" onmousemove="tt(event, 'VWAP', 'Volume Weighted Average Price - średnia cena ważona wolumenem.')" onmouseleave="htt()">i</span></span> czyli średnia cena ważona wolumenem. to jest jedyna „średnia” którą respektują instytucje bo pokazuje gdzie faktycznie handlował duży kapitał. jeśli cena jest powyżej vwap-u instytucjonalni kupujący są zadowoleni, jeśli poniżej to szukają okazji lub uciekają z pozycji. używamy <span class="tooltip-word">anchored vwap <span class="tip-i tip-i-up" onmousemove="tt(event, 'Anchored VWAP', 'Zakotwiczony VWAP, mierzony od konkretnego wydarzenia, miejsca, lub początku sesji.')" onmouseleave="htt()">i</span></span> żeby przyczepić go do konkretnych punktów zwrotnych jak fomc czy szczyt sesji i widzieć kto od tego momentu przejął kontrolę nad rynkiem.</p>
+                    <p class="en">regular moving averages are lagging because they only count time and price. for us, what matters is <span class="tooltip-word">vwap <span class="tip-i tip-i-up" onmousemove="tt(event, 'VWAP', 'Volume Weighted Average Price.')" onmouseleave="htt()">i</span></span>. this is the only "average" respected by institutions because it shows where big capital actually traded. if the price is above vwap, institutional buyers are happy, if below, they look for opportunities or run from positions. we use <span class="tooltip-word">anchored vwap <span class="tip-i tip-i-up" onmousemove="tt(event, 'Anchored VWAP', 'VWAP anchored to a specific event, place, or session start.')" onmouseleave="htt()">i</span></span> to attach it to specific turning points like fomc or session high to see who took control of the market from that moment on.</p>
                     
                     <img src="https://cdn.discordapp.com/attachments/1492548775020073152/1492549533421404170/1775921938108.png?ex=69e1ab52&is=69e059d2&hm=772ce31a9173699c022cac18393dc7e0ea89d1fa365e556461dfc2d305c9fcb6&animated=true" class="course-img" alt="VWAP Bands Reaction">
                     
-                    <p>jak widać cena pięknie reaguje na <span class="tooltip-word">VWAP band'y <span class="tip-i tip-i-up" onmousemove="tt(event, 'VWAP Bands', 'Pasma odchylenia standardowego od głównej linii VWAP. Pełnią rolę dynamicznego VAH i VAL.')" onmouseleave="htt()">i</span></span>, i sam VWAP</p>
-                    <p>sposoby na tradowanie VWAP to między innymi S&R i <span class="tooltip-word">mean reversion <span class="tip-i tip-i-up" onmousemove="tt(event, 'Mean Reversion', 'Tendencja ceny do powrotu do swojej historycznej średniej (w tym wypadku linii VWAP).')" onmouseleave="htt()">i</span></span></p>
-                    <p>przykład użycia: AVWAP zarzucony na high, pięknie pokazuje lokalny resistance, z którego potem tworzy sie support</p>
+                    <p class="pl">jak widać cena pięknie reaguje na <span class="tooltip-word">VWAP band'y <span class="tip-i tip-i-up" onmousemove="tt(event, 'VWAP Bands', 'Pasma odchylenia standardowego od głównej linii VWAP. Pełnią rolę dynamicznego VAH i VAL.')" onmouseleave="htt()">i</span></span>, i sam VWAP</p>
+                    <p class="en">as you can see the price beautifully reacts to <span class="tooltip-word">VWAP bands <span class="tip-i tip-i-up" onmousemove="tt(event, 'VWAP Bands', 'Standard deviation bands from the main VWAP line. Act as dynamic VAH and VAL.')" onmouseleave="htt()">i</span></span>, and VWAP itself</p>
+                    
+                    <p class="pl">sposoby na tradowanie VWAP to między innymi S&R i <span class="tooltip-word">mean reversion <span class="tip-i tip-i-up" onmousemove="tt(event, 'Mean Reversion', 'Tendencja ceny do powrotu do swojej historycznej średniej (w tym wypadku linii VWAP).')" onmouseleave="htt()">i</span></span></p>
+                    <p class="en">ways to trade VWAP include S&R and <span class="tooltip-word">mean reversion <span class="tip-i tip-i-up" onmousemove="tt(event, 'Mean Reversion', 'Price tendency to return to its historical mean (in this case, the VWAP line).')" onmouseleave="htt()">i</span></span></p>
+                    
+                    <p class="pl">przykład użycia: AVWAP zarzucony na high, pięknie pokazuje lokalny resistance, z którego potem tworzy sie support</p>
+                    <p class="en">example usage: AVWAP anchored to the high beautifully shows local resistance, which later becomes support</p>
                 </div>
                 <div class="course-section">
                     <img src="https://cdn.discordapp.com/attachments/1492548775020073152/1492550878832361564/1775922258659.png?ex=69e1ac93&is=69e05b13&hm=4db95c2096f67d6ca697aa654dd4b1d5183fd1fcd5ab939d183586f9054a796d&animated=true" class="course-img" alt="AVWAP Resistance to Support">
-                    <h4>Strategia S&R i <span class="tooltip-word">Bias <span class="tip-i tip-i-up" onmousemove="tt(event, 'Bias', 'Nasze obiektywne nastawienie do rynku w danej chwili, np. bullish (szukamy longów) lub bearish (szukamy shortów).')" onmouseleave="htt()">i</span></span>:</h4>
-                    <ul>
+                    <h4 class="pl">Strategia S&R i <span class="tooltip-word">Bias <span class="tip-i tip-i-up" onmousemove="tt(event, 'Bias', 'Nasze obiektywne nastawienie do rynku w danej chwili, np. bullish (szukamy longów) lub bearish (szukamy shortów).')" onmouseleave="htt()">i</span></span>:</h4>
+                    <h4 class="en">S&R Strategy and <span class="tooltip-word">Bias <span class="tip-i tip-i-up" onmousemove="tt(event, 'Bias', 'Our objective market attitude at a given moment, e.g., bullish (looking for longs) or bearish (looking for shorts).')" onmouseleave="htt()">i</span></span>:</h4>
+                    <ul class="pl">
                         <li>cena powyżej vwap -> szukamy longów / reversion (gdy cena jest bardzo daleko lub widać exhaustion)</li>
                         <li>cena poniżej vwap -> szukamy shortów / reversion (^)</li>
                         <li>cena przecina vwap z dużym volume -> podmianka stron xd</li>
                     </ul>
+                    <ul class="en">
+                        <li>price above vwap -> looking for longs / reversion (when price is very far or exhaustion is visible)</li>
+                        <li>price below vwap -> looking for shorts / reversion (^)</li>
+                        <li>price crosses vwap with high volume -> changing sides xd</li>
+                    </ul>
                     <div class="segment-tag tag-must-know">Must Know</div>
-                    <p>avwap to w jezyku teorii aukcji po prostu dynamiczna linia fair value taki poc ktory przesuwa sie razem z cena w czasie rzeczywistym a te zewnetrzne bandy pelnia funkcje dynamicznych vah i val wiec cala logika z profilu volume ma tu pelne zastosowanie</p>
-                    <p>co do samego tradowania mean reversion pamietajcie o jednej waznej rzeczy to dziala swietnie kiedy rynek jest w szerokim balansie i po prostu oddycha od bandy do bandy ale jesli mamy silny imbalance i pprst plynie w jednym kierunku to cena moze przebywac bardzo daleko od vwap przez cala sesje i nigdy do niego nie wrocic dlatego w trendzie vwap sluzy nam jako trampolina na pullbackach a nie jako cel do ktorego gramy counter-trend</p>
+                    
+                    <p class="pl">avwap to w jezyku teorii aukcji po prostu dynamiczna linia fair value taki poc ktory przesuwa sie razem z cena w czasie rzeczywistym a te zewnetrzne bandy pelnia funkcje dynamicznych vah i val wiec cala logika z profilu volume ma tu pelne zastosowanie</p>
+                    <p class="en">avwap in the language of auction theory is simply a dynamic fair value line, a poc that moves with the price in real time, and these outer bands act as dynamic vah and val, so all the logic from volume profile fully applies here.</p>
+                    
+                    <p class="pl">co do samego tradowania mean reversion pamietajcie o jednej waznej rzeczy to dziala swietnie kiedy rynek jest w szerokim balansie i po prostu oddycha od bandy do bandy ale jesli mamy silny imbalance i pprst plynie w jednym kierunku to cena moze przebywac bardzo daleko od vwap przez cala sesje i nigdy do niego nie wrocic dlatego w trendzie vwap sluzy nam jako trampolina na pullbackach a nie jako cel do ktorego gramy counter-trend</p>
+                    <p class="en">as for trading mean reversion itself, remember one important thing: it works great when the market is in a wide balance and simply breathes from band to band, but if we have a strong imbalance and it just flows in one direction, the price can stay very far from vwap all session and never return to it. therefore, in a trend, vwap serves us as a trampoline on pullbacks, not as a target to which we play counter-trend.</p>
                 </div>
                 <div class="chart-wrapper" style="height: 400px;"><canvas id="canvas-vwap" class="chart-canvas"></canvas></div>
             </div>
             <div class="next-section-wrapper">
-                <button class="next-btn" onclick="nav('cat-vsa')">Czytaj dalej: 5. VSA <span>→</span></button>
+                <button class="next-btn" onclick="nav('cat-vsa')">
+                    <span class="pl">Czytaj dalej: 5. VSA <span>→</span></span>
+                    <span class="en">Read more: 5. VSA <span>→</span></span>
+                </button>
             </div>
         </div>
 
@@ -681,35 +736,70 @@
             <h2 class="section-title">5. VOLUME SPREAD ANALYSIS</h2>
             <div class="course-text">
                 <div class="course-section">
-                    <p>otwieramy nowy dzial czyli vsa volume spread analysis to genialne narzedzie ktore laczy czysty wykres candles z volume i uczy was patrzec na rynek przez pryzmat prawa wysilku i rezultatu</p>
-                    <p>zeby to zrozumiec musimy zaczac od absolutnych podstaw zapomnijcie na chwile o standardowych formacjach świecowych(najlepiej na zawsze swoja droga..) bo w vsa interesuja nas tylko trzy konkretne rzeczy w kazdej candle</p>
-                    <ul>
+                    <p class="pl">otwieramy nowy dzial czyli vsa volume spread analysis to genialne narzedzie ktore laczy czysty wykres candles z volume i uczy was patrzec na rynek przez pryzmat prawa wysilku i rezultatu</p>
+                    <p class="en">we open a new section, vsa volume spread analysis. it's a brilliant tool that combines a pure candle chart with volume and teaches you to look at the market through the prism of the law of effort and result.</p>
+                    
+                    <p class="pl">zeby to zrozumiec musimy zaczac od absolutnych podstaw zapomnijcie na chwile o standardowych formacjach świecowych(najlepiej na zawsze swoja droga..) bo w vsa interesuja nas tylko trzy konkretne rzeczy w kazdej candle</p>
+                    <p class="en">to understand this we must start from the absolute basics. forget for a moment about standard candlestick formations (preferably forever by the way..) because in vsa we are only interested in three specific things in each candle</p>
+                    
+                    <ul class="pl">
                         <li>po pierwsze spread ale nie ten od brokera tylko zasieg candle czyli odleglosc od samego low do samego high to nam mowi jaki konkretny <span class="tooltip-word">rezultat (Result) <span class="tip-i tip-i-up" onmousemove="tt(event, 'Result', 'Spread świecy - czyli faktyczny dystans, jaki pokonała cena w określonym czasie.')" onmouseleave="htt()">i</span></span> osiagnal rynek w danym czasie</li>
                         <li>po drugie volume czyli ile kontraktow w ogole przewinelo sie na tej candle to mowi nam o tym jaki <span class="tooltip-word">wysilek (Effort) <span class="tip-i tip-i-up" onmousemove="tt(event, 'Effort', 'Wolumen - czyli ile siły włożono, aby poruszyć cenę.')" onmouseleave="htt()">i</span></span> rynek wlozyl w ten ruch</li>
                         <li>i po trzecie cena zamkniecia czyli gdzie ostatecznie strona bullish i bearish skonczyla walke czy blisko high czy w srodku czy na samym low</li>
                     </ul>
-                    <p>vsa polega na tym ze patrzac na te trzy rzeczy caly czas zadajemy sobie jedno wazne pytanie czy effort jaki wlozono w dany ruch jest logiczny i zgadza sie z rezultatem jaki osiagnieto na wykresie</p>
+                    <ul class="en">
+                        <li>firstly, the spread, but not the broker's spread, the candle's range meaning the distance from the absolute low to the absolute high. this tells us what specific <span class="tooltip-word">result (Result) <span class="tip-i tip-i-up" onmousemove="tt(event, 'Result', 'Candle spread - the actual distance the price covered in a given time.')" onmouseleave="htt()">i</span></span> the market achieved in a given time</li>
+                        <li>secondly, volume, meaning how many contracts rolled through this candle. this tells us what <span class="tooltip-word">effort (Effort) <span class="tip-i tip-i-up" onmousemove="tt(event, 'Effort', 'Volume - how much force was put in to move the price.')" onmouseleave="htt()">i</span></span> the market put into this move</li>
+                        <li>and thirdly, the closing price, meaning where exactly the bullish and bearish sides ended the fight, near the high, in the middle, or at the absolute low</li>
+                    </ul>
+                    
+                    <p class="pl">vsa polega na tym ze patrzac na te trzy rzeczy caly czas zadajemy sobie jedno wazne pytanie czy effort jaki wlozono w dany ruch jest logiczny i zgadza sie z rezultatem jaki osiagnieto na wykresie</p>
+                    <p class="en">vsa is about looking at these three things and constantly asking ourselves one important question: is the effort put into a given move logical and does it align with the result achieved on the chart?</p>
                 </div>
 
                 <div class="course-section">
-                    <h4>Zdrowy Ruch i Harmonijny Trend</h4>
-                    <p>zaczynamy od tego jak wyglada zdrowy rynek czyli sytuacja w ktorej wlozony effort idealnie rowna sie osiagnietemu rezultatowi</p>
-                    <p>wyobrazcie sobie potezna candle z bardzo duzym spreadem ktora zamyka sie na samym dnie a pod nia widzicie ogromny slupek volume</p>
-                    <p>to jest wlasnie pelna harmonia sellers wlozyli gigantyczny effort w postaci masy uderzen i osiagneli adekwatny result spychajac cene mocno w dol</p>
-                    <p>w takiej sytuacji wiemy ze ruch jest poparty silnym kapitalem i absolutnie nie stajemy mu na drodze zeby lapac falling knives</p>
-                    <p>dziala to tez w druga strone maly volume czyli brak effortu powinien zawsze dawac maly spread czyli brak rezultatu</p>
-                    <p>jesli rynek rysuje mala waska candle na bardzo niskim volume to po prostu oznacza ze chwilowo nie ma tam duzych graczy i presji z zadnej ze stron wiec cena po prostu dryfuje</p>
-                    <p>rozpoznawanie tych zdrowych i logicznych zachowan to wasz podstawowy filtr ktory mowi wam kiedy trend wciaz ma sile do dalszej jazdy a wy mozecie spokojnie plynac z trendem</p>
+                    <h4><span class="pl">Zdrowy Ruch i Harmonijny Trend</span><span class="en">Healthy Move and Harmonious Trend</span></h4>
+                    
+                    <p class="pl">zaczynamy od tego jak wyglada zdrowy rynek czyli sytuacja w ktorej wlozony effort idealnie rowna sie osiagnietemu rezultatowi</p>
+                    <p class="en">we start with what a healthy market looks like, meaning a situation where the applied effort perfectly equals the achieved result.</p>
+                    
+                    <p class="pl">wyobrazcie sobie potezna candle z bardzo duzym spreadem ktora zamyka sie na samym dnie a pod nia widzicie ogromny slupek volume</p>
+                    <p class="en">imagine a massive candle with a very large spread that closes at the absolute bottom, and below it you see a huge volume bar.</p>
+                    
+                    <p class="pl">to jest wlasnie pelna harmonia sellers wlozyli gigantyczny effort w postaci masy uderzen i osiagneli adekwatny result spychajac cene mocno w dol</p>
+                    <p class="en">this is pure harmony. sellers put in a gigantic effort in the form of massive hits and achieved an adequate result by pushing the price hard down.</p>
+                    
+                    <p class="pl">w takiej sytuacji wiemy ze ruch jest poparty silnym kapitalem i absolutnie nie stajemy mu na drodze zeby lapac falling knives</p>
+                    <p class="en">in such a situation, we know the move is backed by strong capital and we absolutely do not stand in its way to catch falling knives.</p>
+                    
+                    <p class="pl">dziala to tez w druga strone maly volume czyli brak effortu powinien zawsze dawac maly spread czyli brak rezultatu</p>
+                    <p class="en">it works the other way around too. low volume, meaning a lack of effort, should always give a small spread, meaning a lack of result.</p>
+                    
+                    <p class="pl">jesli rynek rysuje mala waska candle na bardzo niskim volume to po prostu oznacza ze chwilowo nie ma tam duzych graczy i presji z zadnej ze stron wiec cena po prostu dryfuje</p>
+                    <p class="en">if the market draws a small narrow candle on very low volume, it simply means that temporarily there are no big players there and no pressure from either side, so the price just drifts.</p>
+                    
+                    <p class="pl">rozpoznawanie tych zdrowych i logicznych zachowan to wasz podstawowy filtr ktory mowi wam kiedy trend wciaz ma sile do dalszej jazdy a wy mozecie spokojnie plynac z trendem</p>
+                    <p class="en">recognizing these healthy and logical behaviors is your basic filter which tells you when the trend still has the strength to keep going, and you can calmly swim with the trend.</p>
                 </div>
 
                 <div class="course-section">
                     <div class="segment-tag tag-advanced">Advanced</div>
-                    <h4>Anomalie i Hidden Selling</h4>
-                    <p>skoro wiemy juz jak wyglada zdrowy ruch czas na najwazniejsza czesc vsa czyli anomalie effort vs result</p>
-                    <p>wyobrazcie sobie sytuacje w ktorej widzicie gigantyczny volume czyli ogromny effort ale spread candle jest bardzo maly a cena prawie sie nie ruszyla to jest klasyczny brak rezultatu</p>
-                    <p>w logice vsa oznacza to ze na tym poziomie pojawila sie ogromna bariera w postaci zlecen przeciwnej strony ktora calkowicie wchlonela ten ruch</p>
-                    <p>jesli cena leci w gore na duzym volume ale spread sie zaweza i zamkniecie jest w polowie to mamy do czynienia z <strong>hidden selling</strong> czyli sellers zaczeli absorbowac agresywnych buyers</p>
-                    <p>to jest moment w ktorym profesionalni gracze zaczynaja wychodzic z pozycji albo budowac zupelnie nowy kierunek przeciwko tlumowi</p>
+                    <h4><span class="pl">Anomalie i Hidden Selling</span><span class="en">Anomalies and Hidden Selling</span></h4>
+                    
+                    <p class="pl">skoro wiemy juz jak wyglada zdrowy ruch czas na najwazniejsza czesc vsa czyli anomalie effort vs result</p>
+                    <p class="en">since we know what a healthy move looks like, it's time for the most important part of vsa, meaning anomalies of effort vs result.</p>
+                    
+                    <p class="pl">wyobrazcie sobie sytuacje w ktorej widzicie gigantyczny volume czyli ogromny effort ale spread candle jest bardzo maly a cena prawie sie nie ruszyla to jest klasyczny brak rezultatu</p>
+                    <p class="en">imagine a situation where you see gigantic volume, meaning huge effort, but the candle spread is very small and the price barely moved. this is a classic lack of result.</p>
+                    
+                    <p class="pl">w logice vsa oznacza to ze na tym poziomie pojawila sie ogromna bariera w postaci zlecen przeciwnej strony ktora calkowicie wchlonela ten ruch</p>
+                    <p class="en">in vsa logic, this means that a huge barrier appeared at this level in the form of opposite side orders that completely absorbed this move.</p>
+                    
+                    <p class="pl">jesli cena leci w gore na duzym volume ale spread sie zaweza i zamkniecie jest w polowie to mamy do czynienia z <strong>hidden selling</strong> czyli sellers zaczeli absorbowac agresywnych buyers</p>
+                    <p class="en">if price flies up on high volume but the spread narrows and the close is in the middle, we are dealing with <strong>hidden selling</strong>, meaning sellers started to absorb aggressive buyers.</p>
+                    
+                    <p class="pl">to jest moment w ktorym profesionalni gracze zaczynaja wychodzic z pozycji albo budowac zupelnie nowy kierunek przeciwko tlumowi</p>
+                    <p class="en">this is the moment when professional players start exiting positions or building a completely new direction against the crowd.</p>
                 </div>
             </div>
 
@@ -719,17 +809,29 @@
 
             <div class="course-text">
                 <div class="course-section">
-                    <h4>Sygnały Odwrócenia (Stopping Vol & Climax)</h4>
-                    <p>przechodzimy do konkretnych setupow z vsa na pierwszy ogien idzie stopping volume i climax to sa wasze glowne sygnaly ze dany trend wlasnie dojezdza do sciany i zaraz bedzie reversal</p>
-                    <p>wyobrazcie sobie silny downtrend nagle pojawia sie ogromna candle z gigantycznym volume ale zamiast zamknac sie na samym low zostawia dlugi dolny wick i zamyka sie w polowie lub wyzej to jest wlasnie <strong>stopping volume</strong> duzy kapital wlasnie wszedl na rynek i swoimi zleceniami buy calkowicie zaabsorbowal i zatrzymal spadki</p>
-                    <p>z kolei climax to faza w ktorej retail wchodzi w najgorszym mozliwym momencie na samym szczycie uptrendu widzicie wystrzal ceny na ogromnym spreadzie i chorym volume ale nastepna candle od razu robi reversal to klasyczny <strong>buying climax</strong> duzi gracze wlasnie uzyli tej liquidity zeby pozbyc sie swoich pozycji i ubrac tlum w drogie kontrakty to idealne miejsca zeby szukac wejscia na reversal</p>
+                    <h4><span class="pl">Sygnały Odwrócenia (Stopping Vol & Climax)</span><span class="en">Reversal Signals (Stopping Vol & Climax)</span></h4>
+                    
+                    <p class="pl">przechodzimy do konkretnych setupow z vsa na pierwszy ogien idzie stopping volume i climax to sa wasze glowne sygnaly ze dany trend wlasnie dojezdza do sciany i zaraz bedzie reversal</p>
+                    <p class="en">we move to specific vsa setups, first in line is stopping volume and climax. these are your main signals that a given trend is just hitting a wall and a reversal is coming.</p>
+                    
+                    <p class="pl">wyobrazcie sobie silny downtrend nagle pojawia sie ogromna candle z gigantycznym volume ale zamiast zamknac sie na samym low zostawia dlugi dolny wick i zamyka sie w polowie lub wyzej to jest wlasnie <strong>stopping volume</strong> duzy kapital wlasnie wszedl na rynek i swoimi zleceniami buy calkowicie zaabsorbowal i zatrzymal spadki</p>
+                    <p class="en">imagine a strong downtrend. suddenly a huge candle with gigantic volume appears, but instead of closing at the absolute low, it leaves a long bottom wick and closes in the middle or higher. this is exactly <strong>stopping volume</strong>. big capital just entered the market and with its buy orders completely absorbed and stopped the decline.</p>
+                    
+                    <p class="pl">z kolei climax to faza w ktorej retail wchodzi w najgorszym mozliwym momencie na samym szczycie uptrendu widzicie wystrzal ceny na ogromnym spreadzie i chorym volume ale nastepna candle od razu robi reversal to klasyczny <strong>buying climax</strong> duzi gracze wlasnie uzyli tej liquidity zeby pozbyc sie swoich pozycji i ubrac tlum w drogie kontrakty to idealne miejsca zeby szukac wejscia na reversal</p>
+                    <p class="en">on the other hand, climax is the phase where retail enters at the worst possible moment. at the very top of an uptrend you see a price spike on a huge spread and sick volume, but the next candle immediately makes a reversal. this is a classic <strong>buying climax</strong>. big players just used this liquidity to unload their positions and trap the crowd in expensive contracts. these are ideal places to look for a reversal entry.</p>
                 </div>
 
                 <div class="course-section">
-                    <h4>Wysuszenie Popytu/Podaży (No Demand/Supply)</h4>
-                    <p>druga strona medalu w vsa to sytuacje w ktorych na rynku doslownie brakuje jednej ze stron czyli no supply i no demand to wasze najlepsze sygnaly na bezpieczne dolaczenie do trwajacego juz trendu</p>
-                    <p><strong>no demand</strong> pojawia sie w downtrendzie kiedy cena probuje lekko podbic do gory ale robi to na bardzo malych candles z minimalnym volume to znak ze buyers kompletnie nie maja sily i brakuje demand zeby zrobic reversal po takim tescie cena zazwyczaj bardzo szybko wraca do spadkow</p>
-                    <p>odwrotnie dziala <strong>no supply</strong> w uptrendzie mamy krotki pullback w dol ale candles sa waskie a volume drastycznie spada to pokazuje ze sellers nie maja juz sily rynek zostal wysuszony z supply i wystarczy mala iskra ze strony buyers zeby cena znowu wystrzelila w gore to sa momenty w ktorych rynek po prostu mowi wam ze droga najmniejszego oporu pozostaje niezmieniona</p>
+                    <h4><span class="pl">Wysuszenie Popytu/Podaży (No Demand/Supply)</span><span class="en">Drying up of Demand/Supply (No Demand/Supply)</span></h4>
+                    
+                    <p class="pl">druga strona medalu w vsa to sytuacje w ktorych na rynku doslownie brakuje jednej ze stron czyli no supply i no demand to wasze najlepsze sygnaly na bezpieczne dolaczenie do trwajacego juz trendu</p>
+                    <p class="en">the other side of the coin in vsa are situations where the market literally lacks one of the sides, meaning no supply and no demand. these are your best signals to safely join an already ongoing trend.</p>
+                    
+                    <p class="pl"><strong>no demand</strong> pojawia sie w downtrendzie kiedy cena probuje lekko podbic do gory ale robi to na bardzo malych candles z minimalnym volume to znak ze buyers kompletnie nie maja sily i brakuje demand zeby zrobic reversal po takim tescie cena zazwyczaj bardzo szybko wraca do spadkow</p>
+                    <p class="en"><strong>no demand</strong> appears in a downtrend when the price tries to bounce up slightly but does so on very small candles with minimal volume. this is a sign that buyers completely lack strength and there is no demand to make a reversal. after such a test, the price usually returns to falling very quickly.</p>
+                    
+                    <p class="pl">odwrotnie dziala <strong>no supply</strong> w uptrendzie mamy krotki pullback w dol ale candles sa waskie a volume drastycznie spada to pokazuje ze sellers nie maja juz sily rynek zostal wysuszony z supply i wystarczy mala iskra ze strony buyers zeby cena znowu wystrzelila w gore to sa momenty w ktorych rynek po prostu mowi wam ze droga najmniejszego oporu pozostaje niezmieniona</p>
+                    <p class="en"><strong>no supply</strong> works conversely. in an uptrend we have a short pullback down, but the candles are narrow and volume drops drastically. this shows that sellers have no strength left, the market has been dried out of supply, and a small spark from buyers is enough for the price to shoot up again. these are moments where the market simply tells you that the path of least resistance remains unchanged.</p>
                 </div>
             </div>
 
@@ -738,7 +840,10 @@
             </div>
             
             <div class="next-section-wrapper">
-                <button class="next-btn" onclick="nav('cat-of')">Czytaj dalej: 6. Orderflow <span>→</span></button>
+                <button class="next-btn" onclick="nav('cat-of')">
+                    <span class="pl">Czytaj dalej: 6. Orderflow <span>→</span></span>
+                    <span class="en">Read more: 6. Orderflow <span>→</span></span>
+                </button>
             </div>
         </div>
 
@@ -746,29 +851,43 @@
             <h2 class="section-title">6. ORDERFLOW & DELTA</h2>
             <div class="course-text">
                 <div class="course-section">
-                    <h4>Absorpcja & Exhaustion</h4>
-                    <p><strong>absorpcja</strong> to moment, w którym rynek testuje resistance/support pojawia się przeciwna strona, która ich absorbuje - bardzo często można zauważyć przez znacznie zwiększony volume -> w skrócie walczą o to czy cena pójdzie w góre czy w dół (2 strony mogą wygrać) | nie dodałem absorpcja występuje gdy: zlecenia pasywne (limit orders) wchłaniają zlecenia agresywne "market orders", i absorpcja bardzo często prowadzi do fałszywego wybicia (failed auction)</p>
-                    <p>w skrócie <strong>exhaustion</strong> to, wyczerpanie agresywnej, dominującej strony -> może oznaczać, że cena pójdzie w drugim kierunku (wyczerpała się jedna strona, wiec nie będą pchać counter-trend), lub utworzy sie nowy balance</p>
+                    <h4><span class="pl">Absorpcja & Exhaustion</span><span class="en">Absorption & Exhaustion</span></h4>
+                    
+                    <p class="pl"><strong>absorpcja</strong> to moment, w którym rynek testuje resistance/support pojawia się przeciwna strona, która ich absorbuje - bardzo często można zauważyć przez znacznie zwiększony volume -> w skrócie walczą o to czy cena pójdzie w góre czy w dół (2 strony mogą wygrać) | nie dodałem absorpcja występuje gdy: zlecenia pasywne (limit orders) wchłaniają zlecenia agresywne "market orders", i absorpcja bardzo często prowadzi do fałszywego wybicia (failed auction)</p>
+                    <p class="en"><strong>absorption</strong> is the moment when the market tests resistance/support and the opposite side appears, absorbing them - very often noticeable by significantly increased volume -> in short, they fight over whether the price goes up or down (2 sides can win) | i didn't add that absorption occurs when: passive orders (limit orders) soak up aggressive "market orders", and absorption very often leads to a false breakout (failed auction).</p>
+                    
+                    <p class="pl">w skrócie <strong>exhaustion</strong> to, wyczerpanie agresywnej, dominującej strony -> może oznaczać, że cena pójdzie w drugim kierunku (wyczerpała się jedna strona, wiec nie będą pchać counter-trend), lub utworzy sie nowy balance</p>
+                    <p class="en">in short, <strong>exhaustion</strong> is the depletion of the aggressive, dominant side -> it can mean that the price will go in the other direction (one side dried up, so they won't push counter-trend), or a new balance will form.</p>
                 </div>
             </div>
             
             <div class="fp-wrapper">
                 <div class="fp-box">
-                    <div style="text-align:center; font-weight:700; margin-bottom:10px; color:var(--heading-color);">Absorpcja Limitami</div>
+                    <div style="text-align:center; font-weight:700; margin-bottom:10px; color:var(--heading-color);">
+                        <span class="pl">Absorpcja Limitami</span><span class="en">Limit Absorption</span>
+                    </div>
                     <div style="width:2px; height:20px; background:var(--border-color); margin:0 auto;"></div>
                     <div class="fp-row"><div class="fp-val bid">12</div><div class="fp-val ask">25</div></div>
                     <div class="fp-row"><div class="fp-val bid">45</div><div class="fp-val ask">32</div></div>
                     <div class="fp-row"><div class="fp-val bid">105</div><div class="fp-val ask">18</div></div>
-                    <div class="fp-row" style="border:1px solid var(--up-color); border-radius:4px; background:var(--up-bg);" onmousemove="tt(event, 'Absorpcja', 'Potężne 840 kontraktów uderza w Market Sell, ale Limit Buy to wchłania. Spadek zatrzymany.')" onmouseleave="htt()">
+                    <div class="fp-row pl" style="border:1px solid var(--up-color); border-radius:4px; background:var(--up-bg);" onmousemove="tt(event, 'Absorpcja', 'Potężne 840 kontraktów uderza w Market Sell, ale Limit Buy to wchłania. Spadek zatrzymany.')" onmouseleave="htt()">
+                        <div class="fp-val bid fp-hi-d">840</div><div class="fp-val ask">40</div>
+                    </div>
+                    <div class="fp-row en" style="border:1px solid var(--up-color); border-radius:4px; background:var(--up-bg);" onmousemove="tt(event, 'Absorption', 'A massive 840 contracts hit Market Sell, but Limit Buy absorbs it. Drop stopped.')" onmouseleave="htt()">
                         <div class="fp-val bid fp-hi-d">840</div><div class="fp-val ask">40</div>
                     </div>
                     <div style="width:2px; height:40px; background:var(--border-color); margin:0 auto;"></div>
                 </div>
 
                 <div class="fp-box">
-                    <div style="text-align:center; font-weight:700; margin-bottom:10px; color:var(--heading-color);">Exhaustion (Wyczerpanie)</div>
+                    <div style="text-align:center; font-weight:700; margin-bottom:10px; color:var(--heading-color);">
+                        <span class="pl">Exhaustion (Wyczerpanie)</span><span class="en">Exhaustion</span>
+                    </div>
                     <div style="width:2px; height:30px; background:var(--border-color); margin:0 auto;"></div>
-                    <div class="fp-row" style="border:1px dashed var(--red-accent); border-radius:4px;" onmousemove="tt(event, 'Exhaustion', 'Dokładnie ZERO na Asku na samym szczycie. Popyt wysechł.')" onmouseleave="htt()">
+                    <div class="fp-row pl" style="border:1px dashed var(--red-accent); border-radius:4px;" onmousemove="tt(event, 'Exhaustion', 'Dokładnie ZERO na Asku na samym szczycie. Popyt wysechł.')" onmouseleave="htt()">
+                        <div class="fp-val bid">12</div><div class="fp-val ask fp-z">0</div>
+                    </div>
+                    <div class="fp-row en" style="border:1px dashed var(--red-accent); border-radius:4px;" onmousemove="tt(event, 'Exhaustion', 'Exactly ZERO on the Ask at the very top. Demand dried up.')" onmouseleave="htt()">
                         <div class="fp-val bid">12</div><div class="fp-val ask fp-z">0</div>
                     </div>
                     <div class="fp-row"><div class="fp-val bid">45</div><div class="fp-val ask">18</div></div>
@@ -780,8 +899,9 @@
 
             <div class="course-text">
                 <div class="course-section">
-                    <h4>Imbalance & Diagonal Reading</h4>
-                    <p>imbalance na footprint można zobaczyć po znaczącej różnicy między bid and ask np;</p>
+                    <h4><span class="pl">Imbalance & Diagonal Reading</span><span class="en">Imbalance & Diagonal Reading</span></h4>
+                    <p class="pl">imbalance na footprint można zobaczyć po znaczącej różnicy między bid and ask np;</p>
+                    <p class="en">imbalance on a footprint can be seen by a significant difference between bid and ask e.g.;</p>
                     
                     <div style="display:flex; justify-content:center; margin:20px 0;">
                         <div style="background:var(--card-bg); border:1px solid var(--border-color); border-radius:12px; padding:15px; font-family: ui-monospace, 'SF Mono', 'JetBrains Mono', monospace; display:inline-block;">
@@ -791,39 +911,52 @@
                                     <div style="display:flex; justify-content:space-between; width:120px; padding:4px; border-bottom:1px solid rgba(255,255,255,0.05);"><span style="color:var(--down-color);">10</span> <span style="color:var(--up-color); font-weight:700; background:var(--up-bg); padding:0 4px; border-radius:2px; color:var(--heading-color);">63</span></div>
                                     <div style="display:flex; justify-content:space-between; width:120px; padding:4px;"><span style="color:var(--down-color);">3</span> <span style="color:var(--up-color);">47</span></div>
                                 </div>
-                                <div style="color:var(--secondary-text); font-size:0.85rem; max-width:200px;">
+                                <div style="color:var(--secondary-text); font-size:0.85rem; max-width:200px;" class="pl">
                                     ⤴ (czytamy to po skosie, wytłumaczę poniżej dlaczego)
+                                </div>
+                                <div style="color:var(--secondary-text); font-size:0.85rem; max-width:200px;" class="en">
+                                    ⤴ (we read this diagonally, i will explain below why)
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <p>pojawienie sie silnego imbalance możemy uznać za breakout/kontynuacje trendu</p>
-                    <p>jeśli strefa wraca do wcześniejszego imbalance możemy uznać go za strefe przyszłego rejection - możliwe że osoby, które odpowiadają za ten breakeout będą bronić swoich zleceń, jeśli cena nadal jest bardzo atrakcyjna dla buyers</p>
+                    <p class="pl">pojawienie sie silnego imbalance możemy uznać za breakout/kontynuacje trendu</p>
+                    <p class="en">the appearance of a strong imbalance can be considered a breakout/continuation of the trend</p>
                     
-                    <p>jak widzicie na rysunku ceny bid/ask występują na ukos:</p>
+                    <p class="pl">jeśli strefa wraca do wcześniejszego imbalance możemy uznać go za strefe przyszłego rejection - możliwe że osoby, które odpowiadają za ten breakeout będą bronić swoich zleceń, jeśli cena nadal jest bardzo atrakcyjna dla buyers</p>
+                    <p class="en">if the zone returns to a previous imbalance we can consider it a future rejection zone - it's possible that the people responsible for this breakout will defend their orders if the price is still very attractive to buyers</p>
+                    
+                    <p class="pl">jak widzicie na rysunku ceny bid/ask występują na ukos:</p>
+                    <p class="en">as you see in the illustration, bid/ask prices occur diagonally:</p>
                     
                     <div style="margin:25px auto; max-width:550px;">
                         <table class="dom-table">
                             <tr><th colspan="3">Drabina DOM (Depth of Market)</th></tr>
                             <tr><td style="color:var(--secondary-text);">Price</td><td class="dom-bid">BID (Buy Limits)</td><td class="dom-ask">ASK (Sell Limits)</td></tr>
                             <tr><td>105</td><td></td><td class="dom-ask">50</td></tr>
-                            <tr><td>104</td><td></td><td class="dom-ask">30 ⤴ <span style="font-size:0.75rem; color:var(--secondary-text);">(Mkt Buy uderza tu)</span></td></tr>
+                            <tr><td>104</td><td></td><td class="dom-ask">30 ⤴ <span style="font-size:0.75rem; color:var(--secondary-text);"><span class="pl">(Mkt Buy uderza tu)</span><span class="en">(Mkt Buy hits here)</span></span></td></tr>
                             <tr style="border-top:2px solid var(--border-color); border-bottom:2px solid var(--border-color);"><td colspan="3" style="font-weight:700;">--- SPREAD ---</td></tr>
-                            <tr><td>103</td><td class="dom-bid">25 ⤵ <span style="font-size:0.75rem; color:var(--secondary-text);">(Mkt Sell uderza tu)</span></td><td></td></tr>
+                            <tr><td>103</td><td class="dom-bid">25 ⤵ <span style="font-size:0.75rem; color:var(--secondary-text);"><span class="pl">(Mkt Sell uderza tu)</span><span class="en">(Mkt Sell hits here)</span></span></td><td></td></tr>
                             <tr><td>102</td><td class="dom-bid">40</td><td></td></tr>
                         </table>
-                        <p style="text-align:center; font-size:0.85rem; color:var(--secondary-text); margin-top:10px;">
+                        <p class="pl" style="text-align:center; font-size:0.85rem; color:var(--secondary-text); margin-top:10px;">
                             Kupujesz z Marketu -> zabierasz liquidity z ASK poziomu wyżej.<br>
                             Sprzedajesz z Marketu -> zabierasz liquidity z BID poziomu niżej. Dlatego czytamy po skosie!
+                        </p>
+                        <p class="en" style="text-align:center; font-size:0.85rem; color:var(--secondary-text); margin-top:10px;">
+                            You buy from Market -> you take liquidity from ASK one level higher.<br>
+                            You sell from Market -> you take liquidity from BID one level lower. That's why we read diagonally!
                         </p>
                     </div>
                 </div>
 
                 <div class="course-section">
                     <div class="segment-tag tag-advanced">Advanced</div>
-                    <h4>Delta i CVD Divergence</h4>
-                    <p>kolejnym waznym elementem ukladanki na footprincie jest <span class="tooltip-word">delta <span class="tip-i tip-i-up" onmousemove="tt(event, 'Delta', 'Różnica między agresywnym kupnem (Market Buy) a agresywną sprzedażą (Market Sell).')" onmouseleave="htt()">i</span></span> czyli po prostu roznica miedzy agresywnymi buyers a sellers w danej candle lub na konkretnym poziomie cenowym</p>
+                    <h4><span class="pl">Delta i CVD Divergence</span><span class="en">Delta and CVD Divergence</span></h4>
+                    
+                    <p class="pl">kolejnym waznym elementem ukladanki na footprincie jest <span class="tooltip-word">delta <span class="tip-i tip-i-up" onmousemove="tt(event, 'Delta', 'Różnica między agresywnym kupnem (Market Buy) a agresywną sprzedażą (Market Sell).')" onmouseleave="htt()">i</span></span> czyli po prostu roznica miedzy agresywnymi buyers a sellers w danej candle lub na konkretnym poziomie cenowym</p>
+                    <p class="en">another important piece of the puzzle on the footprint is <span class="tooltip-word">delta <span class="tip-i tip-i-up" onmousemove="tt(event, 'Delta', 'The difference between aggressive buying (Market Buy) and aggressive selling (Market Sell).')" onmouseleave="htt()">i</span></span>, meaning simply the difference between aggressive buyers and sellers in a given candle or at a specific price level</p>
                     
                     <div class="fp-wrapper">
                         <div class="fp-box" style="width: 260px;">
@@ -853,78 +986,132 @@
                             
                             <div style="width:2px; height:15px; background:var(--border-color); margin:0 auto;"></div>
                             <div style="margin-top:10px; padding-top:15px; border-top:1px dashed var(--border-color); text-align:center;">
-                                <span style="color:var(--secondary-text); font-size:0.8rem; text-transform:uppercase; letter-spacing:0.5px;">Delta całkowita świecy:</span><br>
+                                <span class="pl" style="color:var(--secondary-text); font-size:0.8rem; text-transform:uppercase; letter-spacing:0.5px;">Delta całkowita świecy:</span>
+                                <span class="en" style="color:var(--secondary-text); font-size:0.8rem; text-transform:uppercase; letter-spacing:0.5px;">Total candle delta:</span><br>
                                 <strong style="color:var(--down-color); font-size:1.2rem; display:block; margin-top:4px;">-60</strong>
                             </div>
                         </div>
                     </div>
 
-                    <p>delta na plus oznacza ze wiecej bylo uderzen market order w strone ask czyli dominowali agresywni buyers a delta na minus ze wiecej uderzen poszlo w bid czyli cisneli agresywni sellers</p>
-                    <p>i tutaj laczy sie to idealnie z nasza absorpcja bo to wlasnie z delty wyciagamy najwazniejsze wnioski kto tak naprawde wygrywa te walke</p>
-                    <p>jesli widzisz ogromna dodatnia delte czyli masa ludzi kupuje agresywnie po cenie rynkowej ale candle nie potrafi zamknac sie wyzej albo wrecz zostawia dlugi gorny wick i spada to masz twardy dowod ze cale to agresywne kupno zostalo zablokowane i wchloniete przez grube zlecenia pasywne limit sell</p>
-                    <p>to jest wlasnie ten moment w ktorym retail kupuje na samym high a wiekszy kapital ich absorbuje co najczesciej konczy sie failed auction i mocnym dropem w dol(i na tym zarabiamy)</p>
-                    <p>skoro mamy juz wyjasniona zwykla delte na pojedynczych candles to musimy spojrzec na szerszy obraz i do tego sluzy <strong><span class="tooltip-word">cvd <span class="tip-i tip-i-up" onmousemove="tt(event, 'CVD', 'Cumulative Volume Delta - skumulowana delta ze wszystkich świec. Pokazuje szerszy trend agresji na rynku.')" onmouseleave="htt()">i</span></span> czyli skumulowana delta volume</strong></p>
-                    <p>to nic innego jak dodawanie do siebie delty z kolejnych candles dzieki czemu zamiast noise widzimy ogolny trend agresji na rynku</p>
-                    <p>najwieksza przewaga cvd pojawia sie wtedy gdy rozjezdza sie z cena czyli tworzy dywergencje</p>
+                    <p class="pl">delta na plus oznacza ze wiecej bylo uderzen market order w strone ask czyli dominowali agresywni buyers a delta na minus ze wiecej uderzen poszlo w bid czyli cisneli agresywni sellers</p>
+                    <p class="en">a positive delta means there were more market order hits towards the ask side, meaning aggressive buyers dominated, and a negative delta means more hits went into the bid side, meaning aggressive sellers pushed.</p>
+                    
+                    <p class="pl">i tutaj laczy sie to idealnie z nasza absorpcja bo to wlasnie z delty wyciagamy najwazniejsze wnioski kto tak naprawde wygrywa te walke</p>
+                    <p class="en">and this connects perfectly with our absorption because it's from the delta that we draw the most important conclusions about who is actually winning this fight.</p>
+                    
+                    <p class="pl">jesli widzisz ogromna dodatnia delte czyli masa ludzi kupuje agresywnie po cenie rynkowej ale candle nie potrafi zamknac sie wyzej albo wrecz zostawia dlugi gorny wick i spada to masz twardy dowod ze cale to agresywne kupno zostalo zablokowane i wchloniete przez grube zlecenia pasywne limit sell</p>
+                    <p class="en">if you see a huge positive delta, meaning a ton of people aggressively buying at market price, but the candle cannot close higher or even leaves a long top wick and falls, you have hard proof that all this aggressive buying was blocked and soaked up by massive passive limit sell orders.</p>
+                    
+                    <p class="pl">to jest wlasnie ten moment w ktorym retail kupuje na samym high a wiekszy kapital ich absorbuje co najczesciej konczy sie failed auction i mocnym dropem w dol(i na tym zarabiamy)</p>
+                    <p class="en">this is exactly the moment when retail buys at the absolute high and smart money absorbs them, which most often ends in a failed auction and a strong drop down (and this is what we profit on).</p>
+                    
+                    <p class="pl">skoro mamy juz wyjasniona zwykla delte na pojedynczych candles to musimy spojrzec na szerszy obraz i do tego sluzy <strong><span class="tooltip-word">cvd <span class="tip-i tip-i-up" onmousemove="tt(event, 'CVD', 'Cumulative Volume Delta - skumulowana delta ze wszystkich świec. Pokazuje szerszy trend agresji na rynku.')" onmouseleave="htt()">i</span></span> czyli skumulowana delta volume</strong></p>
+                    <p class="en">since we have already explained regular delta on single candles, we must look at the bigger picture, and that's what <strong><span class="tooltip-word">cvd <span class="tip-i tip-i-up" onmousemove="tt(event, 'CVD', 'Cumulative Volume Delta - accumulated delta from all candles. Shows the broader trend of aggression in the market.')" onmouseleave="htt()">i</span></span> meaning cumulative volume delta</strong> is for.</p>
+                    
+                    <p class="pl">to nic innego jak dodawanie do siebie delty z kolejnych candles dzieki czemu zamiast noise widzimy ogolny trend agresji na rynku</p>
+                    <p class="en">this is nothing else but adding up the delta from successive candles so that instead of noise we see the general trend of aggression in the market.</p>
+                    
+                    <p class="pl">najwieksza przewaga cvd pojawia sie wtedy gdy rozjezdza sie z cena czyli tworzy dywergencje</p>
+                    <p class="en">the biggest advantage of cvd appears when it diverges from the price, meaning it creates a divergence.</p>
 
                     <div class="cvd-box">
                         <div class="cvd-row">
-                            <span style="color:var(--up-color);">Cena idzie w górę</span>
+                            <span class="pl" style="color:var(--up-color);">Cena idzie w górę</span>
+                            <span class="en" style="color:var(--up-color);">Price goes up</span>
                             <div class="cvd-line"><span class="cvd-arrow">↗</span></div>
                             <span style="font-size:1.5rem;">📈</span>
                         </div>
                         <div class="cvd-row">
-                            <span style="color:var(--down-color);">CVD spada (Agresorzy sprzedają)</span>
+                            <span class="pl" style="color:var(--down-color);">CVD spada (Agresorzy sprzedają)</span>
+                            <span class="en" style="color:var(--down-color);">CVD drops (Aggressors are selling)</span>
                             <div class="cvd-line"><span class="cvd-arrow down">↘</span></div>
                             <span style="font-size:1.5rem;">📉</span>
                         </div>
-                        <div style="text-align:center; font-size:0.85rem; color:var(--secondary-text); margin-top:10px;">Klasyczna dywergencja wyprzedzająca załamanie trendu.</div>
+                        <div class="pl" style="text-align:center; font-size:0.85rem; color:var(--secondary-text); margin-top:10px;">Klasyczna dywergencja wyprzedzająca załamanie trendu.</div>
+                        <div class="en" style="text-align:center; font-size:0.85rem; color:var(--secondary-text); margin-top:10px;">Classic divergence front-running a trend breakdown.</div>
                     </div>
 
-                    <p>wyobrazcie sobie ze cena robi nowe high idzie wyzej ale na cvd widzicie ze linia spada czyli robi nizsze high</p>
-                    <p>to oznacza ze ten nowy ruch do gory na cenie nie jest juz poparty agresywnym kupnem z rynku a wrecz przeciwnie dominowac zaczynaja agresywni sellers</p>
-                    <p>to klasyczny znak exhaustion i idealne potwierdzenie dla naszej absorpcji o ktorej pisalem wczesniej swietny moment zeby szukac wejscia na reversal</p>
+                    <p class="pl">wyobrazcie sobie ze cena robi nowe high idzie wyzej ale na cvd widzicie ze linia spada czyli robi nizsze high</p>
+                    <p class="en">imagine the price makes a new high, goes higher, but on the cvd you see the line dropping, making lower highs.</p>
+                    
+                    <p class="pl">to oznacza ze ten nowy ruch do gory na cenie nie jest juz poparty agresywnym kupnem z rynku a wrecz przeciwnie dominowac zaczynaja agresywni sellers</p>
+                    <p class="en">this means that this new upward move on the price is no longer supported by aggressive buying from the market, but quite the contrary, aggressive sellers are starting to dominate.</p>
+                    
+                    <p class="pl">to klasyczny znak exhaustion i idealne potwierdzenie dla naszej absorpcji o ktorej pisalem wczesniej swietny moment zeby szukac wejscia na reversal</p>
+                    <p class="en">this is a classic sign of exhaustion and an ideal confirmation for our absorption that i wrote about earlier. a great moment to look for a reversal entry.</p>
                 </div>
             </div>
             
             <div class="next-section-wrapper">
-                <button class="next-btn" onclick="nav('cat-fund')">Czytaj dalej: 7. Fundamenty <span>→</span></button>
+                <button class="next-btn" onclick="nav('cat-fund')">
+                    <span class="pl">Czytaj dalej: 7. Fundamenty <span>→</span></span>
+                    <span class="en">Read more: 7. Fundamentals <span>→</span></span>
+                </button>
             </div>
         </div>
 
         <div id="view-cat-fund" class="view">
-            <h2 class="section-title">7. FUNDAMENTY POD INTRADAY</h2>
+            <h2 class="section-title"><span class="pl">7. FUNDAMENTY POD INTRADAY</span><span class="en">7. INTRADAY FUNDAMENTALS</span></h2>
             <div class="course-text">
                 <div class="course-section">
-                    <p>fundamenty w daytradingu to nie jest czytanie sprawozdan finansowych spolek to po prostu kalendarz makroekonomiczny i swiadomosc kiedy na rynek wpadnie huragan</p>
-                    <p>codziennie rano waszym pierwszym krokiem powinno byc sprawdzenie kalendarza na przyklad na forexfactory interesuja nas tylko te najwazniejsze wydarzenia zaznaczone na czerwono jak <span class="tooltip-word">cpi <span class="tip-i tip-i-up" onmousemove="tt(event, 'CPI', 'Consumer Price Index - raport o inflacji, wywołujący często potężną zmienność.')" onmouseleave="htt()">i</span></span> <span class="tooltip-word">nfp <span class="tip-i tip-i-up" onmousemove="tt(event, 'NFP', 'Non-Farm Payrolls - kluczowe dane z amerykańskiego rynku pracy publikowane raz w miesiącu.')" onmouseleave="htt()">i</span></span> czy decyzje fomc</p>
-                    <p>te dane to zapalnik ktory uruchamia algorytmy i wpuszcza wielki kapital i tu pojawia sie najwazniejsza zasada nie stajemy na autostradzie pod prad</p>
+                    <p class="pl">fundamenty w daytradingu to nie jest czytanie sprawozdan finansowych spolek to po prostu kalendarz makroekonomiczny i swiadomosc kiedy na rynek wpadnie huragan</p>
+                    <p class="en">fundamentals in daytrading is not reading company financial reports, it's simply the macroeconomic calendar and being aware of when a hurricane will hit the market.</p>
+                    
+                    <p class="pl">codziennie rano waszym pierwszym krokiem powinno byc sprawdzenie kalendarza na przyklad na forexfactory interesuja nas tylko te najwazniejsze wydarzenia zaznaczone na czerwono jak <span class="tooltip-word">cpi <span class="tip-i tip-i-up" onmousemove="tt(event, 'CPI', 'Consumer Price Index - raport o inflacji, wywołujący często potężną zmienność.')" onmouseleave="htt()">i</span></span> <span class="tooltip-word">nfp <span class="tip-i tip-i-up" onmousemove="tt(event, 'NFP', 'Non-Farm Payrolls - kluczowe dane z amerykańskiego rynku pracy publikowane raz w miesiącu.')" onmouseleave="htt()">i</span></span> czy decyzje fomc</p>
+                    <p class="en">every morning your first step should be checking the calendar on, for example, forexfactory. we are only interested in the most important events marked in red like <span class="tooltip-word">cpi <span class="tip-i tip-i-up" onmousemove="tt(event, 'CPI', 'Consumer Price Index - inflation report, often causing massive volatility.')" onmouseleave="htt()">i</span></span>, <span class="tooltip-word">nfp <span class="tip-i tip-i-up" onmousemove="tt(event, 'NFP', 'Non-Farm Payrolls - key data from the US labor market published once a month.')" onmouseleave="htt()">i</span></span>, or fomc decisions.</p>
+                    
+                    <p class="pl">te dane to zapalnik ktory uruchamia algorytmy i wpuszcza wielki kapital i tu pojawia sie najwazniejsza zasada nie stajemy na autostradzie pod prad</p>
+                    <p class="en">this data is the trigger that activates algorithms and lets in huge capital, and here comes the most important rule: we do not stand on the highway going against traffic.</p>
+                    
                     <div class="segment-tag tag-must-know">Must Know</div>
-                    <p>granie dokladnie w minucie publikacji to czysty hazard liquidity znika z orderbooka zebranie zlecenia po waszej cenie jest praktycznie niemozliwe a slippage moze wyczyscic wam konto w ulamek sekundy</p>
-                    <p>dlatego profesjonalne podejscie wyglada tak ze przed waznymi danymi zamykacie pozycje albo maksymalnie scinacie ryzyko</p>
-                    <p>potem patrzycie jak rynek wariuje czekacie az minie pierwszy chaos i emocje opadna gdy algorytmy zrobia swoje i rynek zacznie budowac nowy balans lub wyrazny imbalans dopiero wtedy wchodzimy do gry na naszych warunkach</p>
+                    <p class="pl">granie dokladnie w minucie publikacji to czysty hazard liquidity znika z orderbooka zebranie zlecenia po waszej cenie jest praktycznie niemozliwe a slippage moze wyczyscic wam konto w ulamek sekundy</p>
+                    <p class="en">trading exactly in the minute of publication is pure gambling. liquidity vanishes from the orderbook, getting an order filled at your price is practically impossible, and slippage can wipe your account in a fraction of a second.</p>
+                    
+                    <p class="pl">dlatego profesjonalne podejscie wyglada tak ze przed waznymi danymi zamykacie pozycje albo maksymalnie scinacie ryzyko</p>
+                    <p class="en">therefore, a professional approach looks like this: before important data you close your positions or maximally cut your risk.</p>
+                    
+                    <p class="pl">potem patrzycie jak rynek wariuje czekacie az minie pierwszy chaos i emocje opadna gdy algorytmy zrobia swoje i rynek zacznie budowac nowy balans lub wyrazny imbalans dopiero wtedy wchodzimy do gry na naszych warunkach</p>
+                    <p class="en">then you watch how the market goes crazy, wait until the initial chaos passes and emotions settle down. when algorithms do their thing and the market starts building a new balance or a clear imbalance, only then do we enter the game on our terms.</p>
                 </div>
             </div>
             <div class="next-section-wrapper">
-                <button class="next-btn" onclick="nav('cat-risk')">Czytaj dalej: 8. Zarządzanie Ryzykiem <span>→</span></button>
+                <button class="next-btn" onclick="nav('cat-risk')">
+                    <span class="pl">Czytaj dalej: 8. Zarządzanie Ryzykiem <span>→</span></span>
+                    <span class="en">Read more: 8. Risk Management <span>→</span></span>
+                </button>
             </div>
         </div>
 
         <div id="view-cat-risk" class="view">
-            <h2 class="section-title">8. ZARZĄDZANIE RYZYKIEM</h2>
+            <h2 class="section-title"><span class="pl">8. ZARZĄDZANIE RYZYKIEM</span><span class="en">8. RISK MANAGEMENT</span></h2>
             <div class="course-text">
                 <div class="course-section">
-                    <p>polecam przeczytać po zapoznaniu sie z wcześniejszymi kanałami, zawiera ... które były tam wyjaśnione</p>
-                    <p>przejdzmy teraz do tematu ktory chroni wasz kapital czyli zarzadzanie ryzykiem pod ✨ orderflow ✨ zapomnijcie o sztywnym ustawianiu stop lossa na podstawie stalego procentu konta bo rynek zupelnie nie wie ile macie pieniedzy i w ogole go to nie obchodzi w orderflow stop lossa stawiamy tam gdzie nasza teza na trade zostaje ostatecznie invalidated</p>
-                    <p>wyglada to tak ze chowacie sie za struktura na przyklad tuz za grubym hvn albo pod poziomem na ktorym wczesniej mieliscie twarda absorpcje jesli cena tam wraca i agresywnie przebija ten poziom to znaczy ze sciana ktora miala was bronic wlasnie runela wieksi gracze skapitulowali i nie ma sensu dluzej trzymac tej pozycji nadziejami</p>
+                    <p class="pl">polecam przeczytać po zapoznaniu sie z wcześniejszymi kanałami, zawiera ... które były tam wyjaśnione</p>
+                    <p class="en">i recommend reading this after getting familiar with the previous channels, it contains concepts ... that were explained there.</p>
+                    
+                    <p class="pl">przejdzmy teraz do tematu ktory chroni wasz kapital czyli zarzadzanie ryzykiem pod ✨ orderflow ✨ zapomnijcie o sztywnym ustawianiu stop lossa na podstawie stalego procentu konta bo rynek zupelnie nie wie ile macie pieniedzy i w ogole go to nie obchodzi w orderflow stop lossa stawiamy tam gdzie nasza teza na trade zostaje ostatecznie invalidated</p>
+                    <p class="en">let's move now to the topic that protects your capital, meaning risk management tailored for ✨ orderflow ✨. forget about rigidly setting a stop loss based on a fixed percentage of your account because the market has absolutely no idea how much money you have and doesn't care at all. in orderflow, we place a stop loss where our trade thesis is definitively invalidated.</p>
+                    
+                    <p class="pl">wyglada to tak ze chowacie sie za struktura na przyklad tuz za grubym hvn albo pod poziomem na ktorym wczesniej mieliscie twarda absorpcje jesli cena tam wraca i agresywnie przebija ten poziom to znaczy ze sciana ktora miala was bronic wlasnie runela wieksi gracze skapitulowali i nie ma sensu dluzej trzymac tej pozycji nadziejami</p>
+                    <p class="en">it looks like this: you hide behind structure, for example right behind a fat hvn or below a level where you previously had hard absorption. if the price returns there and aggressively breaks this level, it means the wall that was supposed to protect you just collapsed, bigger players capitulated, and there is no point holding this position with hope anymore.</p>
+                    
                     <div class="segment-tag tag-must-know">Must Know</div>
-                    <p>druga kluczowa sprawa to ucinanie strat (cutting losses) z palca majac footprint i delte widzicie intencje na zywo jesli wchodzicie w longa po ladnej absorpcji ale nagle w nastepnej candle delta robi sie drastycznie ujemna i puszczaja kolejne poziomy nie czekacie az cena doczlapie sie do waszego twardego stop lossa po prostu ucinacie trade z palca bo warunki rynkowe wlasnie ulegly zmianie to jest najwieksza przewaga orderflow widzicie kiedy uciekac zanim rynek zabierze wam caly zaplanowany do straty kapital</p>
-                    <p>w skrócie stop lose za strukturą, która was ✨ chroni ✨</p>
-                    <p>może to być big trades, absorpcja, lvn, hvn czy jakakolwiek inna rzecz (która pasuje.)</p>
+                    
+                    <p class="pl">druga kluczowa sprawa to ucinanie strat (cutting losses) z palca majac footprint i delte widzicie intencje na zywo jesli wchodzicie w longa po ladnej absorpcji ale nagle w nastepnej candle delta robi sie drastycznie ujemna i puszczaja kolejne poziomy nie czekacie az cena doczlapie sie do waszego twardego stop lossa po prostu ucinacie trade z palca bo warunki rynkowe wlasnie ulegly zmianie to jest najwieksza przewaga orderflow widzicie kiedy uciekac zanim rynek zabierze wam caly zaplanowany do straty kapital</p>
+                    <p class="en">the second key issue is cutting losses manually. having footprint and delta you see intentions live. if you enter a long after a nice absorption but suddenly in the next candle the delta turns drastically negative and successive levels give way, you don't wait for the price to limp to your hard stop loss. you simply cut the trade manually because market conditions just changed. this is the biggest edge of orderflow. you see when to run before the market takes all the capital you planned to risk.</p>
+                    
+                    <p class="pl">w skrócie stop lose za strukturą, która was ✨ chroni ✨</p>
+                    <p class="en">in short, place stop losses behind structure that ✨ protects ✨ you.</p>
+                    
+                    <p class="pl">może to być big trades, absorpcja, lvn, hvn czy jakakolwiek inna rzecz (która pasuje.)</p>
+                    <p class="en">this could be big trades, absorption, lvn, hvn or any other thing (that fits.)</p>
                 </div>
             </div>
             <div class="next-section-wrapper">
-                <button class="next-btn" onclick="nav('home')" style="background: var(--card-bg); border: 1px solid var(--border-color); color: var(--heading-color); box-shadow: none;">Wróć do Katalogu Głównego</button>
+                <button class="next-btn" onclick="nav('home')" style="background: var(--card-bg); border: 1px solid var(--border-color); color: var(--heading-color); box-shadow: none;">
+                    <span class="pl">Wróć do Katalogu Głównego</span>
+                    <span class="en">Back to Main Catalog</span>
+                </button>
             </div>
         </div>
 
@@ -938,11 +1125,35 @@
             if (e.ctrlKey && e.keyCode === 85) return false;
         };
 
+        // --- THEME ---
         let isLight = false;
         if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-            isLight = true; document.body.classList.add('light-theme'); document.getElementById('theme-btn').innerHTML = '🌙 Dark Mode';
+            isLight = true; document.body.classList.add('light-theme'); 
         }
-        
+
+        function updateThemeBtn() {
+            document.getElementById('theme-btn').innerHTML = isLight ? 
+                '<span class="pl">🌙 Ciemny Motyw</span><span class="en">🌙 Dark Mode</span>' : 
+                '<span class="pl">☀️ Jasny Motyw</span><span class="en">☀️ Light Mode</span>';
+        }
+        updateThemeBtn();
+
+        function toggleTheme() {
+            isLight = !isLight; document.body.classList.toggle('light-theme', isLight);
+            updateThemeBtn();
+            charts.forEach(c => c.render());
+        }
+
+        // --- LANGUAGE ---
+        let currentLang = 'pl'; // Domyślnie Polski
+        function toggleLang() {
+            currentLang = currentLang === 'pl' ? 'en' : 'pl';
+            document.body.classList.remove('lang-pl', 'lang-en');
+            document.body.classList.add('lang-' + currentLang);
+            updateSessions(); // Update dynamic session text translations
+            updateBreadcrumbs(); // Update dynamic breadcrumb texts
+        }
+
         const cssVar = (name) => getComputedStyle(document.body).getPropertyValue(name).trim();
         const tooltip = document.getElementById('tooltip');
         
@@ -974,7 +1185,15 @@
                 let targetTime = isOpen ? closeTime : openTime;
                 if (!isOpen && currentTime > closeTime) targetTime += 24 * 60;
                 let diffMins = targetTime - currentTime;
-                timeSpan.innerText = isOpen ? `Zamyka za ${Math.floor(diffMins / 60)}h ${diffMins % 60}m` : `Otwiera za ${Math.floor(diffMins / 60)}h ${diffMins % 60}m`;
+                
+                let h = Math.floor(diffMins / 60);
+                let m = diffMins % 60;
+                
+                if(isOpen) {
+                    timeSpan.innerText = currentLang === 'pl' ? `Zamyka za ${h}h ${m}m` : `Closes in ${h}h ${m}m`;
+                } else {
+                    timeSpan.innerText = currentLang === 'pl' ? `Otwiera za ${h}h ${m}m` : `Opens in ${h}h ${m}m`;
+                }
             });
         }
         setInterval(updateSessions, 60000);
@@ -1099,7 +1318,12 @@
                 const drawW = rect.width - vpWidth - 20, stepX = drawW / Math.max(this.candles.length, 10);
                 const idx = Math.round((x - vpWidth - 10 - (stepX/2)) / stepX);
                 if (idx >= 0 && idx < this.candles.length) {
-                    if (this.hoverIndex !== idx) { this.hoverIndex = idx; this.render(); const hl = this.options.highlights[idx]; if (hl) tt(e, hl.t, hl.d); else htt(); }
+                    if (this.hoverIndex !== idx) { 
+                        this.hoverIndex = idx; this.render(); 
+                        const hl = this.options.highlights[idx]; 
+                        if (hl) tt(e, currentLang === 'pl' ? hl.t_pl || hl.t : hl.t_en || hl.t, currentLang === 'pl' ? hl.d_pl || hl.d : hl.d_en || hl.d); 
+                        else htt(); 
+                    }
                 } else { this.hoverIndex = -1; this.render(); htt(); }
             }
         }
@@ -1124,34 +1348,41 @@
                 {type: 'arrow', i1: 6, p1: 385, i2: 8, p2: 365, color: '#007aff'}, {type: 'text', text: 'Market Event', i: 5, p: 395, color: '#007aff', font: '800 16px -apple-system, sans-serif'},
                 {type: 'text', text: 'Buy Imbalance', i: 8, p: 380, color: '#32d74b', font: '800 13px -apple-system, sans-serif', angle: -65}
             ]}));
-            charts.push(new ChartEngine('canvas-vaval', dataVA, { highlights: { 10: {t:'Odbicie od VAL', d:'Wsparcie zadziałało (Volume w brzuchu).', border:true}, 13: {t:'Odrzucenie VAH', d:'knot(wick) uderza w krawędź i wraca.', border:true} }, annotations: [ {type: 'zone', p1: 165, p2: 168, text: 'VAH (Opór)', bgVar: '--up-bg', textVar: '--up-color'}, {type: 'zone', p1: 135, p2: 132, text: 'VAL (Wsparcie)', bgVar: '--up-bg', textVar: '--up-color'} ] }));
-            charts.push(new ChartEngine('canvas-poc', dataPOC, { highlights: { 9: {t:'Magnes POC', d:'Wyhamowanie na High Volume Node (HVN).', border:true} } }));
-            charts.push(new ChartEngine('canvas-lvn', dataLVN, { highlights: { 17: {t:'Test LVN', d:'knot(wick) wchodzi w pustkę i gwałtownie odbija.', border:true} }, annotations: [ {type: 'zone', p1: 140, p2: 150, text: 'Strefa LVN (Brak Akceptacji)', bgVar: '--down-bg', textVar: '--red-accent'} ] }));
-            charts.push(new ChartEngine('canvas-vwap', dataVWAP, { vpVisible: false, showVWAP: true, highlights: { 5: {t:'Pullback do VWAP', d:'Cena odnajduje fair value wg VWAP.', border:true}, 11: {t:'Pullback do VWAP', d:'Kolejny udany retest instytucjonalnej linii.', border:true} } }));
-            charts.push(new ChartEngine('canvas-vsa1', dataVSA1, { vpVisible: false, highlights: { 3: {t:'Zdrowy Ruch', d:'Effort = Result. Duży knot, duży vol.', border:true}, 6: {t:'Hidden Selling', d:'Wąski spread, potężny wolumen.', border:true}, 12: {t:'Buying Climax', d:'Wystrzał przed zjazdem.', border:true} } }));
-            charts.push(new ChartEngine('canvas-vsa2', dataVSA2, { vpVisible: false, highlights: { 8: {t:'No Demand', d:'Wąski spread, znikomy wol.', border:true}, 13: {t:'Stopping Volume', d:'Długi knot zaabsorbował sprzedaż.', border:true}, 16: {t:'No Supply', d:'Korekta w dół, podaż wyschła.', border:true} } }));
-            charts.push(new ChartEngine('canvas-map1', dataMap1, { highlights: { 3: {t:'Session Profile', d:'Profil zaplanowany na całą sesję. Silne, historyczne S&R.', border:true} }, annotations: [{type: 'zone', p1: 225, p2: 190, startIdx: 0, endIdx: 7, text: 'Zaplanowane Mapowanie (Sesja)', bgVar: '--amt-box', textVar: '--heading-color'}] }));
-            charts.push(new ChartEngine('canvas-map2', dataMap2, { highlights: { 4: {t:'Micro Balance', d:'Bieżące mapowanie lokalnego balansu i wyłapanie breakoutu.', border:true} }, annotations: [{type: 'zone', p1: 162, p2: 150, startIdx: 0, endIdx: 3, text: 'Bieżące Mapowanie (Lokalne)', bgVar: '--up-bg', textVar: '--up-color'}] }));
+            charts.push(new ChartEngine('canvas-vaval', dataVA, { highlights: { 10: {t_pl:'Odbicie od VAL', d_pl:'Wsparcie zadziałało (Volume w brzuchu).', t_en:'Bounce from VAL', d_en:'Support worked (Volume in the belly).', border:true}, 13: {t_pl:'Odrzucenie VAH', d_pl:'knot(wick) uderza w krawędź i wraca.', t_en:'VAH Rejection', d_en:'Wick hits the edge and returns.', border:true} }, annotations: [ {type: 'zone', p1: 165, p2: 168, text: 'VAH', bgVar: '--up-bg', textVar: '--up-color'}, {type: 'zone', p1: 135, p2: 132, text: 'VAL', bgVar: '--up-bg', textVar: '--up-color'} ] }));
+            charts.push(new ChartEngine('canvas-poc', dataPOC, { highlights: { 9: {t_pl:'Magnes POC', d_pl:'Wyhamowanie na High Volume Node (HVN).', t_en:'POC Magnet', d_en:'Slowdown on High Volume Node (HVN).', border:true} } }));
+            charts.push(new ChartEngine('canvas-lvn', dataLVN, { highlights: { 17: {t_pl:'Test LVN', d_pl:'knot(wick) wchodzi w pustkę i gwałtownie odbija.', t_en:'LVN Test', d_en:'Wick enters the void and bounces violently.', border:true} }, annotations: [ {type: 'zone', p1: 140, p2: 150, text: 'LVN', bgVar: '--down-bg', textVar: '--red-accent'} ] }));
+            charts.push(new ChartEngine('canvas-vwap', dataVWAP, { vpVisible: false, showVWAP: true, highlights: { 5: {t_pl:'Pullback do VWAP', d_pl:'Cena odnajduje fair value wg VWAP.', t_en:'Pullback to VWAP', d_en:'Price finds fair value according to VWAP.', border:true}, 11: {t_pl:'Pullback do VWAP', d_pl:'Kolejny udany retest instytucjonalnej linii.', t_en:'Pullback to VWAP', d_en:'Another successful retest of the institutional line.', border:true} } }));
+            charts.push(new ChartEngine('canvas-vsa1', dataVSA1, { vpVisible: false, highlights: { 3: {t_pl:'Zdrowy Ruch', d_pl:'Effort = Result. Duży knot, duży vol.', t_en:'Healthy Move', d_en:'Effort = Result. Large wick, large vol.', border:true}, 6: {t_pl:'Hidden Selling', d_pl:'Wąski spread, potężny wolumen.', t_en:'Hidden Selling', d_en:'Narrow spread, massive volume.', border:true}, 12: {t_pl:'Buying Climax', d_pl:'Wystrzał przed zjazdem.', t_en:'Buying Climax', d_en:'Spike before the drop.', border:true} } }));
+            charts.push(new ChartEngine('canvas-vsa2', dataVSA2, { vpVisible: false, highlights: { 8: {t_pl:'No Demand', d_pl:'Wąski spread, znikomy wol.', t_en:'No Demand', d_en:'Narrow spread, minimal vol.', border:true}, 13: {t_pl:'Stopping Volume', d_pl:'Długi knot zaabsorbował sprzedaż.', t_en:'Stopping Volume', d_en:'Long wick absorbed the selling.', border:true}, 16: {t_pl:'No Supply', d_pl:'Korekta w dół, podaż wyschła.', t_en:'No Supply', d_en:'Downward correction, supply dried up.', border:true} } }));
+            charts.push(new ChartEngine('canvas-map1', dataMap1, { highlights: { 3: {t_pl:'Session Profile', d_pl:'Profil zaplanowany na całą sesję.', t_en:'Session Profile', d_en:'Profile mapped for the entire session.', border:true} }, annotations: [{type: 'zone', p1: 225, p2: 190, startIdx: 0, endIdx: 7, text: 'Session Map', bgVar: '--amt-box', textVar: '--heading-color'}] }));
+            charts.push(new ChartEngine('canvas-map2', dataMap2, { highlights: { 4: {t_pl:'Micro Balance', d_pl:'Bieżące mapowanie lokalnego balansu.', t_en:'Micro Balance', d_en:'Current mapping of local balance.', border:true} }, annotations: [{type: 'zone', p1: 162, p2: 150, startIdx: 0, endIdx: 3, text: 'Local Map', bgVar: '--up-bg', textVar: '--up-color'}] }));
             charts.forEach(c => c.render());
         });
 
-        function toggleTheme() {
-            isLight = !isLight; document.body.classList.toggle('light-theme', isLight);
-            document.getElementById('theme-btn').innerHTML = isLight ? '🌙 Dark Mode' : '☀️ Light Mode';
-            charts.forEach(c => c.render());
-        }
-
         const viewsData = {
-            'home': { title: 'Katalog Główny', parent: null },
-            'cat-mech': { title: 'Mechanika Rynku', parent: 'home' },
-            'cat-amt': { title: 'AMT', parent: 'home' },
-            'cat-vp': { title: 'Volume Profile', parent: 'home' },
-            'cat-vwap': { title: 'AVWAP', parent: 'home' },
-            'cat-vsa': { title: 'VSA', parent: 'home' },
-            'cat-of': { title: 'Orderflow', parent: 'home' },
-            'cat-fund': { title: 'Fundamenty', parent: 'home' },
-            'cat-risk': { title: 'Ryzyko', parent: 'home' }
+            'home': { title_pl: 'Katalog Główny', title_en: 'Main Catalog', parent: null },
+            'cat-mech': { title_pl: 'Mechanika Rynku', title_en: 'Market Mechanics', parent: 'home' },
+            'cat-amt': { title_pl: 'AMT', title_en: 'AMT', parent: 'home' },
+            'cat-vp': { title_pl: 'Volume Profile', title_en: 'Volume Profile', parent: 'home' },
+            'cat-vwap': { title_pl: 'AVWAP', title_en: 'AVWAP', parent: 'home' },
+            'cat-vsa': { title_pl: 'VSA', title_en: 'VSA', parent: 'home' },
+            'cat-of': { title_pl: 'Orderflow', title_en: 'Orderflow', parent: 'home' },
+            'cat-fund': { title_pl: 'Fundamenty', title_en: 'Fundamentals', parent: 'home' },
+            'cat-risk': { title_pl: 'Ryzyko', title_en: 'Risk', parent: 'home' }
         };
+
+        function updateBreadcrumbs() {
+            const activeView = document.querySelector('.view.active');
+            if(!activeView) return;
+            const viewId = activeView.id.replace('view-', '');
+            let path = []; let current = viewId;
+            while(current) { 
+                let t = currentLang === 'pl' ? viewsData[current].title_pl : viewsData[current].title_en;
+                path.unshift(`<span onclick="nav('${current}')">${t}</span>`); 
+                current = viewsData[current].parent; 
+            }
+            document.getElementById('breadcrumbs').innerHTML = `📍 ${path.join(" > ")}`;
+        }
 
         function nav(viewId) {
             document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
@@ -1161,9 +1392,7 @@
                 const prog = JSON.parse(localStorage.getItem('rei_academy_progress') || '[]');
                 if(!prog.includes(viewId)) { prog.push(viewId); localStorage.setItem('rei_academy_progress', JSON.stringify(prog)); updateProgressUI(); }
             }
-            let path = []; let current = viewId;
-            while(current) { path.unshift(`<span onclick="nav('${current}')">${viewsData[current].title}</span>`); current = viewsData[current].parent; }
-            document.getElementById('breadcrumbs').innerHTML = "📍 " + path.join(" > ");
+            updateBreadcrumbs();
             window.scrollTo(0,0);
             setTimeout(() => { charts.forEach(c => c.render()); }, 50);
         }
