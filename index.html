@@ -7,7 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Deepcharts & macOS Dark Theme */
             --bg-color: #06070d;
             --text-color: #ececf1;
             --secondary-text: #8b8e9f;
@@ -16,13 +15,11 @@
             --border-color: rgba(255, 255, 255, 0.06);
             --chart-bg: #090a10;
             
-            /* Vibrant Trading Colors */
             --up-color: #00e676;
             --down-color: #c084fc;
             --up-bg: rgba(0, 230, 118, 0.12);
             --down-bg: rgba(192, 132, 252, 0.12);
             
-            /* VP Colors */
             --vp-color: rgba(192, 132, 252, 0.15);
             --vp-poc: rgba(0, 230, 118, 0.5);
             
@@ -32,7 +29,6 @@
         }
 
         body.light-theme {
-            /* macOS Light Theme */
             --bg-color: #f5f5f7;
             --text-color: #1d1d1f;
             --secondary-text: #86868b;
@@ -62,7 +58,6 @@
         ::-webkit-scrollbar-thumb { background: rgba(192, 132, 252, 0.2); border-radius: 6px; }
         ::-webkit-scrollbar-thumb:hover { background: rgba(192, 132, 252, 0.5); }
 
-        /* Navigation (macOS Glassmorphism) */
         nav { position: fixed; top: 0; width: 100%; padding: 12px 32px; background: var(--nav-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--border-color); z-index: 100; display: flex; justify-content: space-between; align-items: center; transition: background 0.3s ease; }
         .nav-logo { font-weight: 800; font-size: 1.25rem; cursor: pointer; letter-spacing: -0.5px; display: flex; align-items: center; gap: 12px; }
         .logo-img { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border-color); box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
@@ -81,7 +76,6 @@
         .view.active { display: block; animation: smoothFade 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         @keyframes smoothFade { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Grid & Cards */
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 20px; }
         .folder-card { background: var(--card-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-radius: 16px; padding: 24px; cursor: pointer; border: 1px solid var(--border-color); display: flex; align-items: flex-start; gap: 18px; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 4px 24px rgba(0,0,0,0.1); }
         .folder-card:hover { border-color: var(--up-color); transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0, 230, 118, 0.08); background: rgba(255,255,255,0.04); }
@@ -90,7 +84,6 @@
         .folder-info h3 { margin-bottom: 6px; font-size: 1.1rem; font-weight: 700; letter-spacing: -0.3px; }
         .folder-info p { color: var(--secondary-text); font-size: 0.85rem; line-height: 1.5; font-weight: 400; }
 
-        /* Community & Ko-fi */
         .community-wrapper { margin-top: 60px; padding-top: 40px; border-top: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 40px; }
         .community-footer { text-align: center; }
         .community-footer h4 { margin-bottom: 20px; color: var(--text-color); font-weight: 700; font-size: 1.1rem; letter-spacing: -0.2px; }
@@ -122,7 +115,6 @@
         .kofi-btn { display: inline-block; background: linear-gradient(135deg, #ff5e62, #ff9966); color: #fff; font-weight: 700; font-size: 0.9rem; text-decoration: none; padding: 12px 28px; border-radius: 30px; transition: 0.2s; box-shadow: 0 4px 15px rgba(255, 94, 98, 0.3); }
         .kofi-btn:hover { transform: scale(1.05); box-shadow: 0 6px 20px rgba(255, 94, 98, 0.4); }
 
-        /* Course Content */
         h2.section-title { font-size: 1.75rem; margin-bottom: 20px; color: var(--text-color); font-weight: 800; letter-spacing: -0.5px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; }
         .course-text { font-size: 0.95rem; line-height: 1.7; color: var(--text-color); margin-bottom: 30px; background: var(--card-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding: 30px; border-radius: 16px; border: 1px solid var(--border-color); font-weight: 400; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
         .course-text p { margin-bottom: 16px; }
@@ -135,11 +127,9 @@
         
         .course-img { max-width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--border-color); margin: 20px 0; box-shadow: 0 8px 24px rgba(0,0,0,0.15); display: block; }
 
-        /* Charts */
         .chart-wrapper { background: var(--chart-bg); border: 1px solid var(--border-color); border-radius: 16px; margin: 30px 0; padding: 0; overflow: hidden; position: relative; width: 100%; height: 480px; box-shadow: inset 0 0 40px rgba(0,0,0,0.2); }
         .chart-canvas { display: block; width: 100%; height: 100%; outline: none; cursor: crosshair; }
 
-        /* Orderflow HTML Constraints (Kept exactly 1:1, only CSS updated) */
         .fp-wrapper { display: flex; justify-content: center; gap: 24px; margin: 24px 0; flex-wrap: wrap; }
         .fp-box { background: var(--card-bg); backdrop-filter: blur(12px); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: 0.85rem; box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
         .fp-row { display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding: 6px 0; }
@@ -279,7 +269,7 @@
                     <li>B🌪️ - presja w obie strony xD</li>
                     <li>D👉 - market w balance ("konsolidacja")</li>
                 </ul>
-                <p>Przykładowy setup, z wykorzystaniem logiki auction market theory (tak w D, aż do wystąpienia breakeout możesz tradować S&R).</p>
+                <p>Przykładowe setupy, z wykorzystaniem logiki auction market theory (tak w D, aż do wystąpienia breakeout możesz tradować S&R).</p>
             </div>
             
             <h4 style="color:var(--up-color); margin-bottom: 10px;">Setup 1: Kształt D (Balance) - Tradowanie VAH / VAL</h4>
@@ -403,7 +393,6 @@
             </div>
         </div>
 
-        <!-- ORDERFLOW ZACHOWANE ZGODNIE Z ZALECENIEM, W PEŁNI 1:1, ANI JEDNEJ ZMIANY -->
         <div id="view-cat-of" class="view">
             <h2 class="section-title">6. ORDERFLOW & DELTA</h2>
             <div class="course-text">
@@ -535,7 +524,13 @@
     </div>
 
     <script>
-        // -- THEME & UTILS --
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.onkeydown = function(e) {
+            if (e.keyCode === 123) return false;
+            if (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) return false;
+            if (e.ctrlKey && e.keyCode === 85) return false;
+        };
+
         let isLight = false;
         if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
             isLight = true; document.body.classList.add('light-theme'); document.getElementById('theme-btn').innerHTML = '🌙 Dark Mode';
@@ -550,7 +545,6 @@
         }
         function htt() { tooltip.style.display = 'none'; }
 
-        // -- CHART ENGINE (CANVAS) --
         class ChartEngine {
             constructor(canvasId, ohlcvData, options = {}) {
                 this.canvas = document.getElementById(canvasId);
@@ -568,18 +562,15 @@
                 
                 this.processTicks();
                 
-                // Responsywność
                 this.resizeObserver = new ResizeObserver(() => this.render());
                 this.resizeObserver.observe(this.canvas.parentElement);
                 
-                // Interakcje Tooltip
                 this.canvas.addEventListener('mousemove', (e) => this.handleHover(e));
                 this.canvas.addEventListener('mouseleave', () => { htt(); this.hoverIndex = -1; this.render(); });
                 this.hoverIndex = -1;
             }
 
             processTicks() {
-                // Symulacja "ticków" z podanych danych OHLCV, żeby precyzyjnie obliczyć Volume Profile i AVWAP
                 let cumPV = 0, cumV = 0;
                 
                 this.data.forEach((d, i) => {
@@ -589,7 +580,6 @@
                     if(l < this.minP) this.minP = l;
                     if(v > this.maxVol) this.maxVol = v;
 
-                    // Prosta symulacja ruchu (Open -> Low -> High -> Close)
                     const path = c >= o ? [o, l, h, c] : [o, h, l, c];
                     const steps = 10;
                     const volPerStep = v / steps;
@@ -600,11 +590,9 @@
                         for(let s = 1; s <= pSteps; s++) {
                             let tickP = p1 + (p2 - p1) * (s/pSteps);
                             
-                            // Inkremetalny VWAP (A-VWAP)
                             cumPV += tickP * volPerStep;
                             cumV += volPerStep;
                             
-                            // Volume Profile by Price (1 punkt = 1 bucket)
                             let priceBucket = Math.round(tickP);
                             this.vp[priceBucket] = (this.vp[priceBucket] || 0) + volPerStep;
                             if(this.vp[priceBucket] > this.maxVP) this.maxVP = this.vp[priceBucket];
@@ -629,7 +617,6 @@
                 
                 ctx.clearRect(0, 0, w, h);
 
-                // Setup rozmiarów
                 const vpWidth = this.options.vpVisible ? Math.min(200, w * 0.25) : 10;
                 const volHeight = 60;
                 const padTop = 30;
@@ -637,7 +624,6 @@
                 const drawW = w - vpWidth - 20;
                 const drawH = h - padTop - padBottom;
                 
-                // Helpers dla osi
                 const rangeP = this.maxP - this.minP || 1;
                 const mapY = (price) => h - padBottom - ((price - this.minP) / rangeP) * drawH;
                 const stepX = drawW / Math.max(this.candles.length, 10);
@@ -649,7 +635,6 @@
                 const cVP = cssVar('--vp-color');
                 const cPOC = cssVar('--vp-poc');
                 
-                // 1. Oś Grid
                 ctx.strokeStyle = cGrid;
                 ctx.lineWidth = 1;
                 for(let i=0; i<=5; i++) {
@@ -659,7 +644,6 @@
 
                 const cW = Math.max(stepX * 0.6, 2);
 
-                // 2. Adnotacje (Strefy, Teksty, Strzałki)
                 if (this.options.annotations) {
                     this.options.annotations.forEach(ann => {
                         if (ann.type === 'zone') {
@@ -706,13 +690,12 @@
                             ctx.beginPath();
                             ctx.moveTo(ax1, ay1);
                             const cpX = ax1 + (ax2 - ax1) / 2;
-                            const cpY = Math.min(ay1, ay2) - 30; // Krzywa
+                            const cpY = Math.min(ay1, ay2) - 30;
                             ctx.quadraticCurveTo(cpX, cpY, ax2, ay2);
                             ctx.strokeStyle = ann.color || '#00aaff';
                             ctx.lineWidth = 3;
                             ctx.stroke();
                             
-                            // Grot
                             const angle = Math.atan2(ay2 - cpY, ax2 - cpX);
                             ctx.beginPath();
                             ctx.moveTo(ax2, ay2);
@@ -724,7 +707,6 @@
                     });
                 }
 
-                // 3. Volume Profile (Prosty wygląd)
                 if (this.options.vpVisible) {
                     let pocPrice = null;
                     let maxVPVal = 0;
@@ -740,7 +722,6 @@
                         ctx.fillRect(0, y - 1.5, barW, 3);
                     }
                     
-                    // POC Line
                     if (pocPrice !== null) {
                         const y = mapY(pocPrice);
                         ctx.fillStyle = cPOC;
@@ -753,7 +734,6 @@
                     }
                 }
 
-                // 4. AVWAP
                 if (this.options.showVWAP) {
                     const cVWAP = cssVar('--vwap-line');
                     ctx.beginPath();
@@ -767,7 +747,6 @@
                     ctx.stroke();
                 }
 
-                // 5. Świece i Wolumen pod spodem
                 this.candles.forEach((c, i) => {
                     const cx = mapX(i);
                     const isUp = c.c >= c.o;
@@ -840,46 +819,35 @@
             }
         }
 
-        // -- DANE OPARTE NA TICKACH (OHLCV) --
-        
-        // Dane wykresu AMT - symulacja grafiki
         const dataAMT = [
-            // Balance 1 ($35,000)
             [350, 355, 345, 352, 50], [352, 360, 350, 355, 40], [355, 358, 348, 350, 60],
             [350, 362, 345, 358, 55], [358, 365, 350, 352, 45], [352, 355, 342, 348, 70],
             [348, 352, 345, 350, 50], [350, 358, 348, 355, 40],
-            // Buy Imbalance
             [355, 380, 355, 378, 150], [378, 395, 375, 392, 180], [392, 405, 390, 402, 160],
-            // Balance 2 ($40,000)
             [402, 408, 398, 405, 60], [405, 410, 400, 402, 50], [402, 405, 395, 398, 70],
             [398, 402, 395, 400, 55], [400, 408, 398, 405, 40], [405, 412, 402, 408, 65],
             [408, 410, 395, 398, 80], [398, 405, 395, 402, 50],
-            // Sell Imbalance
             [402, 405, 385, 388, 170], [388, 390, 370, 372, 190], [372, 375, 362, 365, 160],
-            // Balance 3 ($36,500)
             [365, 370, 360, 368, 50], [368, 372, 362, 365, 40], [365, 368, 358, 362, 60],
             [362, 365, 360, 364, 45], [364, 370, 362, 368, 55], [368, 375, 365, 366, 50]
         ];
 
-        // Przebudowane dane VA - Czysty układ "D" z VAH na górze i VAL na dole
         const dataVA = [
-            [150,155,145,152, 100], // budowa poc
-            [152,158,150,155, 110], // budowa poc
-            [155,165,152,160, 80],  // w gore
-            [160,168,158,165, 60],  // okolice VAH
-            [165,168,155,158, 70],  // w dol
-            [158,160,148,150, 120], // budowa poc
-            [150,152,142,145, 80],  // w dol
-            [145,148,135,140, 60],  // okolice VAL
-            [140,145,138,142, 50],  // w gore
-            [142,155,140,152, 100], // budowa poc
-            
-            // Setup - akcje:
-            [152,155,128,135, 90],  // 10: Ostre zejscie do VAL (128)
-            [135,148,132,145, 70],  // Odbicie
-            [145,160,142,155, 80],  // Ruch przez POC
-            [155,175,152,165, 85],  // 13: Ostre wejscie w VAH (175)
-            [165,168,150,155, 75]   // Odrzucenie i powrot
+            [150,155,145,152, 100],
+            [152,158,150,155, 110],
+            [155,165,152,160, 80],
+            [160,168,158,165, 60],
+            [165,168,155,158, 70],
+            [158,160,148,150, 120],
+            [150,152,142,145, 80],
+            [145,148,135,140, 60],
+            [140,145,138,142, 50],
+            [142,155,140,152, 100],
+            [152,155,128,135, 90],
+            [135,148,132,145, 70],
+            [145,160,142,155, 80],
+            [155,175,152,165, 85],
+            [165,168,150,155, 75]
         ];
         
         const dataPOC = [
@@ -926,12 +894,10 @@
             [60,75,55,70, 50], [70,90,65,85, 60]
         ];
 
-        // RENDEROWANIE WIDOKÓW
         let charts = [];
         
         document.addEventListener("DOMContentLoaded", () => {
             
-            // AMT Chart - Odtworzenie grafiki
             charts.push(new ChartEngine('canvas-amt', dataAMT, {
                 vpVisible: false,
                 annotations: [
@@ -950,7 +916,6 @@
                 ]
             }));
 
-            // S&R D-Shape Setup
             charts.push(new ChartEngine('canvas-vaval', dataVA, {
                 highlights: { 
                     10: {t:'Odbicie od VAL', d:'Wsparcie zadziałało (Volume w brzuchu).', border:true}, 
@@ -999,7 +964,6 @@
                 }
             }));
             
-            // Inicjalne przerysowanie
             charts.forEach(c => c.render());
         });
 
@@ -1010,7 +974,6 @@
             charts.forEach(c => c.render());
         }
 
-        // NAWIGACJA
         const breadcrumbsEl = document.getElementById('breadcrumbs');
         const viewsData = {
             'home': { title: 'Katalog Główny', parent: null },
