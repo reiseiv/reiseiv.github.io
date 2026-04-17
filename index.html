@@ -4,7 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rei Academy</title>
+    <!-- 
+      Rei Academy
+      Orderflow knowledge base & trading utilities.
+      UI & core logic built from scratch. Chart rendering logic (Canvas) optimized with AI assistance.
+    -->
     <style>
+        /* Global variables. Color palette & aesthetics inspired by Deepcharts vibe. */
         :root {
             --bg-color: #06070d;
             --text-color: #ececf1;
@@ -35,10 +41,12 @@
             --amt-box: rgba(192, 132, 252, 0.12);
             --tip-bg: rgba(0, 230, 118, 0.05);
             --tip-border: rgba(0, 230, 118, 0.2);
+            
             --gradient-text: linear-gradient(135deg, #ffffff 0%, #a1a1aa 100%);
             --btn-gradient: linear-gradient(135deg, #00e676, #00b359);
         }
 
+        /* Light theme implementation */
         body.light-theme {
             --bg-color: #f5f5f7;
             --text-color: #1d1d1f;
@@ -64,11 +72,13 @@
             --btn-gradient: linear-gradient(135deg, #34c759, #28a745);
         }
 
+        /* Language toggle utility classes */
         body.lang-en .pl { display: none !important; }
         body.lang-pl .en { display: none !important; }
         .next-btn span.pl, .next-btn span.en { display: flex; align-items: center; gap: 8px; }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        
         body {
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-color);
@@ -81,6 +91,7 @@
             position: relative;
         }
 
+        /* Ambient background blurs */
         body::before {
             content: "";
             position: fixed;
@@ -103,10 +114,13 @@
             opacity: 0.85;
             filter: blur(55px);
         }
+        
         a { color: inherit; }
         button { font: inherit; }
 
         :focus-visible { outline: 2px solid var(--up-color); outline-offset: 2px; }
+        
+        /* Custom scrollbar styling */
         ::-webkit-scrollbar { height: 6px; width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: rgba(192, 132, 252, 0.2); border-radius: 6px; }
@@ -142,6 +156,7 @@
         .breadcrumbs span { cursor: pointer; color: var(--up-color); transition: 0.2s; font-weight: 600; }
         .breadcrumbs span:hover { filter: brightness(1.2); }
 
+        /* SPA view transitions */
         .view { display: none; }
         .view.active { display: block; animation: smoothFade 0.25s ease-out; }
         @keyframes smoothFade { from { opacity: 0; } to { opacity: 1; } }
@@ -221,6 +236,7 @@
         .kofi-heart { color: var(--red-accent); font-size: 1.15rem; font-weight: 800; margin: 2px 0 24px; line-height: 1.2; }
 
         h2.section-title { font-size: 1.85rem; margin-bottom: 20px; font-weight: 700; letter-spacing: -0.5px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; color: var(--text-color); }
+        
         .course-text {
             font-size: 0.98rem; line-height: 1.9; color: var(--text-color); margin-bottom: 30px;
             background: var(--card-bg); backdrop-filter: blur(8px); padding: 30px;
@@ -242,9 +258,11 @@
         }
         .course-text h4:first-child { margin-top: 0; }
 
+        /* Custom chart styling */
         .chart-wrapper { background: var(--chart-bg); border: 1px solid var(--border-color); border-radius: var(--radius-lg); margin: 35px 0; padding: 0; overflow: hidden; position: relative; width: 100%; height: 480px; box-shadow: inset 0 0 28px rgba(0,0,0,0.08); }
         .chart-canvas { display: block; width: 100%; height: 100%; outline: none; cursor: crosshair; }
 
+        /* Footprint rendering grids */
         .fp-wrapper { display: flex; justify-content: center; gap: 24px; margin: 30px 0; flex-wrap: wrap; }
         .fp-box { background: var(--card-bg); backdrop-filter: blur(8px); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 22px; font-family: 'SF Mono', ui-monospace, 'JetBrains Mono', monospace; font-size: 0.85rem; box-shadow: none; }
         .fp-row { display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding: 6px 0; }
@@ -255,6 +273,7 @@
         .fp-hi-d { font-weight: 700; background: var(--down-bg); border-radius: 4px; color: var(--text-color); }
         .fp-z { color: var(--secondary-text); opacity: 0.4; }
 
+        /* DOM ladder styles */
         .dom-table { width: 100%; max-width: 450px; margin: 0 auto; border-collapse: separate; border-spacing: 0; font-family: 'SF Mono', ui-monospace, 'JetBrains Mono', monospace; font-size: 0.85rem; border: 1px solid var(--border-color); border-radius: var(--radius-lg); overflow: hidden; background: var(--card-bg); }
         .dom-table th, .dom-table td { padding: 12px 16px; border-bottom: 1px solid var(--border-color); border-right: 1px solid var(--border-color); text-align: center; }
         .dom-table th { background: rgba(255,255,255,0.02); font-weight: 600; color: var(--text-color); }
@@ -269,6 +288,7 @@
         .cvd-arrow { position: absolute; right: 0; top: -7px; color: var(--up-color); font-size: 16px; background: var(--bg-color); padding: 0 4px; }
         .cvd-arrow.down { color: var(--down-color); }
 
+        /* Tooltip behavior and positioning */
         .tooltip {
             position: fixed; display: none; padding: 14px 18px; --tip-accent: var(--up-color);
             background: rgba(28, 28, 30, 0.96); backdrop-filter: blur(8px); color: #fff; border-radius: 12px;
@@ -284,7 +304,7 @@
         .next-btn span { transition: transform 0.18s; }
         .next-btn:hover span { transform: translateX(4px); }
 
-        /* --- FEEDBACK WIDGET CSS --- */
+        /* Feedback Widget - Serverless integration */
         .feedback-widget {
             position: fixed; right: 24px; bottom: 24px; width: 340px;
             background: var(--nav-bg); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
@@ -305,11 +325,12 @@
         .feedback-widget textarea:focus { border-color: var(--up-color); }
         
         .feedback-widget button {
-            width: 100%; background: var(--btn-gradient); border: none; color: #000;
-            padding: 12px; border-radius: 999px; font-weight: 700; cursor: pointer; transition: transform 0.2s ease; box-shadow: none;
+            width: 100%; background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color);
+            padding: 12px; border-radius: 999px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; box-shadow: none;
         }
-        body.light-theme .feedback-widget button { color: #fff; }
-        .feedback-widget button:hover { transform: translateY(-2px); }
+        .feedback-widget button:hover { 
+            border-color: var(--secondary-text); transform: translateY(-2px); 
+        }
 
         @media (max-width: 768px) {
             .feedback-widget {
@@ -317,6 +338,7 @@
             }
         }
 
+        /* Accessibility: respect user motion preferences */
         @media (prefers-reduced-motion: reduce) {
             * { scroll-behavior: auto !important; }
             .view.active { animation: none !important; }
@@ -1149,7 +1171,7 @@
 
     </div>
 
-    <!-- FEEDBACK WIDGET -->
+    <!-- Feedback Widget - Serverless integration -->
     <div id="feedback-widget" class="feedback-widget">
         <div class="feedback-header">
             <span class="pl">Jeżeli znalazłeś jakiś błąd, zgłoś go tutaj 👇</span>
@@ -1163,17 +1185,19 @@
     </div>
 
     <script>
+        // Basic devtools/context menu block
         document.addEventListener('contextmenu', e => e.preventDefault());
         document.onkeydown = function(e) {
-            if (e.keyCode === 123) return false;
-            if (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) return false;
-            if (e.ctrlKey && e.keyCode === 85) return false;
+            if (e.keyCode === 123) return false; // F12
+            if (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) return false; // DevTools shortcuts
+            if (e.ctrlKey && e.keyCode === 85) return false; // View source
         };
 
-        // --- THEME ---
+        // Theme management with system preference detection
         let isLight = false;
         if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-            isLight = true; document.body.classList.add('light-theme'); 
+            isLight = true; 
+            document.body.classList.add('light-theme'); 
         }
 
         function updateThemeBtn() {
@@ -1184,32 +1208,39 @@
         updateThemeBtn();
 
         function toggleTheme() {
-            isLight = !isLight; document.body.classList.toggle('light-theme', isLight);
+            isLight = !isLight; 
+            document.body.classList.toggle('light-theme', isLight);
             updateThemeBtn();
-            charts.forEach(c => c.render());
+            charts.forEach(c => c.render()); // Re-render charts to apply new color vars
         }
 
-        // --- LANGUAGE ---
-        let currentLang = 'pl'; // Domyślnie Polski
+        // Language toggle state management
+        let currentLang = 'pl'; // Default to PL
         function toggleLang() {
             currentLang = currentLang === 'pl' ? 'en' : 'pl';
             document.body.classList.remove('lang-pl', 'lang-en');
             document.body.classList.add('lang-' + currentLang);
-            updateSessions(); // Update dynamic session text translations
-            updateBreadcrumbs(); // Update dynamic breadcrumb texts
+            updateSessions();
+            updateBreadcrumbs();
         }
 
+        // CSS variables utility
         const cssVar = (name) => getComputedStyle(document.body).getPropertyValue(name).trim();
         const tooltip = document.getElementById('tooltip');
         
+        // Tooltip positioning logic. Avoid moving inline styles to CSS to prevent mobile offset issues.
         function tt(e, title, text, accent) {
             tooltip.style.display = 'block';
             tooltip.style.setProperty('--tip-accent', accent || 'var(--up-color)');
             tooltip.innerHTML = `<strong>${title}</strong>${text}`;
-            tooltip.style.left = (e.clientX + 15) + 'px'; tooltip.style.top = (e.clientY + 15) + 'px';
+            tooltip.style.left = (e.clientX + 15) + 'px'; 
+            tooltip.style.top = (e.clientY + 15) + 'px';
         }
-        function htt() { tooltip.style.display = 'none'; }
+        function htt() { 
+            tooltip.style.display = 'none'; 
+        }
 
+        // Session countdown logic (London/NY)
         function updateSessions() {
             const now = new Date();
             const localH = now.getHours();
@@ -1224,13 +1255,16 @@
                 const openTime = s.openH * 60 + s.openM;
                 const closeTime = s.closeH * 60 + s.closeM;
                 const isOpen = currentTime >= openTime && currentTime < closeTime;
+                
                 const dot = s.el.querySelector('.dot');
                 const timeSpan = s.el.querySelector('.session-time');
                 dot.classList.toggle('active', isOpen);
+                
                 let targetTime = isOpen ? closeTime : openTime;
                 if (!isOpen && currentTime > closeTime) targetTime += 24 * 60;
-                let diffMins = targetTime - currentTime;
                 
+                // Time diff calculation
+                let diffMins = targetTime - currentTime;
                 let h = Math.floor(diffMins / 60);
                 let m = diffMins % 60;
                 
@@ -1250,6 +1284,7 @@
             });
         }
 
+        // ChartEngine - Custom Canvas renderer for footprint/VP data.
         class ChartEngine {
             constructor(canvasId, ohlcvData, options = {}) {
                 this.canvas = document.getElementById(canvasId);
@@ -1265,6 +1300,8 @@
                 this.canvas.addEventListener('mouseleave', () => { htt(); this.hoverIndex = -1; this.render(); });
                 this.hoverIndex = -1;
             }
+            
+            // Build volume profile from OHLCV ticks
             processTicks() {
                 let cumPV = 0, cumV = 0;
                 this.data.forEach((d) => {
@@ -1299,13 +1336,17 @@
                 const volHeight = 60, padTop = 30, padBottom = 20 + volHeight;
                 const drawW = w - vpWidth - 20, drawH = h - padTop - padBottom;
                 const rangeP = this.maxP - this.minP || 1;
+                
+                // Coordinate mapping (Price to Y-axis, Time to X-axis)
                 const mapY = (price) => h - padBottom - ((price - this.minP) / rangeP) * drawH;
                 const stepX = drawW / Math.max(this.candles.length, 10);
                 const mapX = (index) => vpWidth + 10 + (index * stepX) + (stepX/2);
+                
                 const cUp = cssVar('--up-color'), cDown = cssVar('--down-color'), cGrid = cssVar('--border-color'), cVP = cssVar('--vp-color'), cPOC = cssVar('--vp-poc');
                 ctx.strokeStyle = cGrid; ctx.lineWidth = 1;
                 for(let i=0; i<=5; i++) { let py = padTop + (drawH/5)*i; ctx.beginPath(); ctx.moveTo(vpWidth, py); ctx.lineTo(w, py); ctx.stroke(); }
                 const cW = Math.max(stepX * 0.6, 2);
+                
                 if (this.options.annotations) {
                     this.options.annotations.forEach(ann => {
                         if (ann.type === 'zone') {
@@ -1327,6 +1368,7 @@
                         }
                     });
                 }
+                
                 if (this.options.vpVisible) {
                     let pocPrice = null, maxVPVal = 0;
                     for(const [pS, v] of Object.entries(this.vp)) { if (v > maxVPVal) { maxVPVal = v; pocPrice = parseFloat(pS); } }
@@ -1339,10 +1381,12 @@
                         ctx.strokeStyle = cPOC; ctx.setLineDash([4, 4]); ctx.beginPath(); ctx.moveTo(vpWidth, y); ctx.lineTo(w, y); ctx.stroke(); ctx.setLineDash([]);
                     }
                 }
+                
                 if (this.options.showVWAP) {
                     ctx.beginPath(); this.vwapLine.forEach((val, i) => { const cx = mapX(i), cy = mapY(val); if(i === 0) ctx.moveTo(cx, cy); else ctx.lineTo(cx, cy); });
                     ctx.strokeStyle = cssVar('--vwap-line'); ctx.lineWidth = 3; ctx.stroke();
                 }
+                
                 this.candles.forEach((c, i) => {
                     const cx = mapX(i), isUp = c.c >= c.o, color = isUp ? cUp : cDown;
                     const vH = (c.v / this.maxVol) * volHeight; ctx.fillStyle = color; ctx.globalAlpha = 0.5;
@@ -1373,6 +1417,7 @@
             }
         }
 
+        // Mock OHLCV data for visual examples
         const dataAMT = [[350,355,345,352,50],[352,360,350,355,40],[355,358,348,350,60],[350,362,345,358,55],[358,365,350,352,45],[352,355,342,348,70],[348,352,345,350,50],[350,358,348,355,40],[355,380,355,378,150],[378,395,375,392,180],[392,405,390,402,160],[402,408,398,405,60],[405,410,400,402,50],[402,405,395,398,70],[398,402,395,400,55],[400,408,398,405,40],[405,412,402,408,65],[408,410,395,398,80],[398,405,395,402,50],[402,405,385,388,170],[388,390,370,372,190],[372,375,362,365,160],[365,370,360,368,50],[368,372,362,365,40],[365,368,358,362,60],[362,365,360,364,45],[364,370,362,368,55],[368,375,365,366,50]];
         const dataVA = [[150,155,145,152,100],[152,158,150,155,110],[155,165,152,160,80],[160,168,158,165,60],[165,168,155,158,70],[158,160,148,150,120],[150,152,142,145,80],[145,148,135,140,60],[140,145,138,142,50],[142,155,140,152,100],[152,155,128,135,90],[135,148,132,145,70],[145,160,142,155,80],[155,175,152,165,85],[165,168,150,155,75]];
         const dataPOC = [[240,245,230,235,40],[235,240,220,225,45],[225,230,210,215,50],[215,220,190,195,60],[195,200,180,185,65],[185,190,160,165,70],[165,175,155,160,80],[160,165,150,158,85],[158,160,145,150,90],[150,155,148,152,95],[152,160,148,158,85],[158,162,145,150,90],[150,155,145,152,80],[152,165,150,160,70],[160,170,155,165,60]];
@@ -1404,6 +1449,7 @@
             charts.forEach(c => c.render());
         });
 
+        // Navigation state mapping
         const viewsData = {
             'home': { title_pl: 'Katalog Główny', title_en: 'Main Catalog', parent: null },
             'cat-mech': { title_pl: 'Mechanika Rynku', title_en: 'Market Mechanics', parent: 'home' },
@@ -1429,6 +1475,7 @@
             document.getElementById('breadcrumbs').innerHTML = `📍 ${path.join(" > ")}`;
         }
 
+        // Simple SPA routing logic
         function nav(viewId) {
             document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
             const viewEl = document.getElementById('view-' + viewId);
@@ -1442,7 +1489,7 @@
             setTimeout(() => { charts.forEach(c => c.render()); }, 50);
         }
 
-        // --- FEEDBACK / DISCORD WORKER LOGIC ---
+        // Feedback submission via Cloudflare Workers (CORS handled on edge)
         async function submitFeedback() {
             const textarea = document.getElementById('feedback-text');
             const text = textarea.value;
@@ -1452,7 +1499,7 @@
             const origHtml = btn.innerHTML;
             
             btn.innerHTML = '<span class="pl">Wysyłanie...</span><span class="en">Sending...</span>';
-            btn.style.pointerEvents = 'none'; // Blokada klikania
+            btn.style.pointerEvents = 'none'; // Prevent double-clicks / rate limit abuse on client side
             
             try {
                 const response = await fetch('https://cool-leaf-ade2.xxxkubes.workers.dev/', {
@@ -1465,7 +1512,7 @@
                     })
                 });
                 
-                // Jeśli Cloudflare odrzuci formularz, wyrzucamy fizyczny błąd z wiadomością
+                // Validate worker response status
                 if (!response.ok) {
                     const errorText = await response.text();
                     console.error("Worker Error:", errorText);
@@ -1484,7 +1531,6 @@
             } catch (e) {
                 console.error("Feedback failed:", e);
                 btn.style.background = 'var(--red-accent)';
-                // Pokazujemy precyzyjniej błąd na przycisku i przypominamy o F12
                 btn.innerHTML = '<span class="pl" style="color:#000; font-size:0.85rem;">❌ Błąd (Sprawdź F12)</span><span class="en" style="color:#000; font-size:0.85rem;">❌ Error (Check F12)</span>';
                 
                 setTimeout(() => {
