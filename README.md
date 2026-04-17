@@ -1,6 +1,6 @@
-# 📈 Darmowy Kurs Daytradingu
+# 📈 Kurs Daytradingu
 
-> hej.. w pełni darmowy kurs daytrade pod Order Flow, Volume Profile, AMT i mechanikę rynku.
+> w pełni darmowy kurs daytrade pod Order Flow, Volume Profile, AMT i mechanikę rynku.
 
 ---
 
