@@ -1,3 +1,8 @@
+let currentPage = "index";
+if (window.location.pathname.includes("mobile")) {
+    currentPage = "mobile";
+}
+
 (function() {
     const WORKER_URL = 'https://stats.xxxkubes.workers.dev/api/ping';
     
@@ -15,6 +20,7 @@
             vid,
             sessionId,
             url: window.location.pathname,
+            page: currentPage, // <--- Tutaj automatycznie dodajemy info o wersji (mobile/index) do każdego eventu
             ...data
         });
 
@@ -24,8 +30,8 @@
             fetch(WORKER_URL, { method: 'POST', body: payload, keepalive: true }).catch(() => {});
         }
     }
-// 1. Pageview & Leave
 
+    // 1. Pageview & Leave
     window.addEventListener('load', () => sendEvent({ type: 'pageview', ref: document.referrer }));
     window.addEventListener('visibilitychange', () => {
         if (document.visibilityState === 'hidden') {
