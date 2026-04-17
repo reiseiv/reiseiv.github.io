@@ -64,10 +64,8 @@
             --btn-gradient: linear-gradient(135deg, #34c759, #28a745);
         }
 
-        /* Sekcja CSS dotycząca zmiany języka */
         body.lang-en .pl { display: none !important; }
         body.lang-pl .en { display: none !important; }
-        /* Upewnienie się, że zachowanie flex w spanach z przyciskami 'Next' nie psuje się */
         .next-btn span.pl, .next-btn span.en { display: flex; align-items: center; gap: 8px; }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -286,6 +284,39 @@
         .next-btn span { transition: transform 0.18s; }
         .next-btn:hover span { transform: translateX(4px); }
 
+        /* --- FEEDBACK WIDGET CSS --- */
+        .feedback-widget {
+            position: fixed; right: 24px; bottom: 24px; width: 340px;
+            background: var(--nav-bg); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+            border: 1px solid color-mix(in srgb, var(--border-color) 40%, rgba(255,255,255,0.1));
+            border-radius: var(--radius-lg); padding: 24px; z-index: 90;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s;
+        }
+        body.light-theme .feedback-widget { box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        
+        .feedback-header { font-size: 0.9rem; font-weight: 500; color: var(--text-color); margin-bottom: 12px; line-height: 1.5; }
+        
+        .feedback-widget textarea {
+            width: 100%; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: var(--radius-sm);
+            padding: 12px; color: var(--text-color); font-family: inherit; font-size: 0.9rem; resize: none; margin: 12px 0; outline: none; transition: 0.2s;
+        }
+        body.light-theme .feedback-widget textarea { background: #fff; }
+        .feedback-widget textarea:focus { border-color: var(--up-color); }
+        
+        .feedback-widget button {
+            width: 100%; background: var(--btn-gradient); border: none; color: #000;
+            padding: 12px; border-radius: 999px; font-weight: 700; cursor: pointer; transition: transform 0.2s ease; box-shadow: none;
+        }
+        body.light-theme .feedback-widget button { color: #fff; }
+        .feedback-widget button:hover { transform: translateY(-2px); }
+
+        @media (max-width: 768px) {
+            .feedback-widget {
+                right: 16px; bottom: 16px; width: calc(100% - 32px); padding: 16px;
+            }
+        }
+
         @media (prefers-reduced-motion: reduce) {
             * { scroll-behavior: auto !important; }
             .view.active { animation: none !important; }
@@ -464,7 +495,7 @@
                         <div class="pro-tip-content">
                             <strong><span class="pl">Tip ode mnie ;p</span><span class="en">Tip from me ;p</span></strong>
                             <span class="pl">na footprintach szukaj wtedy tzw. vacuum effect. kiedy wlatują agresywne market buy'e, a po stronie sprzedających następuje płynnościowa pustka (brak pasywnej absorpcji), cena nie ma innego wyjścia musi "teleportować" się wyżej, żeby znaleźć kogokolwiek, kto dostarczy jej płynność do zamknięcia transakcji to nie jest zwykły ruch, to gwałtowny re-pricing widząc taki imbalance, nie szukasz szczytu po prostu płoniesz razem z rynkiem, dopóki nie zobaczysz pierwszej dużej delty, która zostanie "zatrzymana" (wchłonięta) przez ścianę limitów.</span>
-                            <span class="en"> *** .</span>
+                            <span class="en">look for the so-called vacuum effect on footprints. when aggressive market buys fly in, and there is a liquidity void on the sellers' side (no passive absorption), the price has no other choice, it must "teleport" higher to find anyone who will provide liquidity to close the transaction. this is not a regular move, it's a rapid re-pricing. seeing such an imbalance, you don't look for a top, you simply burn with the market until you see the first large delta that gets "stopped" (absorbed) by a wall of limits.</span>
                         </div>
                     </div>
                 </div>
@@ -477,7 +508,7 @@
                     <p class="en">there is another gigantic force on the market that retail often has no idea about, it's <span class="tooltip-word">market makers <span class="tip-i tip-i-up" onmousemove="tt(event, 'Market Maker', 'Large institutions providing liquidity to the market by simultaneously placing buy and sell orders.')" onmouseleave="htt()">i</span></span>, the ones who write options for you.</p>
                     
                     <p class="pl">Musicie zrozumiec jedna rzecz oni nie graja kierunkowo ich zadaniem jest bycie <span class="tooltip-word">delta neutral <span class="tip-i tip-i-up" onmousemove="tt(event, 'Delta Neutral', 'Strategia, w której zyski i straty z opcji oraz aktywa bazowego wzajemnie się zerują (brak ryzyka kierunkowego).')" onmouseleave="htt()">i</span></span> jesli retail kupuje tony opcji call na longi to market maker musi natychmiast kupic aktywo bazowe zeby zabezpieczyc swoja pozycje czyli zrobic <span class="tooltip-word">hedge <span class="tip-i tip-i-up" onmousemove="tt(event, 'Hedge', 'Zabezpieczenie pozycji przed ryzykiem rynkowym.')" onmouseleave="htt()">i</span></span>.</p>
-                    <p class="en">you must understand one thing, they don't play directionally, their job is to be <span class="tooltip-word">delta neutral <span class="tip-i tip-i-up" onmousemove="tt(event, 'Delta Neutral', 'A strategy where profits and losses from options and the underlying asset cancel each other out (no directional risk).')" onmouseleave="htt()">i</span></span>. if retail buys tons of call options for longs, the market maker must immediately buy the underlying asset to secure their position, i.e., make a <span class="tooltip-word">hedge <span class="tip-i tip-i-up" onmousemove="tt(event, 'Hedge', 'Securing a position against market risk.')" onmouseleave="htt()">i</span></span>.</p>
+                    <p class="en">you must understand one thing, they don't play directionally. their job is to be <span class="tooltip-word">delta neutral <span class="tip-i tip-i-up" onmousemove="tt(event, 'Delta Neutral', 'A strategy where profits and losses from options and the underlying asset cancel each other out (no directional risk).')" onmouseleave="htt()">i</span></span>. if retail buys tons of call options for longs, the market maker must immediately buy the underlying asset to secure their position, i.e., make a <span class="tooltip-word">hedge <span class="tip-i tip-i-up" onmousemove="tt(event, 'Hedge', 'Securing a position against market risk.')" onmouseleave="htt()">i</span></span>.</p>
                     
                     <p class="pl">To przymusowe kupowanie lub sprzedawanie przez nich tworzy sztuczna ogromna presje na cene ktora czesto dziala jak dolanie benzyny do ognia i wywala wykres zupelnie poza skale.</p>
                     <p class="en">this forced buying or selling by them creates an artificial huge pressure on the price which often acts like adding fuel to the fire and blows the chart completely off the scale.</p>
@@ -774,7 +805,7 @@
                     <p class="en">in such a situation, we know the move is backed by strong capital and we absolutely do not stand in its way to catch falling knives.</p>
                     
                     <p class="pl">dziala to tez w druga strone maly volume czyli brak effortu powinien zawsze dawac maly spread czyli brak rezultatu</p>
-                    <p class="en">it works the other way around too. low volume, meaning a lack of effort, should always give a small spread, meaning a lack of result.</p>
+                    <p class="en">it works the other way around too. low volume, meaning a lack of effort, should always result in a small spread, meaning a lack of result.</p>
                     
                     <p class="pl">jesli rynek rysuje mala waska swieczke/candle na bardzo niskim volume to po prostu oznacza ze chwilowo nie ma tam duzych graczy i presji z zadnej ze stron wiec cena po prostu dryfuje</p>
                     <p class="en">if the market draws a small narrow candle on very low volume, it simply means that temporarily there are no big players there and no pressure from either side, so the price just drifts.</p>
@@ -1118,6 +1149,19 @@
 
     </div>
 
+    <!-- FEEDBACK WIDGET -->
+    <div id="feedback-widget" class="feedback-widget">
+        <div class="feedback-header">
+            <span class="pl">Jeżeli znalazłeś jakiś błąd, zgłoś go tutaj 👇</span>
+            <span class="en">The original version was in Polish - here is the English translation. If you found a bug, report it here 👇</span>
+        </div>
+        <textarea id="feedback-text" rows="3"></textarea>
+        <button onclick="submitFeedback()" id="feedback-btn">
+            <span class="pl">Wyślij Zgłoszenie</span>
+            <span class="en">Submit Report</span>
+        </button>
+    </div>
+
     <script>
         document.addEventListener('contextmenu', e => e.preventDefault());
         document.onkeydown = function(e) {
@@ -1396,6 +1440,48 @@
             updateBreadcrumbs();
             window.scrollTo(0,0);
             setTimeout(() => { charts.forEach(c => c.render()); }, 50);
+        }
+
+        // --- FEEDBACK / DISCORD WORKER LOGIC ---
+        async function submitFeedback() {
+            const textarea = document.getElementById('feedback-text');
+            const text = textarea.value;
+            if(!text.trim()) return;
+            
+            const btn = document.getElementById('feedback-btn');
+            const origHtml = btn.innerHTML;
+            btn.innerHTML = '<span class="pl">Wysyłanie...</span><span class="en">Sending...</span>';
+            btn.style.pointerEvents = 'none'; // Zablokowanie podwójnego kliknięcia
+            
+            try {
+                await fetch('https://cool-leaf-ade2.xxxkubes.workers.dev/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        message: text,
+                        page: document.querySelector('.view.active').id,
+                        language: currentLang
+                    })
+                });
+                
+                textarea.value = '';
+                btn.style.background = 'var(--up-color)';
+                btn.innerHTML = '<span class="pl" style="color:#000;">✓ Wysłano</span><span class="en" style="color:#000;">✓ Sent</span>';
+                
+                setTimeout(() => {
+                    btn.style.background = '';
+                    btn.innerHTML = origHtml;
+                    btn.style.pointerEvents = 'auto';
+                }, 3000);
+            } catch (e) {
+                btn.style.background = 'var(--red-accent)';
+                btn.innerHTML = '<span class="pl" style="color:#000;">❌ Błąd</span><span class="en" style="color:#000;">❌ Error</span>';
+                setTimeout(() => {
+                    btn.style.background = '';
+                    btn.innerHTML = origHtml;
+                    btn.style.pointerEvents = 'auto';
+                }, 3000);
+            }
         }
     </script>
 </body>
