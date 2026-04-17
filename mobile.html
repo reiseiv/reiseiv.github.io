@@ -1,3 +1,6 @@
+---
+permalink: m.main
+---
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -1249,7 +1252,6 @@
             initLocks();
         };
 
-        // --- feedback widget submission dummy logic ---
 async function submitFback() {
     const txt = document.getElementById('feedback-text').value;
     if (!txt.trim()) return;
@@ -1257,13 +1259,11 @@ async function submitFback() {
     const btn = document.getElementById('fback-btn');
     const originalText = btn.innerText;
     
-    // Wizualne rozpoczęcie wysyłania
     btn.innerText = 'Wysyłanie...';
-    btn.disabled = true; // Blokujemy przycisk, żeby nie kliknąć 2 razy
+    btn.disabled = true; 
 
     try {
-        // --- FAKTYCZNE WYSYŁANIE DO CLOUDFLARE ---
-        const response = await fetch("TU_WKLEJ_TWOJ_URL_DO_WORKERA", {
+        const response = await fetch("https://cool-leaf-ade2.xxxkubes.workers.dev/", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -1276,24 +1276,23 @@ async function submitFback() {
         });
 
         if (response.ok) {
-            // Sukces
+
             document.getElementById('feedback-text').value = '';
             btn.style.background = 'var(--up-color)';
             btn.style.color = '#000';
             btn.innerText = '✓ Wysłano';
         } else {
-            // Błąd po stronie serwera (np. spam ban)
+
             const errorMsg = await response.text();
             btn.innerText = 'Błąd!';
             alert("Błąd: " + errorMsg);
         }
     } catch (error) {
-        // Błąd połączenia (np. brak internetu)
+
         console.error("Błąd sieci:", error);
         btn.innerText = 'Błąd sieci';
     }
 
-    // Resetowanie przycisku i zamknięcie okna po 2 sekundach
     setTimeout(() => {
         btn.disabled = false;
         btn.style.background = ''; 
