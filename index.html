@@ -1450,11 +1450,12 @@
             
             const btn = document.getElementById('feedback-btn');
             const origHtml = btn.innerHTML;
+            
             btn.innerHTML = '<span class="pl">Wysyłanie...</span><span class="en">Sending...</span>';
-            btn.style.pointerEvents = 'none'; // Zablokowanie podwójnego kliknięcia
+            btn.style.pointerEvents = 'none'; // Blokada klikania
             
             try {
-                await fetch('https://cool-leaf-ade2.xxxkubes.workers.dev/', {
+                const response = await fetch('https://cool-leaf-ade2.xxxkubes.workers.dev/', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
@@ -1463,6 +1464,13 @@
                         language: currentLang
                     })
                 });
+                
+                // Jeśli Cloudflare odrzuci formularz, wyrzucamy fizyczny błąd z wiadomością
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error("Worker Error:", errorText);
+                    throw new Error(errorText || 'Server rejected request');
+                }
                 
                 textarea.value = '';
                 btn.style.background = 'var(--up-color)';
@@ -1474,8 +1482,11 @@
                     btn.style.pointerEvents = 'auto';
                 }, 3000);
             } catch (e) {
+                console.error("Feedback failed:", e);
                 btn.style.background = 'var(--red-accent)';
-                btn.innerHTML = '<span class="pl" style="color:#000;">❌ Błąd</span><span class="en" style="color:#000;">❌ Error</span>';
+                // Pokazujemy precyzyjniej błąd na przycisku i przypominamy o F12
+                btn.innerHTML = '<span class="pl" style="color:#000; font-size:0.85rem;">❌ Błąd (Sprawdź F12)</span><span class="en" style="color:#000; font-size:0.85rem;">❌ Error (Check F12)</span>';
+                
                 setTimeout(() => {
                     btn.style.background = '';
                     btn.innerHTML = origHtml;
