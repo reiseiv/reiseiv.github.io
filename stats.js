@@ -1,6 +1,6 @@
 (function() {
-
-    const WORKER_URL = 'https://stats.xxxkubes.workers.dev/track';
+    // Zmieniono endpoint z /track na /api/ping (dla zmylenia AdBlockerów)
+    const WORKER_URL = 'https://stats.xxxkubes.workers.dev/api/ping';
     
     let vid = localStorage.getItem('rei_vid');
     if (!vid) { 
@@ -11,29 +11,55 @@
     const sessionId = Math.random().toString(36).substring(2);
     const startTime = Date.now();
 
-    function sendBeacon(type) {
-        const timeOnPage = Math.round((Date.now() - startTime) / 1000); // w sekundach
+    function sendEvent(data) {
         const payload = JSON.stringify({
             vid,
             sessionId,
-            type, // 'pageview' lub 'leave'
             url: window.location.pathname,
-            ref: document.referrer,
-            lang: navigator.language,
-            screen: `${window.screen.width}x${window.screen.height}`,
-            timeOnPage
+            ...data
         });
 
         if (navigator.sendBeacon) {
             navigator.sendBeacon(WORKER_URL, payload);
         } else {
-            fetch(WORKER_URL, { method: 'POST', body: payload, keepalive: true }).catch(()=>console.log('Analytic ping failed'));
+            fetch(WORKER_URL, { method: 'POST', body: payload, keepalive: true }).catch(() => {});
         }
     }
 
-    window.addEventListener('load', () => sendEvent('pageview'));
-
+    // 1. Pageview & Leave
+    window.addEventListener('load', () => sendEvent({ type: 'pageview', ref: document.referrer }));
     window.addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'hidden') sendBeacon('leave');
+        if (document.visibilityState === 'hidden') {
+            sendEvent({ type: 'leave', timeOnPage: Math.round((Date.now() - startTime) / 1000) });
+        }
+    });
+
+    // 2. Interakcje z Canvasami (Wykresy)
+    document.querySelectorAll('canvas').forEach(canvas => {
+        canvas.addEventListener('mouseenter', () => {
+            sendEvent({ type: 'interaction', target: 'chart', id: canvas.id });
+        });
+    });
+
+    // 3. Kliknięcia w Tooltipy
+    const originalTT = window.tt;
+    if (typeof originalTT === 'function') {
+        window.tt = function(e, title, text, accent) {
+            sendEvent({ type: 'interaction', target: 'tooltip', val: title });
+            return originalTT.apply(this, arguments);
+        };
+    }
+
+    // 4. Trackowanie sekcji (Heatmapa logiki)
+    const sectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
+                sendEvent({ type: 'view_section', id: entry.target.id });
+            }
+        });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('.view, .course-section').forEach(section => {
+        if (section.id) sectionObserver.observe(section);
     });
 })();
