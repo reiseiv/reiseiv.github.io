@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Płynność wyczerpana | Rei Academy</title>
+    <!-- 
+      Rei Academy - 404 Error Page
+      Orderflow knowledge base & trading utilities.
+      Custom 404 logic with system-pref theme and interactive ambient tracking.
+    -->
+    <style>
+        /* Global variables. Color palette & aesthetics inspired by Deepcharts vibe. */
+        :root {
+            --bg-color: #06070d;
+            --text-color: #ececf1;
+            --secondary-text: #8b8e9f;
+            --card-bg: rgba(255, 255, 255, 0.02);
+            --border-color: rgba(255, 255, 255, 0.06);
+            
+            --up-color: #00e676;
+            --down-color: #c084fc;
+            --up-bg: rgba(0, 230, 118, 0.12);
+            
+            --btn-gradient: linear-gradient(135deg, #00e676, #00b359);
+            --text-gradient: linear-gradient(135deg, #ffffff 0%, #8b8e9f 100%);
+            --error-gradient: linear-gradient(135deg, var(--down-color) 0%, var(--up-color) 100%);
+        }
+
+        /* Light theme implementation - Auto system detection */
+        @media (prefers-color-scheme: light) {
+            :root {
+                --bg-color: #f5f5f7;
+                --text-color: #1d1d1f;
+                --secondary-text: #86868b;
+                --card-bg: rgba(255, 255, 255, 0.7);
+                --border-color: rgba(0, 0, 0, 0.08);
+                
+                --up-color: #34c759;
+                --down-color: #ff3b30;
+                --up-bg: rgba(52, 199, 89, 0.12);
+                
+                --btn-gradient: linear-gradient(135deg, #34c759, #28a745);
+                --text-gradient: linear-gradient(135deg, #1d1d1f 0%, #86868b 100%);
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.65;
+            overflow: hidden; /* No scrolling on 404 */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Ambient background blurs - now interactive via JS */
+        .ambient-blobs {
+            position: absolute;
+            inset: -200px;
+            z-index: 0;
+            pointer-events: none;
+            background:
+                radial-gradient(800px circle at 30% 30%, rgba(0, 230, 118, 0.12) 0%, transparent 60%),
+                radial-gradient(800px circle at 70% 70%, rgba(192, 132, 252, 0.12) 0%, transparent 60%);
+            filter: blur(60px);
+            opacity: 0.8;
+            transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+            will-change: transform;
+        }
+
+        @media (prefers-color-scheme: light) {
+            .ambient-blobs {
+                background:
+                    radial-gradient(800px circle at 30% 30%, rgba(52, 199, 89, 0.08) 0%, transparent 60%),
+                    radial-gradient(800px circle at 70% 70%, rgba(0, 122, 255, 0.08) 0%, transparent 60%);
+            }
+        }
+
+        /* Main 404 Container */
+        .error-container {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            max-width: 600px;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+        }
+
+        /* 404 Glitch & Gradient Text */
+        .error-code {
+            font-size: 8rem;
+            font-weight: 800;
+            line-height: 1;
+            letter-spacing: -4px;
+            background: var(--error-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: -10px;
+            filter: drop-shadow(0 12px 24px rgba(0,0,0,0.1));
+            user-select: none;
+        }
+
+        /* Titles and descriptions */
+        .error-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: var(--text-color);
+        }
+
+        .error-desc {
+            font-size: 1rem;
+            color: var(--secondary-text);
+            font-weight: 400;
+            max-width: 420px;
+            margin: 0 auto;
+        }
+
+        /* Styled DOM ladder representation for visual flair */
+        .mini-dom {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 16px 24px;
+            border-radius: 14px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            font-family: 'SF Mono', ui-monospace, 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            margin: 10px 0 20px 0;
+            opacity: 0.8;
+            user-select: none;
+        }
+
+        .mini-dom-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 40px;
+        }
+
+        .mini-dom-row.ask { color: var(--up-color); }
+        .mini-dom-row.bid { color: var(--down-color); }
+        .mini-dom-row.empty { color: var(--secondary-text); opacity: 0.5; font-style: italic; }
+
+        /* Return button */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: var(--btn-gradient);
+            color: #000000;
+            text-decoration: none;
+            padding: 14px 32px;
+            border-radius: 999px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+            box-shadow: 0 8px 20px rgba(0, 230, 118, 0.2);
+        }
+
+        @media (prefers-color-scheme: light) {
+            .back-btn {
+                color: #ffffff;
+                box-shadow: 0 8px 20px rgba(52, 199, 89, 0.2);
+            }
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            filter: saturate(1.1);
+            box-shadow: 0 12px 24px rgba(0, 230, 118, 0.3);
+        }
+
+        .back-btn span.arrow {
+            transition: transform 0.2s ease;
+        }
+
+        .back-btn:hover span.arrow {
+            transform: translateX(-4px);
+        }
+
+        /* Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            .ambient-blobs { transition: none; }
+            .back-btn { transition: none; }
+            .back-btn:hover { transform: none; }
+            .back-btn:hover span.arrow { transform: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Interactive background -->
+    <div class="ambient-blobs" id="ambient"></div>
+
+    <!-- Main Content -->
+    <div class="error-container">
+        <h1 class="error-code">404</h1>
+        <h2 class="error-title">Brak płynności na tym poziomie</h2>
+        
+        <div class="mini-dom">
+            <div class="mini-dom-row ask"><span>405</span><span>120</span></div>
+            <div class="mini-dom-row ask"><span>404</span><span>45</span></div>
+            <div class="mini-dom-row empty"><span>---</span><span>LVN (Pustka)</span></div>
+            <div class="mini-dom-row bid"><span>403</span><span>0</span></div>
+        </div>
+
+        <p class="error-desc">
+            Wygląda na to, że rynek nie zaakceptował tej ceny (Low Volume Node). Zlecenie trafiło w próżnię, a strona której szukasz nie istnieje.
+        </p>
+
+        <a href="index.html" class="back-btn">
+            <span class="arrow">←</span> Wróć do bazy (Main Catalog)
+        </a>
+    </div>
+
+    <script>
+        // Basic devtools/context menu block (consistency with main site)
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.onkeydown = function(e) {
+            if (e.keyCode === 123) return false; // F12
+            if (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) return false; // DevTools
+            if (e.ctrlKey && e.keyCode === 85) return false; // View source
+        };
+
+        // Subtle parallax effect for the ambient background
+        const ambient = document.getElementById('ambient');
+        let currentX = 0;
+        let currentY = 0;
+        let targetX = 0;
+        let targetY = 0;
+
+        // Track mouse movement
+        document.addEventListener('mousemove', (e) => {
+            // Calculate mouse position relative to center (-1 to 1)
+            const x = (e.clientX / window.innerWidth - 0.5) * 2;
+            const y = (e.clientY / window.innerHeight - 0.5) * 2;
+            
+            // Set max movement in pixels
+            targetX = x * 40; 
+            targetY = y * 40;
+        });
+
+        // Smooth animation loop for the ambient blobs
+        function animate() {
+            // Lerp (Linear Interpolation) for smoothness
+            currentX += (targetX - currentX) * 0.05;
+            currentY += (targetY - currentY) * 0.05;
+            
+            ambient.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+            requestAnimationFrame(animate);
+        }
+
+        // Check if user prefers reduced motion before animating
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (!prefersReducedMotion) {
+            animate();
+        }
+    </script>
+</body>
+</html>
