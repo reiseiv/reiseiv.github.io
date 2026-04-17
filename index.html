@@ -10,6 +10,11 @@
       UI & core logic built from scratch. Chart rendering logic (Canvas) optimized with AI assistance.
     -->
     <link rel="stylesheet" href="style.css">
+    <script>
+  if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+    window.location.href = "mobile.html";
+  }
+</script>
 </head>
 <body class="lang-pl">
 
@@ -420,7 +425,7 @@
                     <p class="pl">zwykłe średnie kroczące są spóźnione bo liczą tylko czas i cenę. dla nas liczy się <span class="tooltip-word">vwap <span class="tip-i tip-i-up" onmousemove="tt(event, 'VWAP', 'Volume Weighted Average Price - średnia cena ważona wolumenem.')" onmouseleave="htt()">i</span></span> czyli średnia cena ważona wolumenem. to jest jedyna „średnia” którą respektują instytucje bo pokazuje gdzie faktycznie handlował duży kapitał. jeśli cena jest powyżej vwap-u instytucjonalni kupujący są zadowoleni, jeśli poniżej to szukają okazji lub uciekają z pozycji. używamy <span class="tooltip-word">anchored vwap <span class="tip-i tip-i-up" onmousemove="tt(event, 'Anchored VWAP', 'Zakotwiczony VWAP, mierzony od konkretnego wydarzenia, miejsca, lub początku sesji.')" onmouseleave="htt()">i</span></span> żeby przyczepić go do konkretnych punktów zwrotnych jak fomc czy szczyt sesji i widzieć kto od tego momentu przejął kontrolę nad rynkiem.</p>
                     <p class="en">regular moving averages are lagging because they only count time and price. for us, what matters is <span class="tooltip-word">vwap <span class="tip-i tip-i-up" onmousemove="tt(event, 'VWAP', 'Volume Weighted Average Price.')" onmouseleave="htt()">i</span></span>. this is the only "average" respected by institutions because it shows where big capital actually traded. if the price is above vwap, institutional buyers are happy, if below, they look for opportunities or run from positions. we use <span class="tooltip-word">anchored vwap <span class="tip-i tip-i-up" onmousemove="tt(event, 'Anchored VWAP', 'VWAP anchored to a specific event, place, or session start.')" onmouseleave="htt()">i</span></span> to attach it to specific turning points like fomc or session high to see who took control of the market from that moment on.</p>
                     
-                    <img src="https://cdn.discordapp.com/attachments/1492548775020073152/1492549533421404170/1775921938108.png?ex=69e1ab52&is=69e059d2&hm=772ce31a9173699c022cac18393dc7e0ea89d1fa365e556461dfc2d305c9fcb6&animated=true" class="course-img" alt="VWAP Bands Reaction">
+                    <img src="https://i.imgur.com/6wu6fDM.png" class="course-img" alt="VWAP Bands Reaction">
                     
                     <p class="pl">jak widać cena pięknie reaguje na <span class="tooltip-word">VWAP band'y <span class="tip-i tip-i-up" onmousemove="tt(event, 'VWAP Bands', 'Pasma odchylenia standardowego od głównej linii VWAP. Pełnią rolę dynamicznego VAH i VAL.')" onmouseleave="htt()">i</span></span>, i sam VWAP</p>
                     <p class="en">as you can see the price beautifully reacts to <span class="tooltip-word">VWAP bands <span class="tip-i tip-i-up" onmousemove="tt(event, 'VWAP Bands', 'Standard deviation bands from the main VWAP line. Act as dynamic VAH and VAL.')" onmouseleave="htt()">i</span></span>, and VWAP itself</p>
@@ -432,7 +437,7 @@
                     <p class="en">example usage: AVWAP anchored to the high beautifully shows local resistance, which later becomes support</p>
                 </div>
                 <div class="course-section">
-                    <img src="https://cdn.discordapp.com/attachments/1492548775020073152/1492550878832361564/1775922258659.png?ex=69e1ac93&is=69e05b13&hm=4db95c2096f67d6ca697aa654dd4b1d5183fd1fcd5ab939d183586f9054a796d&animated=true" class="course-img" alt="AVWAP Resistance to Support">
+                    <img src="https://i.imgur.com/WiyvKtT.png" alt="AVWAP Resistance to Support">
                     <h4 class="pl">Strategia S&R i <span class="tooltip-word">Bias <span class="tip-i tip-i-up" onmousemove="tt(event, 'Bias', 'Nasze obiektywne nastawienie do rynku w danej chwili, np. bullish (szukamy longów) lub bearish (szukamy shortów).')" onmouseleave="htt()">i</span></span>:</h4>
                     <h4 class="en">S&R Strategy and <span class="tooltip-word">Bias <span class="tip-i tip-i-up" onmousemove="tt(event, 'Bias', 'Our objective market attitude at a given moment, e.g., bullish (looking for longs) or bearish (looking for shorts).')" onmouseleave="htt()">i</span></span>:</h4>
                     <ul class="pl">
@@ -864,6 +869,6 @@
     <!-- Skrypty -->
     <script src="script.js"></script>
     <script src="script.js"></script>
-    <script src="stats.js"></script>
+    <script src="api.js"></script>
 </body>
 </html>
