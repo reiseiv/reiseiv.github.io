@@ -2,48 +2,248 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rei Academy</title>
-    <!-- 
-      Rei Academy
-      Orderflow knowledge base & trading utilities.
-      UI & core logic built from scratch. Chart rendering logic (Canvas) optimized with AI assistance.
-    -->
-    <link rel="stylesheet" href="style.css">
-    <script>
-  if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-    window.location.href = "mobile.html";
-  }
-</script>
-</head>
-<body class="lang-pl">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Rei Academy Mobile</title>
+    <style>
+        /* * core css vars & mobile glassmorphism config 
+         * dark mode by default, clean awwwards vibe
+         */
+        :root {
+            --bg-color: #06070d;
+            --text-color: #ececf1;
+            --secondary-text: #8b8e9f;
+            --heading-color: var(--text-color);
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --nav-bg: rgba(6, 7, 13, 0.85);
+            --border-color: rgba(255, 255, 255, 0.08);
 
-    <!-- Animated theme (Awwwards vibe) -->
-    <div class="ambient-blobs" id="ambient"></div>
+            --radius-lg: 20px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-sm: 0 8px 32px rgba(0,0,0,0.12);
+            --shadow-md: 0 12px 48px rgba(0,0,0,0.20);
+            
+            --up-color: #00e676;
+            --down-color: #c084fc;
+            --up-bg: rgba(0, 230, 118, 0.12);
+            --down-bg: rgba(192, 132, 252, 0.12);
+            
+            --red-accent: #ff3b30;
+            --tip-bg: rgba(20, 20, 22, 0.95);
+            --tip-border: rgba(0, 230, 118, 0.3);
+            
+            --btn-gradient: linear-gradient(135deg, #00e676, #00b359);
+        }
+
+        /* light mode overrides if the user prefers eye bleed */
+        body.light-theme {
+            --bg-color: #f5f5f7;
+            --text-color: #1d1d1f;
+            --secondary-text: #86868b;
+            --card-bg: rgba(255, 255, 255, 0.65);
+            --nav-bg: rgba(245, 245, 247, 0.85);
+            --border-color: rgba(0, 0, 0, 0.06);
+            
+            --up-color: #34c759;
+            --down-color: #ff3b30;
+            --up-bg: rgba(52, 199, 89, 0.12);
+            --down-bg: rgba(255, 59, 48, 0.12);
+            
+            --tip-bg: rgba(255, 255, 255, 0.95);
+            --tip-border: rgba(52, 199, 89, 0.4);
+            --btn-gradient: linear-gradient(135deg, #34c759, #28a745);
+        }
+
+        /* simple lang toggle logic */
+        body.lang-en .pl { display: none !important; }
+        body.lang-pl .en { display: none !important; }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* * ambient animated blobs for that premium feel
+         * pure css, zero js overhead
+         */
+        .ambient-blobs {
+            position: fixed; inset: -200px; z-index: 0; pointer-events: none;
+            background:
+                radial-gradient(600px circle at 20% 30%, rgba(0, 230, 118, 0.15) 0%, transparent 60%),
+                radial-gradient(500px circle at 80% 70%, rgba(192, 132, 252, 0.15) 0%, transparent 60%);
+            filter: blur(50px); opacity: 0.8;
+            animation: drift 15s infinite alternate ease-in-out;
+        }
+        body.light-theme .ambient-blobs {
+            background:
+                radial-gradient(600px circle at 20% 30%, rgba(52, 199, 89, 0.15) 0%, transparent 60%),
+                radial-gradient(500px circle at 80% 70%, rgba(0, 122, 255, 0.12) 0%, transparent 60%);
+        }
+        @keyframes drift {
+            0% { transform: scale(1) translate(0, 0); }
+            100% { transform: scale(1.1) translate(-20px, 30px); }
+        }
+
+        /* mobile optimized navbar */
+        nav {
+            position: fixed; top: 0; width: 100%; z-index: 100;
+            background: var(--nav-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-color);
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px 16px; height: 60px;
+        }
+        .nav-left { display: flex; align-items: center; gap: 8px; }
+        .nav-logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.1rem; letter-spacing: -0.3px; color: var(--text-color); cursor: pointer; }
+        .logo-img { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--border-color); }
+        .made-with { font-size: 0.65rem; color: var(--secondary-text); font-weight: 500; margin-top: 2px; }
+        
+        .nav-actions { display: flex; gap: 8px; }
+        .nav-btn {
+            background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color);
+            width: 36px; height: 36px; border-radius: 50%; display: flex; justify-content: center; align-items: center;
+            font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: 0.2s;
+        }
+        .nav-btn:active { transform: scale(0.92); background: var(--border-color); }
+
+        /* core layout constraints */
+        .container { position: relative; z-index: 1; padding: 80px 16px 80px; min-height: 100vh; }
+        .breadcrumbs { font-size: 0.8rem; margin-bottom: 24px; color: var(--secondary-text); font-weight: 500; overflow-x: auto; white-space: nowrap; padding-bottom: 4px; }
+        .breadcrumbs span { color: var(--up-color); font-weight: 600; cursor: pointer; }
+        
+        .view { display: none; animation: fade 0.3s ease; }
+        .view.active { display: block; }
+        @keyframes fade { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* glassmorphism cards for main menu */
+        .grid { display: flex; flex-direction: column; gap: 16px; margin-top: 10px; }
+        .folder-card {
+            background: var(--card-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color); border-radius: var(--radius-lg);
+            padding: 20px; display: flex; gap: 16px; align-items: flex-start;
+            position: relative; box-shadow: var(--shadow-sm); transition: 0.2s;
+        }
+        .folder-card:active { transform: scale(0.98); }
+        .folder-num {
+            background: var(--border-color); color: var(--secondary-text);
+            width: 36px; height: 36px; border-radius: var(--radius-sm);
+            display: flex; justify-content: center; align-items: center;
+            font-weight: 700; font-size: 1.1rem; flex-shrink: 0;
+        }
+        .folder-info h3 { font-size: 1.1rem; font-weight: 600; color: var(--text-color); margin-bottom: 4px; letter-spacing: -0.2px; }
+        .folder-info p { font-size: 0.85rem; color: var(--secondary-text); line-height: 1.4; }
+        .progress-badge { position: absolute; top: 12px; right: 12px; font-size: 0.6rem; color: var(--up-color); background: var(--up-bg); padding: 3px 8px; border-radius: 20px; font-weight: 700; display: none; }
+        .folder-card.completed .progress-badge { display: block; }
+        .folder-card.completed .folder-num { background: var(--up-color); color: var(--bg-color); }
+
+        /* typography & article content blocks */
+        h2.section-title { font-size: 1.5rem; font-weight: 700; color: var(--text-color); margin-bottom: 20px; letter-spacing: -0.5px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; text-transform: uppercase; }
+        .course-text { font-size: 0.95rem; line-height: 1.7; background: var(--card-bg); backdrop-filter: blur(12px); border-radius: var(--radius-lg); border: 1px solid var(--border-color); padding: 20px; }
+        .course-section { margin-bottom: 30px; }
+        .course-text p { margin-bottom: 16px; }
+        .course-text h4 { font-size: 1.1rem; margin: 24px 0 12px; border-left: 3px solid var(--up-color); padding-left: 12px; font-weight: 600; color: var(--text-color); }
+        .course-text ul { padding-left: 20px; margin-bottom: 16px; }
+        .course-text li { margin-bottom: 8px; }
+        
+        .course-text strong { font-weight: 700; color: var(--text-color); }
+        .course-text strong.em-up { color: var(--up-color); }
+        .course-text strong.em-down { color: var(--down-color); }
+        
+        .segment-tag { display: inline-block; padding: 4px 10px; font-size: 0.7rem; font-weight: 700; border-radius: 20px; margin-bottom: 12px; }
+        .tag-must-know { background: var(--up-bg); color: var(--up-color); border: 1px solid var(--tip-border); }
+        .tag-advanced { background: rgba(245, 158, 11, 0.1); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); }
+
+        /* tooltips logic */
+        .tooltip-word { text-decoration: underline dotted var(--secondary-text); }
+        .tip-i { display: inline-flex; justify-content: center; align-items: center; width: 16px; height: 16px; font-size: 0.7rem; border-radius: 50%; font-weight: 700; border: 1px solid var(--border-color); margin-left: 4px; vertical-align: middle; cursor: pointer; }
+        .tip-i-up { color: var(--up-color); background: var(--up-bg); border-color: var(--tip-border); }
+        .tip-i-down { color: var(--down-color); background: var(--down-bg); border-color: rgba(255, 59, 48, 0.3); }
+
+        /* tips & notes components */
+        .note-block { background: rgba(255,255,255,0.03); border-left: 3px solid var(--up-color); padding: 16px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; margin: 20px 0; display: flex; gap: 12px; font-size: 0.9rem; }
+        .light-theme .note-block { background: rgba(0,0,0,0.03); }
+        .note-icon { font-size: 1.2rem; }
+        .pro-tip { background: var(--tip-bg); border: 1px solid var(--tip-border); border-radius: var(--radius-md); padding: 16px; margin: 20px 0; display: flex; gap: 12px; box-shadow: var(--shadow-sm); }
+        .pro-tip-content strong { display: block; color: var(--up-color); font-size: 0.75rem; text-transform: uppercase; margin-bottom: 4px; }
+
+        /* image placeholders wrapper (replaces canvas) */
+        .course-img { 
+            width: 100%; border-radius: var(--radius-md); border: 1px solid var(--border-color); 
+            margin: 24px 0; display: block; min-height: 120px; background: var(--card-bg); 
+            object-fit: cover; box-shadow: var(--shadow-sm);
+        }
+
+        /* dom tables & orderflow footprint logic */
+        .dom-table, .fp-box { font-family: ui-monospace, monospace; font-size: 0.8rem; width: 100%; background: var(--card-bg); border-radius: var(--radius-md); border: 1px solid var(--border-color); overflow: hidden; margin: 20px 0; }
+        .dom-table th, .dom-table td { padding: 10px; text-align: center; border-bottom: 1px solid var(--border-color); }
+        .dom-table th { background: rgba(255,255,255,0.02); font-weight: 600; }
+        .dom-ask { color: var(--up-color); }
+        .dom-bid { color: var(--down-color); }
+
+        .fp-wrapper { display: flex; flex-direction: column; gap: 16px; margin: 24px 0; align-items: center; } /* centered */
+        .fp-box { padding: 16px; margin: 0 auto; } /* centered */
+        .fp-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .fp-val { width: 35px; text-align: center; }
+        .fp-hi { font-weight: 700; background: var(--up-bg); color: var(--text-color); border-radius: 4px; }
+        .fp-hi-d { font-weight: 700; background: var(--down-bg); color: var(--text-color); border-radius: 4px; }
+        .fp-z { opacity: 0.4; }
+
+        .cvd-box { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px; margin: 20px 0; }
+        .cvd-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; font-size: 0.9rem; font-weight: 600; }
+        .cvd-line { flex-grow: 1; height: 1px; background: var(--border-color); margin: 0 12px; position: relative; }
+        .cvd-arrow { position: absolute; right: 0; top: -10px; background: var(--card-bg); padding: 0 4px; font-size: 14px; color: var(--up-color); }
+        .cvd-arrow.down { color: var(--down-color); }
+
+        /* floating tooltip overlay */
+        .tooltip {
+            position: fixed; display: none; background: var(--tip-bg); color: var(--text-color);
+            padding: 12px 16px; border-radius: var(--radius-md); font-size: 0.85rem; z-index: 1000;
+            border: 1px solid var(--border-color); box-shadow: var(--shadow-md); max-width: 280px;
+            pointer-events: none; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+        }
+        .tooltip strong { display: block; color: var(--tip-accent, var(--up-color)); margin-bottom: 4px; font-size: 0.9rem; }
+
+        /* buttons & footers */
+        .next-section-wrapper { margin-top: 32px; display: flex; justify-content: center; }
+        .next-btn { background: var(--btn-gradient); color: #000; border: none; padding: 14px 24px; border-radius: 999px; font-weight: 700; font-size: 0.95rem; width: 100%; max-width: 300px; box-shadow: var(--shadow-sm); }
+        .light-theme .next-btn { color: #fff; }
+
+        .community-wrapper { margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--border-color); text-align: center; }
+        .links-group { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+        .rei-link { display: flex; justify-content: center; align-items: center; gap: 8px; background: var(--card-bg); border: 1px solid var(--border-color); padding: 14px; border-radius: var(--radius-md); font-weight: 600; text-decoration: none; color: var(--text-color); }
+        
+        .kofi-card { background: linear-gradient(145deg, rgba(255,94,98,0.08) 0%, rgba(255,153,102,0.08) 100%); border: 1px solid rgba(255,94,98,0.2); border-radius: var(--radius-lg); padding: 24px; margin-top: 32px; }
+        .kofi-btn { display: inline-block; background: linear-gradient(135deg, #ff5e62, #ff9966); color: #fff; text-decoration: none; padding: 12px 24px; border-radius: 999px; font-weight: 700; margin-top: 16px; }
+        
+        /* feedback widget */
+        .feedback-widget { position: fixed; bottom: -200px; left: 16px; right: 16px; background: var(--nav-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 16px; z-index: 90; box-shadow: var(--shadow-md); transition: bottom 0.3s ease; }
+        .feedback-widget.show { bottom: 16px; }
+        .feedback-widget textarea { width: 100%; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 12px; color: var(--text-color); margin: 12px 0; font-family: inherit; resize: none; outline: none; }
+        .feedback-widget button { width: 100%; background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); padding: 12px; border-radius: 999px; font-weight: 600; }
+        .feedback-toggle { position: fixed; bottom: 16px; right: 16px; width: 48px; height: 48px; border-radius: 50%; background: var(--nav-bg); border: 1px solid var(--border-color); display: flex; justify-content: center; align-items: center; font-size: 1.2rem; z-index: 95; backdrop-filter: blur(10px); color: var(--text-color); box-shadow: var(--shadow-sm); }
+    </style>
+</head>
+<body class="lang-pl" onclick="htt()"> 
+    
+    <div class="ambient-blobs"></div>
 
     <nav>
         <div class="nav-left">
             <div class="nav-logo" onclick="nav('home')">
-                <img src="https://i.pinimg.com/736x/5f/f7/d9/5ff7d9a02f87c055dc7d09bbfe17f80a.jpg" alt="Rei Academy Logo" class="logo-img">
-                Rei Academy
+                <img src="https://i.pinimg.com/736x/5f/f7/d9/5ff7d9a02f87c055dc7d09bbfe17f80a.jpg" alt="Logo" class="logo-img">
+                <span>Rei Academy</span>
             </div>
-            <div class="made-with">made with ❤️ - rei</div>
+            <div class="made-with">made with ❤️ ~ rei</div>
         </div>
-        <div class="nav-right">
-            <div class="session-container">
-                <div class="session-item" id="london-session">
-                    <div class="dot"></div> LON: <span class="session-time">--:--</span>
-                </div>
-                <div class="session-item" id="ny-session">
-                    <div class="dot"></div> NY: <span class="session-time">--:--</span>
-                </div>
-            </div>
-            <button class="lang-toggle" onclick="toggleLang()">
-                <span class="pl">🇬🇧 EN</span><span class="en">🇵🇱 PL</span>
-            </button>
-            <button class="theme-toggle" onclick="toggleTheme()" id="theme-btn">
-                <span class="pl">☀️ Jasny Motyw</span><span class="en">☀️ Light Mode</span>
-            </button>
+        <div class="nav-actions">
+            <div class="nav-btn" onclick="toggleLang()" id="lang-btn">🇬🇧</div>
+            <div class="nav-btn" onclick="toggleTheme()" id="theme-btn">☀️</div>
         </div>
     </nav>
 
@@ -54,6 +254,7 @@
             <span class="pl">📍 Katalog Główny</span><span class="en">📍 Main Catalog</span>
         </div>
 
+        <!-- HOME -->
         <div id="view-home" class="view active">
             <div class="grid">
                 <div class="folder-card" data-cat="cat-mech" onclick="nav('cat-mech')">
@@ -120,32 +321,17 @@
                         <p><span class="pl">Orderflow SL, itd..</span><span class="en">Manual Cutting, Orderflow SL</span></p>
                     </div>
                 </div>
-                
-                <!-- Przekierowanie do checklisty jako punkt 9 -->
-                <div class="folder-card" onclick="window.location.href='checklist.html'">
-    <div class="folder-num">9</div>
-                    <div class="folder-info">
-                        <h3><span class="pl">Pre-trade Checklist</span><span class="en">Pre-trade Checklist</span></h3>
-                        <p><span class="pl">Narzędzie do walidacji setupu przed wejściem</span><span class="en">Setup validation tool before entry</span></p>
-                    </div>
-                </div>
             </div>
             
             <div class="community-wrapper">
-                <div class="community-footer">
-                    <h4><span class="pl">Nasze Community</span><span class="en">Our Community</span></h4>
-                    <div class="links-group">
-                        <a href="https://dsc.gg/rei" target="_blank" class="rei-link">
-                            <span style="font-size: 1.1rem;">👾</span> dsc.gg/rei
-                        </a>
-                        <a href="https://guns.lol/reiseiv" target="_blank" class="rei-link">
-                            <span style="font-size: 1.1rem;">🔗</span> guns.lol/reiseiv
-                        </a>
-                    </div>
+                <h4 style="margin-bottom: 16px;"><span class="pl">Nasze Community</span><span class="en">Our Community</span></h4>
+                <div class="links-group">
+                    <a href="https://dsc.gg/rei" target="_blank" class="rei-link">👾 dsc.gg/rei</a>
+                    <a href="https://guns.lol/reiseiv" target="_blank" class="rei-link">🔗 guns.lol/reiseiv</a>
                 </div>
 
                 <div class="kofi-card">
-                    <h4><span style="-webkit-text-fill-color: initial;">☕</span> <span class="pl">Wsparcie Projektu</span><span class="en">Support the Project</span></h4>
+                    <h4>☕ <span class="pl">Wsparcie Projektu</span><span class="en">Support the Project</span></h4>
                     <p class="pl">jesli darmowa wiedza wam pomogla i macie ochote wesprzec rozwoj tego projektu to wrzucam link do ko-fi</p>
                     <p class="en">if this free knowledge helped you and you feel like supporting the development of this project, here is the ko-fi link</p>
                     
@@ -155,7 +341,7 @@
                     <p class="pl">liczy sie dla mnie wasz gest i chec docenienia mojej pracy za co z gory serdecznie dziekuje</p>
                     <p class="en">what matters to me is your gesture and willingness to appreciate my work, for which I sincerely thank you in advance</p>
                     
-                    <div class="kofi-heart">❤</div>
+                    <div style="color: var(--red-accent); font-size: 1.15rem; font-weight: 800; margin: 10px 0;">❤</div>
                     
                     <p class="pl">z osobami ktore dorzucaja swoja cegielke do projektu jestem tez naturalnie o wiele bardziej zaangazowany w bezposredni kontakt i poswiecam im po prostu wiecej czasu</p>
                     <p class="en">I am also naturally much more engaged in direct contact with people who add their brick to the project, and I simply dedicate more time to them</p>
@@ -165,6 +351,7 @@
             </div>
         </div>
 
+        <!-- 1. MECHANICS -->
         <div id="view-cat-mech" class="view">
             <h2 class="section-title"><span class="pl">1. MECHANIKA RYNKU</span><span class="en">1. MARKET MECHANICS</span></h2>
             <div class="course-text">
@@ -175,24 +362,24 @@
                     <p class="pl">zanim odpalicie footprinty i vsa musicie zrozumiec dlaczego swieczka/candle w ogole rusza sie na wykresie zapomnijcie o micie ze cena rosnie bo jest po prostu wiecej kupujacych to bzdura</p>
                     <p class="en">before you fire up footprints and vsa you must understand why a candle even moves on the chart forget the myth that price goes up simply because there are more buyers that's nonsense</p>
                     
-                    <p class="pl">cena rosnie tylko i wylacznie dlatego ze agresywne <span class="tooltip-word">market orders <span class="tip-i tip-i-up" onmousemove="tt(event, 'Market Orders', 'Agresywne zlecenia realizowane natychmiast po najlepszej dostępnej cenie w orderbooku.')" onmouseleave="htt()">i</span></span> zjadaja cala dostepna <span class="tooltip-word">liquidity <span class="tip-i tip-i-up" onmousemove="tt(event, 'Liquidity (Płynność)', 'Zlecenia z limitami oczekujące w orderbooku na realizację.')" onmouseleave="htt()">i</span></span> czyli limit orders na danym poziomie i system musi szukac kolejnego poziomu wyzej zeby zrealizowac transakcje</p>
-                    <p class="en">price rises solely because aggressive <span class="tooltip-word">market orders <span class="tip-i tip-i-up" onmousemove="tt(event, 'Market Orders', 'Aggressive orders executed immediately at the best available price in the orderbook.')" onmouseleave="htt()">i</span></span> eat all available <span class="tooltip-word">liquidity <span class="tip-i tip-i-up" onmousemove="tt(event, 'Liquidity', 'Limit orders waiting in the orderbook to be executed.')" onmouseleave="htt()">i</span></span>, meaning limit orders at a given level, and the system must look for the next level higher to execute transactions</p>
+                    <p class="pl">cena rosnie tylko i wylacznie dlatego ze agresywne <span class="tooltip-word">market orders <span class="tip-i tip-i-up" onmousemove="tt(event, 'Market Orders', 'Agresywne zlecenia realizowane natychmiast po najlepszej dostępnej cenie w orderbooku.')" ontouchstart="tt(event, 'Market Orders', 'Agresywne zlecenia realizowane natychmiast po najlepszej dostępnej cenie w orderbooku.')">i</span></span> zjadaja cala dostepna <span class="tooltip-word">liquidity <span class="tip-i tip-i-up" onmousemove="tt(event, 'Liquidity (Płynność)', 'Zlecenia z limitami oczekujące w orderbooku na realizację.')" ontouchstart="tt(event, 'Liquidity (Płynność)', 'Zlecenia z limitami oczekujące w orderbooku na realizację.')">i</span></span> czyli limit orders na danym poziomie i system musi szukac kolejnego poziomu wyzej zeby zrealizowac transakcje</p>
+                    <p class="en">price rises solely because aggressive <span class="tooltip-word">market orders <span class="tip-i tip-i-up" onmousemove="tt(event, 'Market Orders', 'Aggressive orders executed immediately at the best available price in the orderbook.')" ontouchstart="tt(event, 'Market Orders', 'Aggressive orders executed immediately at the best available price in the orderbook.')">i</span></span> eat all available <span class="tooltip-word">liquidity <span class="tip-i tip-i-up" onmousemove="tt(event, 'Liquidity', 'Limit orders waiting in the orderbook to be executed.')" ontouchstart="tt(event, 'Liquidity', 'Limit orders waiting in the orderbook to be executed.')">i</span></span>, meaning limit orders at a given level, and the system must look for the next level higher to execute transactions</p>
                     
-                    <p class="pl">to wlasnie <span class="tooltip-word">orderflow pressure <span class="tip-i tip-i-up" onmousemove="tt(event, 'Orderflow Pressure', 'Presja tworzona przez agresywne zlecenia rynkowe uderzające w orderbook.')" onmouseleave="htt()">i</span></span> pcha cene od jednego bloku liquidity do drugiego kto bije mocniej i agresywniej po cenie rynkowej ten przesuwa wykres a cala reszta to tylko tlo</p>
-                    <p class="en">this <span class="tooltip-word">orderflow pressure <span class="tip-i tip-i-up" onmousemove="tt(event, 'Orderflow Pressure', 'Pressure created by aggressive market orders hitting the orderbook.')" onmouseleave="htt()">i</span></span> pushes the price from one liquidity block to another whoever hits harder and more aggressively at market price moves the chart and the rest is just background</p>
+                    <p class="pl">to wlasnie <span class="tooltip-word">orderflow pressure <span class="tip-i tip-i-up" onmousemove="tt(event, 'Orderflow Pressure', 'Presja tworzona przez agresywne zlecenia rynkowe uderzające w orderbook.')" ontouchstart="tt(event, 'Orderflow Pressure', 'Presja tworzona przez agresywne zlecenia rynkowe uderzające w orderbook.')">i</span></span> pcha cene od jednego bloku liquidity do drugiego kto bije mocniej i agresywniej po cenie rynkowej ten przesuwa wykres a cala reszta to tylko tlo</p>
+                    <p class="en">this <span class="tooltip-word">orderflow pressure <span class="tip-i tip-i-up" onmousemove="tt(event, 'Orderflow Pressure', 'Pressure created by aggressive market orders hitting the orderbook.')" ontouchstart="tt(event, 'Orderflow Pressure', 'Pressure created by aggressive market orders hitting the orderbook.')">i</span></span> pushes the price from one liquidity block to another whoever hits harder and more aggressively at market price moves the chart and the rest is just background</p>
                 </div>
 
                 <div class="course-section">
                     <h4><span class="pl">Część 2: Fundamental reason</span><span class="en">Part 2: Fundamental reason</span></h4>
                     
-                    <p class="pl">Skoro wiemy ze to agresywne zlecenia ruszaja rynkiem to co sprawia ze duzy kapital nagle zaczyna tak mocno uderzac w zlecenia <span class="tooltip-word">market <span class="tip-i tip-i-up" onmousemove="tt(event, 'Market Orders', 'Agresywne zlecenia realizowane natychmiast po najlepszej dostępnej cenie w orderbooku.')" onmouseleave="htt()">i</span></span>?</p>
-                    <p class="en">Since we know that aggressive orders move the market, what makes big capital suddenly hit <span class="tooltip-word">market <span class="tip-i tip-i-up" onmousemove="tt(event, 'Market Orders', 'Aggressive orders executed immediately at the best available price in the orderbook.')" onmouseleave="htt()">i</span></span> orders so hard?</p>
+                    <p class="pl">Skoro wiemy ze to agresywne zlecenia ruszaja rynkiem to co sprawia ze duzy kapital nagle zaczyna tak mocno uderzac w zlecenia <span class="tooltip-word">market <span class="tip-i tip-i-up" onmousemove="tt(event, 'Market Orders', 'Agresywne zlecenia realizowane natychmiast po najlepszej dostępnej cenie w orderbooku.')" ontouchstart="tt(event, 'Market Orders', 'Agresywne zlecenia realizowane natychmiast po najlepszej dostępnej cenie w orderbooku.')">i</span></span>?</p>
+                    <p class="en">Since we know that aggressive orders move the market, what makes big capital suddenly hit <span class="tooltip-word">market <span class="tip-i tip-i-up" onmousemove="tt(event, 'Market Orders', 'Aggressive orders executed immediately at the best available price in the orderbook.')" ontouchstart="tt(event, 'Market Orders', 'Aggressive orders executed immediately at the best available price in the orderbook.')">i</span></span> orders so hard?</p>
                     
-                    <p class="pl">tu wchodzą fundamenty ale nie nudne raporty tylko grube makro jak <span class="tooltip-word">cpi <span class="tip-i tip-i-up" onmousemove="tt(event, 'CPI', 'Consumer Price Index - kluczowy raport o inflacji, wywołujący zmienność.')" onmouseleave="htt()">i</span></span> czy <span class="tooltip-word">fomc <span class="tip-i tip-i-up" onmousemove="tt(event, 'FOMC', 'Federal Open Market Committee - spotkania banku centralnego, na których ustala się np. stopy procentowe.')" onmouseleave="htt()">i</span></span>. to są momenty w których duzi gracze robią rekalibrację wartości.</p>
-                    <p class="en">this is where fundamentals come in, but not boring reports, rather heavy macro like <span class="tooltip-word">cpi <span class="tip-i tip-i-up" onmousemove="tt(event, 'CPI', 'Consumer Price Index - key inflation report causing volatility.')" onmouseleave="htt()">i</span></span> or <span class="tooltip-word">fomc <span class="tip-i tip-i-up" onmousemove="tt(event, 'FOMC', 'Federal Open Market Committee - central bank meetings that set interest rates.')" onmouseleave="htt()">i</span></span>. these are moments when big players recalibrate value.</p>
+                    <p class="pl">tu wchodzą fundamenty ale nie nudne raporty tylko grube makro jak <span class="tooltip-word">cpi <span class="tip-i tip-i-up" onmousemove="tt(event, 'CPI', 'Consumer Price Index - kluczowy raport o inflacji, wywołujący zmienność.')" ontouchstart="tt(event, 'CPI', 'Consumer Price Index - kluczowy raport o inflacji, wywołujący zmienność.')">i</span></span> czy <span class="tooltip-word">fomc <span class="tip-i tip-i-up" onmousemove="tt(event, 'FOMC', 'Federal Open Market Committee - spotkania banku centralnego, na których ustala się np. stopy procentowe.')" ontouchstart="tt(event, 'FOMC', 'Federal Open Market Committee - spotkania banku centralnego, na których ustala się np. stopy procentowe.')">i</span></span>. to są momenty w których duzi gracze robią rekalibrację wartości.</p>
+                    <p class="en">this is where fundamentals come in, but not boring reports, rather heavy macro like <span class="tooltip-word">cpi <span class="tip-i tip-i-up" onmousemove="tt(event, 'CPI', 'Consumer Price Index - key inflation report causing volatility.')" ontouchstart="tt(event, 'CPI', 'Consumer Price Index - key inflation report causing volatility.')">i</span></span> or <span class="tooltip-word">fomc <span class="tip-i tip-i-up" onmousemove="tt(event, 'FOMC', 'Federal Open Market Committee - central bank meetings that set interest rates.')" ontouchstart="tt(event, 'FOMC', 'Federal Open Market Committee - central bank meetings that set interest rates.')">i</span></span>. these are moments when big players recalibrate value.</p>
                     
-                    <p class="pl">Stara cena z sekundy na sekunde przestaje byc logiczna wiec odpalaja ogromne zlecenia zeby jak najszybciej zaparkowac na nowych poziomach to wlasnie ten fundamentalny zapalnik tworzy najwieksze <span class="tooltip-word">imbalansy <span class="tip-i tip-i-down" onmousemove="tt(event, 'Imbalance', 'Gwałtowny ruch kierunkowy i brak równowagi między kupującymi a sprzedającymi.', 'var(--down-color)')" onmouseleave="htt()">i</span></span> na ktorych my zarabiamy.</p>
-                    <p class="en">the old price instantly stops making logical sense so they fire massive orders to park at new levels as quickly as possible. this fundamental trigger creates the biggest <span class="tooltip-word">imbalances <span class="tip-i tip-i-down" onmousemove="tt(event, 'Imbalance', 'Rapid directional move and lack of equilibrium between buyers and sellers.', 'var(--down-color)')" onmouseleave="htt()">i</span></span> on which we profit.</p>
+                    <p class="pl">Stara cena z sekundy na sekunde przestaje byc logiczna wiec odpalaja ogromne zlecenia zeby jak najszybciej zaparkowac na nowych poziomach to wlasnie ten fundamentalny zapalnik tworzy najwieksze <span class="tooltip-word">imbalansy <span class="tip-i tip-i-down" onmousemove="tt(event, 'Imbalance', 'Gwałtowny ruch kierunkowy i brak równowagi między kupującymi a sprzedającymi.')" ontouchstart="tt(event, 'Imbalance', 'Gwałtowny ruch kierunkowy i brak równowagi między kupującymi a sprzedającymi.')">i</span></span> na ktorych my zarabiamy.</p>
+                    <p class="en">the old price instantly stops making logical sense so they fire massive orders to park at new levels as quickly as possible. this fundamental trigger creates the biggest <span class="tooltip-word">imbalances <span class="tip-i tip-i-down" onmousemove="tt(event, 'Imbalance', 'Rapid directional move and lack of equilibrium between buyers and sellers.')" ontouchstart="tt(event, 'Imbalance', 'Rapid directional move and lack of equilibrium between buyers and sellers.')">i</span></span> on which we profit.</p>
                     
                     <div class="pro-tip">
                         <div class="pro-tip-icon">💡</div>
@@ -208,11 +395,11 @@
                     <div class="segment-tag tag-advanced">Advanced</div>
                     <h4><span class="pl">Część 3: Options pressure</span><span class="en">Part 3: Options pressure</span></h4>
                     
-                    <p class="pl">Na rynku jest jeszcze jedna gigantyczna sila o ktorej retail czesto nie ma pojecia to <span class="tooltip-word">market makers <span class="tip-i tip-i-up" onmousemove="tt(event, 'Market Maker', 'Duże instytucje zapewniające płynność na rynku poprzez jednoczesne wystawianie zleceń kupna i sprzedaży.')" onmouseleave="htt()">i</span></span> czyli ci ktorzy wystawiaja wam opcje.</p>
-                    <p class="en">there is another gigantic force on the market that retail often has no idea about, it's <span class="tooltip-word">market makers <span class="tip-i tip-i-up" onmousemove="tt(event, 'Market Maker', 'Large institutions providing liquidity to the market by simultaneously placing buy and sell orders.')" onmouseleave="htt()">i</span></span>, the ones who write options for you.</p>
+                    <p class="pl">Na rynku jest jeszcze jedna gigantyczna sila o ktorej retail czesto nie ma pojecia to <span class="tooltip-word">market makers <span class="tip-i tip-i-up" onmousemove="tt(event, 'Market Maker', 'Duże instytucje zapewniające płynność na rynku poprzez jednoczesne wystawianie zleceń kupna i sprzedaży.')" ontouchstart="tt(event, 'Market Maker', 'Duże instytucje zapewniające płynność na rynku poprzez jednoczesne wystawianie zleceń kupna i sprzedaży.')">i</span></span> czyli ci ktorzy wystawiaja wam opcje.</p>
+                    <p class="en">there is another gigantic force on the market that retail often has no idea about, it's <span class="tooltip-word">market makers <span class="tip-i tip-i-up" onmousemove="tt(event, 'Market Maker', 'Large institutions providing liquidity to the market by simultaneously placing buy and sell orders.')" ontouchstart="tt(event, 'Market Maker', 'Large institutions providing liquidity to the market by simultaneously placing buy and sell orders.')">i</span></span>, the ones who write options for you.</p>
                     
-                    <p class="pl">Musicie zrozumiec jedna rzecz oni nie graja kierunkowo ich zadaniem jest bycie <span class="tooltip-word">delta neutral <span class="tip-i tip-i-up" onmousemove="tt(event, 'Delta Neutral', 'Strategia, w której zyski i straty z opcji oraz aktywa bazowego wzajemnie się zerują (brak ryzyka kierunkowego).')" onmouseleave="htt()">i</span></span> jesli retail kupuje tony opcji call na longi to market maker musi natychmiast kupic aktywo bazowe zeby zabezpieczyc swoja pozycje czyli zrobic <span class="tooltip-word">hedge <span class="tip-i tip-i-up" onmousemove="tt(event, 'Hedge', 'Zabezpieczenie pozycji przed ryzykiem rynkowym.')" onmouseleave="htt()">i</span></span>.</p>
-                    <p class="en">you must understand one thing, they don't play directionally. their job is to be <span class="tooltip-word">delta neutral <span class="tip-i tip-i-up" onmousemove="tt(event, 'Delta Neutral', 'A strategy where profits and losses from options and the underlying asset cancel each other out (no directional risk).')" onmouseleave="htt()">i</span></span>. if retail buys tons of call options for longs, the market maker must immediately buy the underlying asset to secure their position, i.e., make a <span class="tooltip-word">hedge <span class="tip-i tip-i-up" onmousemove="tt(event, 'Hedge', 'Securing a position against market risk.')" onmouseleave="htt()">i</span></span>.</p>
+                    <p class="pl">Musicie zrozumiec jedna rzecz oni nie graja kierunkowo ich zadaniem jest bycie <span class="tooltip-word">delta neutral <span class="tip-i tip-i-up" onmousemove="tt(event, 'Delta Neutral', 'Strategia, w której zyski i straty z opcji oraz aktywa bazowego wzajemnie się zerują (brak ryzyka kierunkowego).')" ontouchstart="tt(event, 'Delta Neutral', 'Strategia, w której zyski i straty z opcji oraz aktywa bazowego wzajemnie się zerują (brak ryzyka kierunkowego).')">i</span></span> jesli retail kupuje tony opcji call na longi to market maker musi natychmiast kupic aktywo bazowe zeby zabezpieczyc swoja pozycje czyli zrobic <span class="tooltip-word">hedge <span class="tip-i tip-i-up" onmousemove="tt(event, 'Hedge', 'Zabezpieczenie pozycji przed ryzykiem rynkowym.')" ontouchstart="tt(event, 'Hedge', 'Zabezpieczenie pozycji przed ryzykiem rynkowym.')">i</span></span>.</p>
+                    <p class="en">you must understand one thing, they don't play directionally. their job is to be <span class="tooltip-word">delta neutral <span class="tip-i tip-i-up" onmousemove="tt(event, 'Delta Neutral', 'A strategy where profits and losses from options and the underlying asset cancel each other out (no directional risk).')" ontouchstart="tt(event, 'Delta Neutral', 'A strategy where profits and losses from options and the underlying asset cancel each other out (no directional risk).')">i</span></span>. if retail buys tons of call options for longs, the market maker must immediately buy the underlying asset to secure their position, i.e., make a <span class="tooltip-word">hedge <span class="tip-i tip-i-up" onmousemove="tt(event, 'Hedge', 'Securing a position against market risk.')" ontouchstart="tt(event, 'Hedge', 'Securing a position against market risk.')">i</span></span>.</p>
                     
                     <p class="pl">To przymusowe kupowanie lub sprzedawanie przez nich tworzy sztuczna ogromna presje na cene ktora czesto dziala jak dolanie benzyny do ognia i wywala wykres zupelnie poza skale.</p>
                     <p class="en">this forced buying or selling by them creates an artificial huge pressure on the price which often acts like adding fuel to the fire and blows the chart completely off the scale.</p>
@@ -239,18 +426,18 @@
             </div>
         </div>
 
+        <!-- 2. AMT -->
         <div id="view-cat-amt" class="view">
             <h2 class="section-title">2. AMT (Auction Market Theory)</h2>
             <div class="course-text">
                 <div class="course-section">
-                    <p><strong class="em-up">balance</strong> -> <strong class="em-down">imbalance</strong> -> auction -> <strong class="em-up">new balance</strong></p>
+                    <p style="text-align: center;"><strong class="em-up">balance</strong> -> <strong class="em-down">imbalance</strong> -> auction -> <strong class="em-up">new balance</strong></p>
                     
                     <p class="pl">W skrocie na wykresie wyglada to tak;</p>
                     <p class="en">In short, on the chart it looks like this;</p>
                     
-                    <div class="chart-wrapper" style="height: 420px;">
-                        <canvas id="canvas-amt" class="chart-canvas"></canvas>
-                    </div>
+                    <!-- Replaced Canvas with Image Placeholder -->
+                    <img src="" alt="Ilustracja AMT" class="course-img">
                 </div>
 
                 <div class="course-section">
@@ -286,6 +473,7 @@
             </div>
         </div>
 
+        <!-- 3. VP -->
         <div id="view-cat-vp" class="view">
             <h2 class="section-title">3. VOLUME PROFILE</h2>
             <div class="course-text">
@@ -298,8 +486,8 @@
                         <li>B🌪️ - <span class="pl">presja w obie strony xD</span><span class="en">pressure both ways xD</span></li>
                         <li>D👉 - <span class="pl">market w balance ("konsolidacja")</span><span class="en">market in balance ("consolidation")</span></li>
                     </ul>
-                    <p class="pl">Przykładowy setup, z wykorzystaniem logiki auction market theory (tak w D, aż do wystąpienia breakoutu możesz tradować <span class="tooltip-word">S&R <span class="tip-i tip-i-up" onmousemove="tt(event, 'S&R', 'Support & Resistance - poziomy wsparcia (gdzie cena odbija w górę) i oporu (gdzie cena zawraca w dół).')" onmouseleave="htt()">i</span></span>).</p>
-                    <p class="en">Example setups, using auction market theory logic (yes in D shape, until a breakout occurs you can trade <span class="tooltip-word">S&R <span class="tip-i tip-i-up" onmousemove="tt(event, 'S&R', 'Support & Resistance - levels where price bounces up or rejects down.')" onmouseleave="htt()">i</span></span>).</p>
+                    <p class="pl">Przykładowy setup, z wykorzystaniem logiki auction market theory (tak w D, aż do wystąpienia breakoutu możesz tradować <span class="tooltip-word" onmousemove="tt(event, 'S&R', 'Support & Resistance - poziomy wsparcia (gdzie cena odbija w górę) i oporu (gdzie cena zawraca w dół).')" ontouchstart="tt(event, 'S&R', 'Support & Resistance - poziomy wsparcia (gdzie cena odbija w górę) i oporu (gdzie cena zawraca w dół).')">S&R</span>).</p>
+                    <p class="en">Example setups, using auction market theory logic (yes in D shape, until a breakout occurs you can trade <span class="tooltip-word" onmousemove="tt(event, 'S&R', 'Support & Resistance - levels where price bounces up or rejects down.')" ontouchstart="tt(event, 'S&R', 'Support & Resistance - levels where price bounces up or rejects down.')">S&R</span>).</p>
                 </div>
             </div>
             
@@ -307,9 +495,8 @@
                 <span class="pl">Setup 1: Kształt D (Balance) - Tradowanie VAH / VAL</span>
                 <span class="en">Setup 1: D Shape (Balance) - Trading VAH / VAL</span>
             </h4>
-            <div class="chart-wrapper" style="height: 400px;">
-                <canvas id="canvas-vaval" class="chart-canvas"></canvas>
-            </div>
+            <!-- Replaced Canvas with Image Placeholder -->
+            <img src="" alt="Ilustracja VAH VAL" class="course-img">
 
             <div class="course-text">
                 <div class="course-section">
@@ -317,14 +504,10 @@
                     <p class="en">"Mapping" with volume profile(XD) can be done in two ways;</p>
                     <ul>
                         <li><span class="pl">zaplanowane; ustawiasz na sesje/dni-wieki... - można uznać je za bardzo "znaczące"</span><span class="en">planned; you anchor it to sessions/days-ages... - they can be considered very "significant"</span>
-                            <div class="chart-wrapper" style="height: 280px; margin-top: 15px;">
-                                <canvas id="canvas-map1" class="chart-canvas"></canvas>
-                            </div>
+                            <img src="" alt="Mapowanie zaplanowane" class="course-img">
                         </li>
                         <li><span class="pl">bieżące: ustawiasz na bieżące strefy (balance, imbalance) - też są znaczące, ale raczej nie wyłapiesz tak tradu na kolejne 3h</span><span class="en">current: you anchor it to current zones (balance, imbalance) - also significant, but you probably won't catch a 3h long trade this way</span>
-                            <div class="chart-wrapper" style="height: 280px; margin-top: 15px;">
-                                <canvas id="canvas-map2" class="chart-canvas"></canvas>
-                            </div>
+                            <img src="" alt="Mapowanie bieżące" class="course-img">
                         </li>
                     </ul>
                 </div>
@@ -333,17 +516,17 @@
                     <p class="pl">Jeśli ktoś nie rozumie jak działa VP, i co oznaczają dane pola;</p>
                     <p class="en">If someone doesn't understand how VP works, and what these terms mean;</p>
                     <ul>
-                        <li class="pl"><strong class="em-up">VAH</strong>, <strong class="em-down">VAL</strong> - <span class="tooltip-word">Value Area <span class="tip-i tip-i-up" onmousemove="tt(event, 'VAH / VAL', 'Value Area High (Górna granica) i Value Area Low (Dolna granica). Wyznaczają strefę 68% wolumenu w danej sesji.', 'var(--up-color)')" onmouseleave="htt()">i</span></span></li>
-                        <li class="en"><strong class="em-up">VAH</strong>, <strong class="em-down">VAL</strong> - <span class="tooltip-word">Value Area <span class="tip-i tip-i-up" onmousemove="tt(event, 'VAH / VAL', 'Value Area High and Value Area Low. They mark the 68% volume zone in a given session.', 'var(--up-color)')" onmouseleave="htt()">i</span></span></li>
+                        <li class="pl"><strong class="em-up">VAH</strong>, <strong class="em-down">VAL</strong> - <span class="tooltip-word">Value Area <span class="tip-i tip-i-up" onmousemove="tt(event, 'VAH / VAL', 'Value Area High (Górna granica) i Value Area Low (Dolna granica). Wyznaczają strefę 68% wolumenu w danej sesji.')" ontouchstart="tt(event, 'VAH / VAL', 'Value Area High (Górna granica) i Value Area Low (Dolna granica). Wyznaczają strefę 68% wolumenu w danej sesji.')">i</span></span></li>
+                        <li class="en"><strong class="em-up">VAH</strong>, <strong class="em-down">VAL</strong> - <span class="tooltip-word">Value Area <span class="tip-i tip-i-up" onmousemove="tt(event, 'VAH / VAL', 'Value Area High and Value Area Low. They mark the 68% volume zone in a given session.')" ontouchstart="tt(event, 'VAH / VAL', 'Value Area High and Value Area Low. They mark the 68% volume zone in a given session.')">i</span></span></li>
                         
-                        <li class="pl"><strong class="em-up">POC</strong> - <span class="tooltip-word">Point of Control <span class="tip-i tip-i-up" onmousemove="tt(event, 'POC', 'Punkt kontroli z największym wygenerowanym wolumenem. Często działa jak magnes przyciągający cenę (Fair Value).', 'var(--up-color)')" onmouseleave="htt()">i</span></span></li>
-                        <li class="en"><strong class="em-up">POC</strong> - <span class="tooltip-word">Point of Control <span class="tip-i tip-i-up" onmousemove="tt(event, 'POC', 'Point of control with the highest generated volume. Often acts as a magnet for price (Fair Value).', 'var(--up-color)')" onmouseleave="htt()">i</span></span></li>
+                        <li class="pl"><strong class="em-up">POC</strong> - <span class="tooltip-word">Point of Control <span class="tip-i tip-i-up" onmousemove="tt(event, 'POC', 'Punkt kontroli z największym wygenerowanym wolumenem. Często działa jak magnes przyciągający cenę (Fair Value).')" ontouchstart="tt(event, 'POC', 'Punkt kontroli z największym wygenerowanym wolumenem. Często działa jak magnes przyciągający cenę (Fair Value).')">i</span></span></li>
+                        <li class="en"><strong class="em-up">POC</strong> - <span class="tooltip-word">Point of Control <span class="tip-i tip-i-up" onmousemove="tt(event, 'POC', 'Point of control with the highest generated volume. Often acts as a magnet for price (Fair Value).')" ontouchstart="tt(event, 'POC', 'Point of control with the highest generated volume. Often acts as a magnet for price (Fair Value).')">i</span></span></li>
                         
-                        <li class="pl"><strong class="em-up">HVN</strong> - <span class="tooltip-word">Balance <span class="tip-i tip-i-up" onmousemove="tt(event, 'Balance (VP)', 'Strefa balansu w Volume Profile: popyt i podaż są w miarę zgodne, więc cena zwalnia i spędza tam najwięcej czasu (HVN).', 'var(--up-color)')" onmouseleave="htt()">i</span></span></li>
-                        <li class="en"><strong class="em-up">HVN</strong> - <span class="tooltip-word">Balance <span class="tip-i tip-i-up" onmousemove="tt(event, 'Balance (VP)', 'Balance zone in Volume Profile: supply and demand are mostly in agreement, so price slows down and spends the most time there (High Volume Node).', 'var(--up-color)')" onmouseleave="htt()">i</span></span></li>
+                        <li class="pl"><strong class="em-up">HVN</strong> - <span class="tooltip-word">Balance <span class="tip-i tip-i-up" onmousemove="tt(event, 'Balance (VP)', 'Strefa balansu w Volume Profile: popyt i podaż są w miarę zgodne, więc cena zwalnia i spędza tam najwięcej czasu (HVN).')" ontouchstart="tt(event, 'Balance (VP)', 'Strefa balansu w Volume Profile: popyt i podaż są w miarę zgodne, więc cena zwalnia i spędza tam najwięcej czasu (HVN).')">i</span></span></li>
+                        <li class="en"><strong class="em-up">HVN</strong> - <span class="tooltip-word">Balance <span class="tip-i tip-i-up" onmousemove="tt(event, 'Balance (VP)', 'Balance zone in Volume Profile: supply and demand are mostly in agreement, so price slows down and spends the most time there (High Volume Node).')" ontouchstart="tt(event, 'Balance (VP)', 'Balance zone in Volume Profile: supply and demand are mostly in agreement, so price slows down and spends the most time there (High Volume Node).')">i</span></span></li>
                         
-                        <li class="pl"><strong class="em-down">LVN</strong> - <span class="tooltip-word">Imbalance <span class="tip-i tip-i-down" onmousemove="tt(event, 'Imbalance (VP)', 'Strefa imbalansu w Volume Profile: brak akceptacji na danych poziomach, więc cena przelatuje szybciej przez LVN w stronę kolejnego kierunku.', 'var(--down-color)')" onmouseleave="htt()">i</span></span></li>
-                        <li class="en"><strong class="em-down">LVN</strong> - <span class="tooltip-word">Imbalance <span class="tip-i tip-i-down" onmousemove="tt(event, 'Imbalance (VP)', 'Imbalance zone in Volume Profile: lack of acceptance at these levels, so price flies faster through LVN towards the next direction.', 'var(--down-color)')" onmouseleave="htt()">i</span></span></li>
+                        <li class="pl"><strong class="em-down">LVN</strong> - <span class="tooltip-word">Imbalance <span class="tip-i tip-i-down" onmousemove="tt(event, 'Imbalance (VP)', 'Strefa imbalansu w Volume Profile: brak akceptacji na danych poziomach, więc cena przelatuje szybciej przez LVN w stronę kolejnego kierunku.')" ontouchstart="tt(event, 'Imbalance (VP)', 'Strefa imbalansu w Volume Profile: brak akceptacji na danych poziomach, więc cena przelatuje szybciej przez LVN w stronę kolejnego kierunku.')">i</span></span></li>
+                        <li class="en"><strong class="em-down">LVN</strong> - <span class="tooltip-word">Imbalance <span class="tip-i tip-i-down" onmousemove="tt(event, 'Imbalance (VP)', 'Imbalance zone in Volume Profile: lack of acceptance at these levels, so price flies faster through LVN towards the next direction.')" ontouchstart="tt(event, 'Imbalance (VP)', 'Imbalance zone in Volume Profile: lack of acceptance at these levels, so price flies faster through LVN towards the next direction.')">i</span></span></li>
                     </ul>
                     
                     <div class="note-block pl">
@@ -398,17 +581,13 @@
                 <span class="pl">Setup 2: Magnes POC i powrót do HVN</span>
                 <span class="en">Setup 2: POC Magnet and return to HVN</span>
             </h4>
-            <div class="chart-wrapper" style="height: 400px;">
-                <canvas id="canvas-poc" class="chart-canvas"></canvas>
-            </div>
+            <img src="" alt="Ilustracja Magnes POC" class="course-img">
 
             <h4 style="color:var(--heading-color); margin-bottom: 10px;">
                 <span class="pl">Setup 3: Odbicie od LVN (Imbalance)</span>
                 <span class="en">Setup 3: LVN Bounce (Imbalance)</span>
             </h4>
-            <div class="chart-wrapper" style="height: 400px;">
-                <canvas id="canvas-lvn" class="chart-canvas"></canvas>
-            </div>
+            <img src="" alt="Ilustracja Odbicie LVN" class="course-img">
             
             <div class="next-section-wrapper">
                 <button class="next-btn" onclick="nav('cat-vwap')">
@@ -418,28 +597,29 @@
             </div>
         </div>
 
+        <!-- 4. AVWAP -->
         <div id="view-cat-vwap" class="view">
             <h2 class="section-title">4. AVWAP</h2>
             <div class="course-text">
                 <div class="course-section">
-                    <p class="pl">zwykłe średnie kroczące są spóźnione bo liczą tylko czas i cenę. dla nas liczy się <span class="tooltip-word">vwap <span class="tip-i tip-i-up" onmousemove="tt(event, 'VWAP', 'Volume Weighted Average Price - średnia cena ważona wolumenem.')" onmouseleave="htt()">i</span></span> czyli średnia cena ważona wolumenem. to jest jedyna „średnia” którą respektują instytucje bo pokazuje gdzie faktycznie handlował duży kapitał. jeśli cena jest powyżej vwap-u instytucjonalni kupujący są zadowoleni, jeśli poniżej to szukają okazji lub uciekają z pozycji. używamy <span class="tooltip-word">anchored vwap <span class="tip-i tip-i-up" onmousemove="tt(event, 'Anchored VWAP', 'Zakotwiczony VWAP, mierzony od konkretnego wydarzenia, miejsca, lub początku sesji.')" onmouseleave="htt()">i</span></span> żeby przyczepić go do konkretnych punktów zwrotnych jak fomc czy szczyt sesji i widzieć kto od tego momentu przejął kontrolę nad rynkiem.</p>
-                    <p class="en">regular moving averages are lagging because they only count time and price. for us, what matters is <span class="tooltip-word">vwap <span class="tip-i tip-i-up" onmousemove="tt(event, 'VWAP', 'Volume Weighted Average Price.')" onmouseleave="htt()">i</span></span>. this is the only "average" respected by institutions because it shows where big capital actually traded. if the price is above vwap, institutional buyers are happy, if below, they look for opportunities or run from positions. we use <span class="tooltip-word">anchored vwap <span class="tip-i tip-i-up" onmousemove="tt(event, 'Anchored VWAP', 'VWAP anchored to a specific event, place, or session start.')" onmouseleave="htt()">i</span></span> to attach it to specific turning points like fomc or session high to see who took control of the market from that moment on.</p>
+                    <p class="pl">zwykłe średnie kroczące są spóźnione bo liczą tylko czas i cenę. dla nas liczy się <span class="tooltip-word" onmousemove="tt(event, 'VWAP', 'Volume Weighted Average Price - średnia cena ważona wolumenem.')" ontouchstart="tt(event, 'VWAP', 'Volume Weighted Average Price - średnia cena ważona wolumenem.')">vwap</span> czyli średnia cena ważona wolumenem. to jest jedyna „średnia” którą respektują instytucje bo pokazuje gdzie faktycznie handlował duży kapitał. jeśli cena jest powyżej vwap-u instytucjonalni kupujący są zadowoleni, jeśli poniżej to szukają okazji lub uciekają z pozycji. używamy <span class="tooltip-word" onmousemove="tt(event, 'Anchored VWAP', 'Zakotwiczony VWAP, mierzony od konkretnego wydarzenia, miejsca, lub początku sesji.')" ontouchstart="tt(event, 'Anchored VWAP', 'Zakotwiczony VWAP, mierzony od konkretnego wydarzenia, miejsca, lub początku sesji.')">anchored vwap</span> żeby przyczepić go do konkretnych punktów zwrotnych jak fomc czy szczyt sesji i widzieć kto od tego momentu przejął kontrolę nad rynkiem.</p>
+                    <p class="en">regular moving averages are lagging because they only count time and price. for us, what matters is <span class="tooltip-word" onmousemove="tt(event, 'VWAP', 'Volume Weighted Average Price.')" ontouchstart="tt(event, 'VWAP', 'Volume Weighted Average Price.')">vwap</span>. this is the only "average" respected by institutions because it shows where big capital actually traded. if the price is above vwap, institutional buyers are happy, if below, they look for opportunities or run from positions. we use <span class="tooltip-word" onmousemove="tt(event, 'Anchored VWAP', 'VWAP anchored to a specific event, place, or session start.')" ontouchstart="tt(event, 'Anchored VWAP', 'VWAP anchored to a specific event, place, or session start.')">anchored vwap</span> to attach it to specific turning points like fomc or session high to see who took control of the market from that moment on.</p>
                     
-                    <img src="https://i.imgur.com/6wu6fDM.png" class="course-img" alt="VWAP Bands Reaction" referrerpolicy="no-referrer">
+                    <img src="https://i.imgur.com/6wu6fDM.png" class="course-img" alt="VWAP Bands Reaction">
                     
-                    <p class="pl">jak widać cena pięknie reaguje na <span class="tooltip-word">VWAP band'y <span class="tip-i tip-i-up" onmousemove="tt(event, 'VWAP Bands', 'Pasma odchylenia standardowego od głównej linii VWAP. Pełnią rolę dynamicznego VAH i VAL.')" onmouseleave="htt()">i</span></span>, i sam VWAP</p>
-                    <p class="en">as you can see the price beautifully reacts to <span class="tooltip-word">VWAP bands <span class="tip-i tip-i-up" onmousemove="tt(event, 'VWAP Bands', 'Standard deviation bands from the main VWAP line. Act as dynamic VAH and VAL.')" onmouseleave="htt()">i</span></span>, and VWAP itself</p>
+                    <p class="pl">jak widać cena pięknie reaguje na <span class="tooltip-word" onmousemove="tt(event, 'VWAP Bands', 'Pasma odchylenia standardowego od głównej linii VWAP. Pełnią rolę dynamicznego VAH i VAL.')" ontouchstart="tt(event, 'VWAP Bands', 'Pasma odchylenia standardowego od głównej linii VWAP. Pełnią rolę dynamicznego VAH i VAL.')">VWAP band'y</span>, i sam VWAP</p>
+                    <p class="en">as you can see the price beautifully reacts to <span class="tooltip-word" onmousemove="tt(event, 'VWAP Bands', 'Standard deviation bands from the main VWAP line. Act as dynamic VAH and VAL.')" ontouchstart="tt(event, 'VWAP Bands', 'Standard deviation bands from the main VWAP line. Act as dynamic VAH and VAL.')">VWAP bands</span>, and VWAP itself</p>
                     
-                    <p class="pl">sposoby na tradowanie VWAP to między innymi S&R i <span class="tooltip-word">mean reversion <span class="tip-i tip-i-up" onmousemove="tt(event, 'Mean Reversion', 'Tendencja ceny do powrotu do swojej historycznej średniej (w tym wypadku linii VWAP).')" onmouseleave="htt()">i</span></span></p>
-                    <p class="en">ways to trade VWAP include S&R and <span class="tooltip-word">mean reversion <span class="tip-i tip-i-up" onmousemove="tt(event, 'Mean Reversion', 'Price tendency to return to its historical mean (in this case, the VWAP line).')" onmouseleave="htt()">i</span></span></p>
+                    <p class="pl">sposoby na tradowanie VWAP to między innymi S&R i <span class="tooltip-word" onmousemove="tt(event, 'Mean Reversion', 'Tendencja ceny do powrotu do swojej historycznej średniej (w tym wypadku linii VWAP).')" ontouchstart="tt(event, 'Mean Reversion', 'Tendencja ceny do powrotu do swojej historycznej średniej (w tym wypadku linii VWAP).')">mean reversion</span></p>
+                    <p class="en">ways to trade VWAP include S&R and <span class="tooltip-word" onmousemove="tt(event, 'Mean Reversion', 'Price tendency to return to its historical mean (in this case, the VWAP line).')" ontouchstart="tt(event, 'Mean Reversion', 'Price tendency to return to its historical mean (in this case, the VWAP line).')">mean reversion</span></p>
                     
                     <p class="pl">przykład użycia: AVWAP zarzucony na high, pięknie pokazuje lokalny resistance, z którego potem tworzy sie support</p>
                     <p class="en">example usage: AVWAP anchored to the high beautifully shows local resistance, which later becomes support</p>
                 </div>
                 <div class="course-section">
-                    <img src="https://i.imgur.com/WiyvKtT.png" class="course-img" alt="AVWAP Resistance to Support" referrerpolicy="no-referrer">
-                    <h4 class="pl">Strategia S&R i <span class="tooltip-word">Bias <span class="tip-i tip-i-up" onmousemove="tt(event, 'Bias', 'Nasze obiektywne nastawienie do rynku w danej chwili, np. bullish (szukamy longów) lub bearish (szukamy shortów).')" onmouseleave="htt()">i</span></span>:</h4>
-                    <h4 class="en">S&R Strategy and <span class="tooltip-word">Bias <span class="tip-i tip-i-up" onmousemove="tt(event, 'Bias', 'Our objective market attitude at a given moment, e.g., bullish (looking for longs) or bearish (looking for shorts).')" onmouseleave="htt()">i</span></span>:</h4>
+                    <img src="https://i.imgur.com/WiyvKtT.png" alt="AVWAP Resistance to Support" class="course-img">
+                    <h4 class="pl">Strategia S&R i <span class="tooltip-word" onmousemove="tt(event, 'Bias', 'Nasze obiektywne nastawienie do rynku w danej chwili, np. bullish (szukamy longów) lub bearish (szukamy shortów).')" ontouchstart="tt(event, 'Bias', 'Nasze obiektywne nastawienie do rynku w danej chwili, np. bullish (szukamy longów) lub bearish (szukamy shortów).')">Bias</span>:</h4>
+                    <h4 class="en">S&R Strategy and <span class="tooltip-word" onmousemove="tt(event, 'Bias', 'Our objective market attitude at a given moment, e.g., bullish (looking for longs) or bearish (looking for shorts).')" ontouchstart="tt(event, 'Bias', 'Our objective market attitude at a given moment, e.g., bullish (looking for longs) or bearish (looking for shorts).')">Bias</span>:</h4>
                     <ul class="pl">
                         <li>cena powyżej vwap -> szukamy longów / reversion (gdy cena jest bardzo daleko lub widać exhaustion)</li>
                         <li>cena poniżej vwap -> szukamy shortów / reversion (^)</li>
@@ -458,8 +638,10 @@
                     <p class="pl">co do samego tradowania mean reversion pamietajcie o jednej waznej rzeczy to dziala swietnie kiedy rynek jest w szerokim balansie i po prostu oddycha od bandy do bandy ale jesli mamy silny imbalance i pprst plynie w jednym kierunku to cena moze przebywac bardzo daleko od vwap przez cala sesje i nigdy do niego nie wrocic dlatego w trendzie vwap sluzy nam jako trampolina na pullbackach a nie jako cel do ktorego gramy counter-trend</p>
                     <p class="en">as for trading mean reversion itself, remember one important thing: it works great when the market is in a wide balance and simply breathes from band to band, but if we have a strong imbalance and it just flows in one direction, the price can stay very far from vwap all session and never return to it. therefore, in a trend, vwap serves us as a trampoline on pullbacks, not as a target to which we play counter-trend.</p>
                 </div>
-                <div class="chart-wrapper" style="height: 400px;"><canvas id="canvas-vwap" class="chart-canvas"></canvas></div>
             </div>
+            
+            <img src="" alt="Ilustracja VWAP" class="course-img">
+
             <div class="next-section-wrapper">
                 <button class="next-btn" onclick="nav('cat-vsa')">
                     <span class="pl">Czytaj dalej: 5. VSA <span>→</span></span>
@@ -468,6 +650,7 @@
             </div>
         </div>
 
+        <!-- 5. VSA -->
         <div id="view-cat-vsa" class="view">
             <h2 class="section-title">5. VOLUME SPREAD ANALYSIS</h2>
             <div class="course-text">
@@ -479,13 +662,13 @@
                     <p class="en">to understand this we must start from the absolute basics. forget for a moment about standard candlestick formations (preferably forever by the way..) because in vsa we are only interested in three specific things in each candle</p>
                     
                     <ul class="pl">
-                        <li>po pierwsze spread ale nie ten od brokera tylko zasieg candle czyli odleglosc od samego low do samego high to nam mowi jaki konkretny <span class="tooltip-word">rezultat (Result) <span class="tip-i tip-i-up" onmousemove="tt(event, 'Result', 'Spread świecy - czyli faktyczny dystans, jaki pokonała cena w określonym czasie.')" onmouseleave="htt()">i</span></span> osiagnal rynek w danym czasie</li>
-                        <li>po drugie volume czyli ile kontraktow w ogole przewinelo sie na tej candle to mowi nam o tym jaki <span class="tooltip-word">wysilek (Effort) <span class="tip-i tip-i-up" onmousemove="tt(event, 'Effort', 'Wolumen - czyli ile siły włożono, aby poruszyć cenę.')" onmouseleave="htt()">i</span></span> rynek wlozyl w ten ruch</li>
+                        <li>po pierwsze spread ale nie ten od brokera tylko zasieg candle czyli odleglosc od samego low do samego high to nam mowi jaki konkretny <span class="tooltip-word" onmousemove="tt(event, 'Result', 'Spread świecy - czyli faktyczny dystans, jaki pokonała cena w określonym czasie.')" ontouchstart="tt(event, 'Result', 'Spread świecy - czyli faktyczny dystans, jaki pokonała cena w określonym czasie.')">rezultat (Result)</span> osiagnal rynek w danym czasie</li>
+                        <li>po drugie volume czyli ile kontraktow w ogole przewinelo sie na tej candle to mowi nam o tym jaki <span class="tooltip-word" onmousemove="tt(event, 'Effort', 'Wolumen - czyli ile siły włożono, aby poruszyć cenę.')" ontouchstart="tt(event, 'Effort', 'Wolumen - czyli ile siły włożono, aby poruszyć cenę.')">wysilek (Effort)</span> rynek wlozyl w ten ruch</li>
                         <li>i po trzecie cena zamkniecia czyli gdzie ostatecznie strona bullish i bearish skonczyla walke czy blisko high czy w srodku czy na samym low</li>
                     </ul>
                     <ul class="en">
-                        <li>firstly, the spread, but not the broker's spread, the candle's range meaning the distance from the absolute low to the absolute high. this tells us what specific <span class="tooltip-word">result (Result) <span class="tip-i tip-i-up" onmousemove="tt(event, 'Result', 'Candle spread - the actual distance the price covered in a given time.')" onmouseleave="htt()">i</span></span> the market achieved in a given time</li>
-                        <li>secondly, volume, meaning how many contracts rolled through this candle. this tells us what <span class="tooltip-word">effort (Effort) <span class="tip-i tip-i-up" onmousemove="tt(event, 'Effort', 'Volume - how much force was put in to move the price.')" onmouseleave="htt()">i</span></span> the market put into this move</li>
+                        <li>firstly, the spread, but not the broker's spread, the candle's range meaning the distance from the absolute low to the absolute high. this tells us what specific <span class="tooltip-word" onmousemove="tt(event, 'Result', 'Candle spread - the actual distance the price covered in a given time.')" ontouchstart="tt(event, 'Result', 'Candle spread - the actual distance the price covered in a given time.')">result (Result)</span> the market achieved in a given time</li>
+                        <li>secondly, volume, meaning how many contracts rolled through this candle. this tells us what <span class="tooltip-word" onmousemove="tt(event, 'Effort', 'Volume - how much force was put in to move the price.')" ontouchstart="tt(event, 'Effort', 'Volume - how much force was put in to move the price.')">effort (Effort)</span> the market put into this move</li>
                         <li>and thirdly, the closing price, meaning where exactly the bullish and bearish sides ended the fight, near the high, in the middle, or at the absolute low</li>
                     </ul>
                     
@@ -539,9 +722,7 @@
                 </div>
             </div>
 
-            <div class="chart-wrapper" style="height: 420px;">
-                <canvas id="canvas-vsa1" class="chart-canvas"></canvas>
-            </div>
+            <img src="" alt="Ilustracja VSA" class="course-img">
 
             <div class="course-text">
                 <div class="course-section">
@@ -571,9 +752,7 @@
                 </div>
             </div>
 
-            <div class="chart-wrapper" style="height: 420px;">
-                <canvas id="canvas-vsa2" class="chart-canvas"></canvas>
-            </div>
+            <img src="" alt="Ilustracja VSA No Demand Supply" class="course-img">
             
             <div class="next-section-wrapper">
                 <button class="next-btn" onclick="nav('cat-of')">
@@ -583,6 +762,7 @@
             </div>
         </div>
 
+        <!-- 6. ORDERFLOW -->
         <div id="view-cat-of" class="view">
             <h2 class="section-title">6. ORDERFLOW & DELTA</h2>
             <div class="course-text">
@@ -597,8 +777,9 @@
                 </div>
             </div>
             
+            <!-- footprint boxes centered layout -->
             <div class="fp-wrapper">
-                <div class="fp-box">
+                <div class="fp-box" style="width: 260px;">
                     <div style="text-align:center; font-weight:700; margin-bottom:10px; color:var(--heading-color);">
                         <span class="pl">Absorpcja Limitami</span><span class="en">Limit Absorption</span>
                     </div>
@@ -606,24 +787,24 @@
                     <div class="fp-row"><div class="fp-val bid">12</div><div class="fp-val ask">25</div></div>
                     <div class="fp-row"><div class="fp-val bid">45</div><div class="fp-val ask">32</div></div>
                     <div class="fp-row"><div class="fp-val bid">105</div><div class="fp-val ask">18</div></div>
-                    <div class="fp-row pl" style="border:1px solid var(--up-color); border-radius:4px; background:var(--up-bg);" onmousemove="tt(event, 'Absorpcja', 'Potężne 840 kontraktów uderza w Market Sell, ale Limit Buy to wchłania. Spadek zatrzymany.')" onmouseleave="htt()">
+                    <div class="fp-row pl" style="border:1px solid var(--up-color); border-radius:4px; background:var(--up-bg);" onmousemove="tt(event, 'Absorpcja', 'Potężne 840 kontraktów uderza w Market Sell, ale Limit Buy to wchłania. Spadek zatrzymany.')" ontouchstart="tt(event, 'Absorpcja', 'Potężne 840 kontraktów uderza w Market Sell, ale Limit Buy to wchłania. Spadek zatrzymany.')">
                         <div class="fp-val bid fp-hi-d">840</div><div class="fp-val ask">40</div>
                     </div>
-                    <div class="fp-row en" style="border:1px solid var(--up-color); border-radius:4px; background:var(--up-bg);" onmousemove="tt(event, 'Absorption', 'A massive 840 contracts hit Market Sell, but Limit Buy absorbs it. Drop stopped.')" onmouseleave="htt()">
+                    <div class="fp-row en" style="border:1px solid var(--up-color); border-radius:4px; background:var(--up-bg);" onmousemove="tt(event, 'Absorption', 'A massive 840 contracts hit Market Sell, but Limit Buy absorbs it. Drop stopped.')" ontouchstart="tt(event, 'Absorption', 'A massive 840 contracts hit Market Sell, but Limit Buy absorbs it. Drop stopped.')">
                         <div class="fp-val bid fp-hi-d">840</div><div class="fp-val ask">40</div>
                     </div>
                     <div style="width:2px; height:40px; background:var(--border-color); margin:0 auto;"></div>
                 </div>
 
-                <div class="fp-box">
+                <div class="fp-box" style="width: 260px;">
                     <div style="text-align:center; font-weight:700; margin-bottom:10px; color:var(--heading-color);">
                         <span class="pl">Exhaustion (Wyczerpanie)</span><span class="en">Exhaustion</span>
                     </div>
                     <div style="width:2px; height:30px; background:var(--border-color); margin:0 auto;"></div>
-                    <div class="fp-row pl" style="border:1px dashed var(--red-accent); border-radius:4px;" onmousemove="tt(event, 'Exhaustion', 'Dokładnie ZERO na Asku na samym szczycie. Popyt wysechł.')" onmouseleave="htt()">
+                    <div class="fp-row pl" style="border:1px dashed var(--red-accent); border-radius:4px;" onmousemove="tt(event, 'Exhaustion', 'Dokładnie ZERO na Asku na samym szczycie. Popyt wysechł.')" ontouchstart="tt(event, 'Exhaustion', 'Dokładnie ZERO na Asku na samym szczycie. Popyt wysechł.')">
                         <div class="fp-val bid">12</div><div class="fp-val ask fp-z">0</div>
                     </div>
-                    <div class="fp-row en" style="border:1px dashed var(--red-accent); border-radius:4px;" onmousemove="tt(event, 'Exhaustion', 'Exactly ZERO on the Ask at the very top. Demand dried up.')" onmouseleave="htt()">
+                    <div class="fp-row en" style="border:1px dashed var(--red-accent); border-radius:4px;" onmousemove="tt(event, 'Exhaustion', 'Exactly ZERO on the Ask at the very top. Demand dried up.')" ontouchstart="tt(event, 'Exhaustion', 'Exactly ZERO on the Ask at the very top. Demand dried up.')">
                         <div class="fp-val bid">12</div><div class="fp-val ask fp-z">0</div>
                     </div>
                     <div class="fp-row"><div class="fp-val bid">45</div><div class="fp-val ask">18</div></div>
@@ -666,7 +847,7 @@
                     <p class="pl">jak widzicie na rysunku ceny bid/ask występują na ukos:</p>
                     <p class="en">as you see in the illustration, bid/ask prices occur diagonally:</p>
                     
-                    <div style="margin:25px auto; max-width:550px;">
+                    <div style="margin: 25px auto; max-width: 550px;">
                         <table class="dom-table">
                             <tr><th colspan="3">Drabina DOM (Depth of Market)</th></tr>
                             <tr><td style="color:var(--secondary-text);">Price</td><td class="dom-bid">BID (Buy Limits)</td><td class="dom-ask">ASK (Sell Limits)</td></tr>
@@ -691,9 +872,10 @@
                     <div class="segment-tag tag-advanced">Advanced</div>
                     <h4><span class="pl">Delta i CVD Divergence</span><span class="en">Delta and CVD Divergence</span></h4>
                     
-                    <p class="pl">kolejnym waznym elementem ukladanki na footprincie jest <span class="tooltip-word">delta <span class="tip-i tip-i-up" onmousemove="tt(event, 'Delta', 'Różnica między agresywnym kupnem (Market Buy) a agresywną sprzedażą (Market Sell).')" onmouseleave="htt()">i</span></span> czyli po prostu roznica miedzy agresywnymi kupujacymi a sprzedajacymi w danej swieczce/candle lub na konkretnym poziomie cenowym</p>
-                    <p class="en">another important piece of the puzzle on the footprint is <span class="tooltip-word">delta <span class="tip-i tip-i-up" onmousemove="tt(event, 'Delta', 'The difference between aggressive buying (Market Buy) and aggressive selling (Market Sell).')" onmouseleave="htt()">i</span></span>, meaning simply the difference between aggressive buyers and sellers in a given candle or at a specific price level</p>
+                    <p class="pl">kolejnym waznym elementem ukladanki na footprincie jest <span class="tooltip-word" onmousemove="tt(event, 'Delta', 'Różnica między agresywnym kupnem a sprzedażą.')" ontouchstart="tt(event, 'Delta', 'Różnica między agresywnym kupnem a sprzedażą.')">delta</span> czyli po prostu roznica miedzy agresywnymi kupujacymi a sprzedajacymi w danej swieczce/candle lub na konkretnym poziomie cenowym</p>
+                    <p class="en">another important piece of the puzzle on the footprint is <span class="tooltip-word" onmousemove="tt(event, 'Delta', 'Difference between aggressive buying and selling.')" ontouchstart="tt(event, 'Delta', 'Difference between aggressive buying and selling.')">delta</span>, meaning simply the difference between aggressive buyers and sellers in a given candle or at a specific price level</p>
                     
+                    <!-- delta centered layout -->
                     <div class="fp-wrapper">
                         <div class="fp-box" style="width: 260px;">
                             <div style="text-align:center; font-weight:700; margin-bottom:10px; color:var(--heading-color);">Delta = Ask - Bid</div>
@@ -741,8 +923,8 @@
                     <p class="pl">to jest wlasnie ten moment w ktorym retail kupuje na samym high a wiekszy kapital ich absorbuje co najczesciej konczy sie failed auction i mocnym dropem w dol(i na tym zarabiamy)</p>
                     <p class="en">this is exactly the moment when retail buys at the absolute high and smart money absorbs them, which most often ends in a failed auction and a strong drop down (and this is what we profit on).</p>
                     
-                    <p class="pl">skoro mamy juz wyjasniona zwykla delte na pojedynczych candles to musimy spojrzec na szerszy obraz i do tego sluzy <strong><span class="tooltip-word">cvd <span class="tip-i tip-i-up" onmousemove="tt(event, 'CVD', 'Cumulative Volume Delta - skumulowana delta ze wszystkich świec. Pokazuje szerszy trend agresji na rynku.')" onmouseleave="htt()">i</span></span> czyli skumulowana delta volume</strong></p>
-                    <p class="en">since we have already explained regular delta on single candles, we must look at the bigger picture, and that's what <strong><span class="tooltip-word">cvd <span class="tip-i tip-i-up" onmousemove="tt(event, 'CVD', 'Cumulative Volume Delta - accumulated delta from all candles. Shows the broader trend of aggression in the market.')" onmouseleave="htt()">i</span></span> meaning cumulative volume delta</strong> is for.</p>
+                    <p class="pl">skoro mamy juz wyjasniona zwykla delte na pojedynczych candles to musimy spojrzec na szerszy obraz i do tego sluzy <strong><span class="tooltip-word" onmousemove="tt(event, 'CVD', 'Cumulative Volume Delta - skumulowana delta ze wszystkich świec.')" ontouchstart="tt(event, 'CVD', 'Cumulative Volume Delta - skumulowana delta ze wszystkich świec.')">cvd</span> czyli skumulowana delta volume</strong></p>
+                    <p class="en">since we have already explained regular delta on single candles, we must look at the bigger picture, and that's what <strong><span class="tooltip-word" onmousemove="tt(event, 'CVD', 'Cumulative Volume Delta - accumulated delta from all candles.')" ontouchstart="tt(event, 'CVD', 'Cumulative Volume Delta - accumulated delta from all candles.')">cvd</span> meaning cumulative volume delta</strong> is for.</p>
                     
                     <p class="pl">to nic innego jak dodawanie do siebie delty z kolejnych candles dzieki czemu zamiast noise widzimy ogolny trend agresji na rynku</p>
                     <p class="en">this is nothing else but adding up the delta from successive candles so that instead of noise we see the general trend of aggression in the market.</p>
@@ -786,6 +968,7 @@
             </div>
         </div>
 
+        <!-- 7. FUNDAMENTALS -->
         <div id="view-cat-fund" class="view">
             <h2 class="section-title"><span class="pl">7. FUNDAMENTY POD INTRADAY</span><span class="en">7. INTRADAY FUNDAMENTALS</span></h2>
             <div class="course-text">
@@ -793,8 +976,8 @@
                     <p class="pl">fundamenty w daytradingu to nie jest czytanie sprawozdan finansowych spolek to po prostu kalendarz makroekonomiczny i swiadomosc kiedy na rynek wpadnie huragan</p>
                     <p class="en">fundamentals in daytrading is not reading company financial reports, it's simply the macroeconomic calendar and being aware of when a hurricane will hit the market.</p>
                     
-                    <p class="pl">codziennie rano waszym pierwszym krokiem powinno byc sprawdzenie kalendarza na przyklad na forexfactory interesuja nas tylko te najwazniejsze wydarzenia zaznaczone na czerwono jak <span class="tooltip-word">cpi <span class="tip-i tip-i-up" onmousemove="tt(event, 'CPI', 'Consumer Price Index - raport o inflacji, wywołujący często potężną zmienność.')" onmouseleave="htt()">i</span></span> <span class="tooltip-word">nfp <span class="tip-i tip-i-up" onmousemove="tt(event, 'NFP', 'Non-Farm Payrolls - kluczowe dane z amerykańskiego rynku pracy publikowane raz w miesiącu.')" onmouseleave="htt()">i</span></span> czy decyzje fomc</p>
-                    <p class="en">every morning your first step should be checking the calendar on, for example, forexfactory. we are only interested in the most important events marked in red like <span class="tooltip-word">cpi <span class="tip-i tip-i-up" onmousemove="tt(event, 'CPI', 'Consumer Price Index - inflation report, often causing massive volatility.')" onmouseleave="htt()">i</span></span>, <span class="tooltip-word">nfp <span class="tip-i tip-i-up" onmousemove="tt(event, 'NFP', 'Non-Farm Payrolls - key data from the US labor market published once a month.')" onmouseleave="htt()">i</span></span>, or fomc decisions.</p>
+                    <p class="pl">codziennie rano waszym pierwszym krokiem powinno byc sprawdzenie kalendarza na przyklad na forexfactory interesuja nas tylko te najwazniejsze wydarzenia zaznaczone na czerwono jak <span class="tooltip-word" onmousemove="tt(event, 'CPI', 'Consumer Price Index')" ontouchstart="tt(event, 'CPI', 'Consumer Price Index')">cpi</span> <span class="tooltip-word" onmousemove="tt(event, 'NFP', 'Non-Farm Payrolls')" ontouchstart="tt(event, 'NFP', 'Non-Farm Payrolls')">nfp</span> czy decyzje fomc</p>
+                    <p class="en">every morning your first step should be checking the calendar on, for example, forexfactory. we are only interested in the most important events marked in red like <span class="tooltip-word" onmousemove="tt(event, 'CPI', 'Consumer Price Index')" ontouchstart="tt(event, 'CPI', 'Consumer Price Index')">cpi</span>, <span class="tooltip-word" onmousemove="tt(event, 'NFP', 'Non-Farm Payrolls')" ontouchstart="tt(event, 'NFP', 'Non-Farm Payrolls')">nfp</span>, or fomc decisions.</p>
                     
                     <p class="pl">te dane to zapalnik ktory uruchamia algorytmy i wpuszcza wielki kapital i tu pojawia sie najwazniejsza zasada nie stajemy na autostradzie pod prad</p>
                     <p class="en">this data is the trigger that activates algorithms and lets in huge capital, and here comes the most important rule: we do not stand on the highway going against traffic.</p>
@@ -818,6 +1001,7 @@
             </div>
         </div>
 
+        <!-- 8. RISK MANAGEMENT -->
         <div id="view-cat-risk" class="view">
             <h2 class="section-title"><span class="pl">8. ZARZĄDZANIE RYZYKIEM</span><span class="en">8. RISK MANAGEMENT</span></h2>
             <div class="course-text">
@@ -850,33 +1034,122 @@
                 </button>
             </div>
         </div>
-
     </div>
 
-    <!-- bug report widget -->
-<div id="feedback-widget" class="feedback-widget collapsed">
-        <button class="feedback-toggle" onclick="toggleFeedback()" aria-label="Zgłoś błąd">
-            <span style="font-size: 1.3rem;">💬</span>
-        </button>
-        <div class="feedback-content">
-            <div class="feedback-header">
-                <div style="flex-grow: 1;">
-                    <span class="pl">Jeżeli znalazłeś jakiś błąd, zgłoś go tutaj 👇</span>
-                    <span class="en">If you found a bug(even in translation, original site is in polish...), report it here 👇</span>
-                </div>
-                <button class="feedback-close" onclick="toggleFeedback()">✕</button>
-            </div>
-            <textarea id="feedback-text" rows="3" placeholder="#"></textarea>
-            <button onclick="submitFeedback()" id="feedback-btn">
-                <span class="pl">Wyślij Zgłoszenie</span>
-                <span class="en">Submit Report</span>
-            </button>
-        </div>
+    <!-- feedback floating toggle -->
+    <div class="feedback-toggle" onclick="document.getElementById('feedback-w').classList.toggle('show'); event.stopPropagation();">💬</div>
+    
+    <div id="feedback-w" class="feedback-widget" onclick="event.stopPropagation();">
+        <div style="font-weight:600; font-size:0.9rem; margin-bottom:8px; color: var(--text-color);"><span class="pl">Zgłoś błąd 👇</span><span class="en">Report a bug 👇</span></div>
+        <textarea id="feedback-text" rows="3" placeholder="..."></textarea>
+        <button onclick="submitFback()" id="fback-btn"><span class="pl">Wyślij</span><span class="en">Submit</span></button>
     </div>
 
-    <!-- Skrypty -->
-    <script src="script.js"></script>
-    <script src="script.js"></script>
-    <script src="api.js"></script>
+    <script>
+        // --- core state management ---
+        let isLight = false;
+        let currentLang = 'pl';
+        const tooltip = document.getElementById('tooltip');
+        
+        // --- theme auto-detection from system prep ---
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) toggleTheme();
+
+        function toggleTheme() {
+            isLight = !isLight;
+            document.body.classList.toggle('light-theme', isLight);
+            document.getElementById('theme-btn').innerText = isLight ? '🌙' : '☀️';
+        }
+
+        function toggleLang() {
+            currentLang = currentLang === 'pl' ? 'en' : 'pl';
+            document.body.classList.remove('lang-pl', 'lang-en');
+            document.body.classList.add('lang-' + currentLang);
+            document.getElementById('lang-btn').innerText = currentLang === 'pl' ? '🇬🇧' : '🇵🇱';
+            updateBreadcrumbs();
+        }
+
+        // --- tooltips logic bruh ---
+        function tt(e, title, text) {
+            e.stopPropagation();
+            tooltip.style.display = 'block';
+            tooltip.innerHTML = `<strong>${title}</strong>${text}`;
+            const x = e.touches ? e.touches[0].clientX : e.clientX;
+            const y = e.touches ? e.touches[0].clientY : e.clientY;
+            tooltip.style.left = Math.min(x + 10, window.innerWidth - 200) + 'px'; 
+            tooltip.style.top = (y - 50) + 'px';
+        }
+        
+        function htt() { 
+            tooltip.style.display = 'none'; 
+            document.getElementById('feedback-w').classList.remove('show');
+        }
+
+        // --- core routing & views mapping ---
+        const views = {
+            'home': { pl: 'Katalog Główny', en: 'Main Catalog', p: null },
+            'cat-mech': { pl: 'Mechanika', en: 'Mechanics', p: 'home' },
+            'cat-amt': { pl: 'AMT', en: 'AMT', p: 'home' },
+            'cat-vp': { pl: 'Volume Profile', en: 'Volume Profile', p: 'home' },
+            'cat-vwap': { pl: 'AVWAP', en: 'AVWAP', p: 'home' },
+            'cat-vsa': { pl: 'VSA', en: 'VSA', p: 'home' },
+            'cat-of': { pl: 'Orderflow', en: 'Orderflow', p: 'home' },
+            'cat-fund': { pl: 'Fundamenty', en: 'Fundamentals', p: 'home' },
+            'cat-risk': { pl: 'Ryzyko', en: 'Risk', p: 'home' }
+        };
+
+        function nav(id) {
+            document.querySelectorAll('.view').forEach(e => e.classList.remove('active'));
+            document.getElementById('view-' + id).classList.add('active');
+            
+            // local tracking for progress
+            if(id !== 'home') {
+                const prog = JSON.parse(localStorage.getItem('rei_prog_mob') || '[]');
+                if(!prog.includes(id)) { prog.push(id); localStorage.setItem('rei_prog_mob', JSON.stringify(prog)); updateProg(); }
+            }
+            updateBreadcrumbs();
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+
+        function updateBreadcrumbs() {
+            const active = document.querySelector('.view.active').id.replace('view-', '');
+            let path = [], curr = active;
+            while(curr) {
+                path.unshift(`<span onclick="nav('${curr}')">${views[curr][currentLang]}</span>`);
+                curr = views[curr].p;
+            }
+            document.getElementById('breadcrumbs').innerHTML = `📍 ` + path.join(' > ');
+        }
+
+        function updateProg() {
+            const prog = JSON.parse(localStorage.getItem('rei_prog_mob') || '[]');
+            document.querySelectorAll('.folder-card').forEach(c => {
+                if(prog.includes(c.dataset.cat)) c.classList.add('completed');
+            });
+        }
+
+        // --- init app ---
+        window.onload = () => {
+            updateProg();
+        };
+
+        // --- feedback widget submission dummy logic ---
+        async function submitFback() {
+            const txt = document.getElementById('feedback-text').value;
+            if(!txt.trim()) return;
+            const btn = document.getElementById('fback-btn');
+            btn.innerText = 'Wysyłanie...';
+            setTimeout(() => {
+                document.getElementById('feedback-text').value = '';
+                btn.style.background = 'var(--up-color)';
+                btn.style.color = '#000';
+                btn.innerText = '✓ Wysłano';
+                setTimeout(() => {
+                    btn.style.background = ''; btn.style.color = '';
+                    btn.innerText = currentLang === 'pl' ? 'Wyślij' : 'Submit';
+                    document.getElementById('feedback-w').classList.remove('show');
+                }, 2000);
+            }, 800);
+        }
+    </script>
 </body>
 </html>

@@ -6,6 +6,12 @@ document.onkeydown = function(e) {
     if (e.ctrlKey && e.keyCode === 85) return false; // View source
 };
 
+// Toggle Feedback Widget animation
+function toggleFeedback() {
+    const widget = document.getElementById('feedback-widget');
+    widget.classList.toggle('collapsed');
+}
+
 // Theme management with system preference detection
 let isLight = false;
 if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {

@@ -293,18 +293,51 @@ h2.section-title { font-size: 1.85rem; margin-bottom: 20px; font-weight: 700; le
 .next-btn span { transition: transform 0.18s; }
 .next-btn:hover span { transform: translateX(4px); }
 
-/* Feedback Widget - Serverless integration */
+/* Feedback Widget - Serverless integration / edit. animated version*/
 .feedback-widget {
-    position: fixed; right: 24px; bottom: 24px; width: 340px;
+    position: fixed; right: 24px; bottom: 24px; z-index: 90;
+    display: flex; flex-direction: column; align-items: flex-end;
+}
+
+.feedback-toggle {
+    width: 56px; height: 56px; border-radius: 50%;
     background: var(--nav-bg); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
     border: 1px solid color-mix(in srgb, var(--border-color) 40%, rgba(255,255,255,0.1));
-    border-radius: var(--radius-lg); padding: 24px; z-index: 90;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05);
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s;
+    color: var(--text-color); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 10px 24px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.05);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s ease;
+    z-index: 2; outline: none;
 }
-body.light-theme .feedback-widget { box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+body.light-theme .feedback-toggle { box-shadow: 0 10px 24px rgba(0,0,0,0.1); }
+.feedback-toggle:hover { transform: scale(1.08); background: var(--card-bg); }
 
-.feedback-header { font-size: 0.9rem; font-weight: 500; color: var(--text-color); margin-bottom: 12px; line-height: 1.5; }
+.feedback-content {
+    position: absolute; bottom: 70px; right: 0; width: 340px;
+    background: var(--nav-bg); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+    border: 1px solid color-mix(in srgb, var(--border-color) 40%, rgba(255,255,255,0.1));
+    border-radius: var(--radius-lg); padding: 20px 24px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05);
+    transform-origin: bottom right;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    opacity: 1; transform: scale(1) translateY(0); pointer-events: auto;
+}
+body.light-theme .feedback-content { box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+
+.feedback-widget.collapsed .feedback-content {
+    opacity: 0; transform: scale(0.9) translateY(20px); pointer-events: none;
+}
+
+.feedback-header { 
+    display: flex; justify-content: space-between; align-items: flex-start;
+    font-size: 0.9rem; font-weight: 500; color: var(--text-color); margin-bottom: 8px; line-height: 1.5; 
+}
+
+.feedback-close {
+    background: none; border: none; color: var(--secondary-text); font-size: 1.1rem;
+    cursor: pointer; padding: 0 0 0 12px; transition: color 0.2s; box-shadow: none; width: auto; font-weight: 700;
+}
+.feedback-close:hover { color: var(--red-accent); transform: translateY(0); border-color: transparent; background: transparent; }
 
 .feedback-widget textarea {
     width: 100%; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: var(--radius-sm);
@@ -313,18 +346,17 @@ body.light-theme .feedback-widget { box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
 body.light-theme .feedback-widget textarea { background: #fff; }
 .feedback-widget textarea:focus { border-color: var(--up-color); }
 
-.feedback-widget button {
+.feedback-widget button#feedback-btn {
     width: 100%; background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color);
     padding: 12px; border-radius: 999px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; box-shadow: none;
 }
-.feedback-widget button:hover { 
-    border-color: var(--secondary-text); transform: translateY(-2px); 
+.feedback-widget button#feedback-btn:hover { 
+    border-color: var(--up-color); color: var(--up-color); transform: translateY(-2px); 
 }
 
 @media (max-width: 768px) {
-    .feedback-widget {
-        right: 16px; bottom: 16px; width: calc(100% - 32px); padding: 16px;
-    }
+    .feedback-widget { right: 16px; bottom: 16px; }
+    .feedback-content { right: 0; width: calc(100vw - 32px); padding: 16px; }
 }
 
 /* Accessibility: respect user motion preferences */
