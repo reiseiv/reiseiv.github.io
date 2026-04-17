@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Rei Academy Mobile</title>
-    <script src="api.js"></script>
     <style>
         /* * core css vars & mobile glassmorphism config 
          * dark mode by default
@@ -1251,22 +1250,57 @@
         };
 
         // --- feedback widget submission dummy logic ---
-        async function submitFback() {
-            const txt = document.getElementById('feedback-text').value;
-            if(!txt.trim()) return;
-            const btn = document.getElementById('fback-btn');
-            btn.innerText = 'Wysyłanie...';
-            setTimeout(() => {
-                document.getElementById('feedback-text').value = '';
-                btn.style.background = 'var(--up-color)';
-                btn.style.color = '#000';
-                btn.innerText = '✓ Wysłano';
-                setTimeout(() => {
-                    btn.style.background = ''; btn.style.color = '';
-                    btn.innerText = currentLang === 'pl' ? 'Wyślij' : 'Submit';
-                    document.getElementById('feedback-w').classList.remove('show');
-                }, 2000);
-            }, 800);
+async function submitFback() {
+    const txt = document.getElementById('feedback-text').value;
+    if (!txt.trim()) return;
+
+    const btn = document.getElementById('fback-btn');
+    const originalText = btn.innerText;
+    
+    // Wizualne rozpoczęcie wysyłania
+    btn.innerText = 'Wysyłanie...';
+    btn.disabled = true; // Blokujemy przycisk, żeby nie kliknąć 2 razy
+
+    try {
+        // --- FAKTYCZNE WYSYŁANIE DO CLOUDFLARE ---
+        const response = await fetch("TU_WKLEJ_TWOJ_URL_DO_WORKERA", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                message: txt,
+                language: typeof currentLang !== 'undefined' ? currentLang : 'pl',
+                page: window.location.pathname.split('/').pop() || 'index.html'
+            })
+        });
+
+        if (response.ok) {
+            // Sukces
+            document.getElementById('feedback-text').value = '';
+            btn.style.background = 'var(--up-color)';
+            btn.style.color = '#000';
+            btn.innerText = '✓ Wysłano';
+        } else {
+            // Błąd po stronie serwera (np. spam ban)
+            const errorMsg = await response.text();
+            btn.innerText = 'Błąd!';
+            alert("Błąd: " + errorMsg);
+        }
+    } catch (error) {
+        // Błąd połączenia (np. brak internetu)
+        console.error("Błąd sieci:", error);
+        btn.innerText = 'Błąd sieci';
+    }
+
+    // Resetowanie przycisku i zamknięcie okna po 2 sekundach
+    setTimeout(() => {
+        btn.disabled = false;
+        btn.style.background = ''; 
+        btn.style.color = '';
+        btn.innerText = typeof currentLang !== 'undefined' && currentLang === 'pl' ? 'Wyślij' : 'Submit';
+        document.getElementById('feedback-w').classList.remove('show');
+    }, 2000);
         }
     </script>
 </body>
