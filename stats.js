@@ -1,5 +1,4 @@
 (function() {
-    // Zmieniono endpoint z /track na /api/ping (dla zmylenia AdBlockerów)
     const WORKER_URL = 'https://stats.xxxkubes.workers.dev/api/ping';
     
     let vid = localStorage.getItem('rei_vid');
@@ -25,8 +24,8 @@
             fetch(WORKER_URL, { method: 'POST', body: payload, keepalive: true }).catch(() => {});
         }
     }
+// 1. Pageview & Leave
 
-    // 1. Pageview & Leave
     window.addEventListener('load', () => sendEvent({ type: 'pageview', ref: document.referrer }));
     window.addEventListener('visibilitychange', () => {
         if (document.visibilityState === 'hidden') {
@@ -34,14 +33,14 @@
         }
     });
 
-    // 2. Interakcje z Canvasami (Wykresy)
+    // 2. (Wykresy)
     document.querySelectorAll('canvas').forEach(canvas => {
         canvas.addEventListener('mouseenter', () => {
             sendEvent({ type: 'interaction', target: 'chart', id: canvas.id });
         });
     });
 
-    // 3. Kliknięcia w Tooltipy
+    // 3. Tooltipy
     const originalTT = window.tt;
     if (typeof originalTT === 'function') {
         window.tt = function(e, title, text, accent) {
@@ -50,7 +49,7 @@
         };
     }
 
-    // 4. Trackowanie sekcji (Heatmapa logiki)
+    // 4. Trackowanie sekcji
     const sectionObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
