@@ -27,6 +27,29 @@ function toggleTheme() {
     charts.forEach(c => c.render()); // Re-render charts to apply new color vars
 }
 
+// Ambient Background Parallax (Awwwards vibe tracking)
+const ambient = document.getElementById('ambient');
+let currentX = 0, currentY = 0, targetX = 0, targetY = 0;
+
+document.addEventListener('mousemove', (e) => {
+    targetX = (e.clientX / window.innerWidth - 0.5) * 60; 
+    targetY = (e.clientY / window.innerHeight - 0.5) * 60;
+});
+
+function animateAmbient() {
+    currentX += (targetX - currentX) * 0.05;
+    currentY += (targetY - currentY) * 0.05;
+    if (ambient) {
+        ambient.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+    }
+    requestAnimationFrame(animateAmbient);
+}
+
+// Only run animation if user doesn't prefer reduced motion
+if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    animateAmbient();
+}
+
 // Language toggle state management
 let currentLang = 'pl'; // Default to PL
 function toggleLang() {
@@ -41,7 +64,7 @@ function toggleLang() {
 const cssVar = (name) => getComputedStyle(document.body).getPropertyValue(name).trim();
 const tooltip = document.getElementById('tooltip');
 
-// Tooltip positioning logic. Avoid moving inline styles to CSS to prevent mobile offset issues.
+// Tooltip positioning logic
 function tt(e, title, text, accent) {
     tooltip.style.display = 'block';
     tooltip.style.setProperty('--tip-accent', accent || 'var(--up-color)');
@@ -93,7 +116,9 @@ setInterval(updateSessions, 60000);
 function updateProgressUI() {
     const progress = JSON.parse(localStorage.getItem('rei_academy_progress') || '[]');
     document.querySelectorAll('.folder-card').forEach(card => {
-        if(progress.includes(card.dataset.cat)) card.classList.add('completed');
+        if (card.dataset.cat && progress.includes(card.dataset.cat)) {
+            card.classList.add('completed');
+        }
     });
 }
 
@@ -150,7 +175,7 @@ class ChartEngine {
         const drawW = w - vpWidth - 20, drawH = h - padTop - padBottom;
         const rangeP = this.maxP - this.minP || 1;
         
-        // Coordinate mapping (Price to Y-axis, Time to X-axis)
+        // Coordinate mapping
         const mapY = (price) => h - padBottom - ((price - this.minP) / rangeP) * drawH;
         const stepX = drawW / Math.max(this.candles.length, 10);
         const mapX = (index) => vpWidth + 10 + (index * stepX) + (stepX/2);

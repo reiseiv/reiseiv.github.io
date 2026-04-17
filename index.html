@@ -4,9 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rei Academy</title>
+    <!-- 
+      Rei Academy
+      Orderflow knowledge base & trading utilities.
+      UI & core logic built from scratch. Chart rendering logic (Canvas) optimized with AI assistance.
+    -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="lang-pl">
+
+    <!-- Animated theme (Awwwards vibe) -->
+    <div class="ambient-blobs" id="ambient"></div>
 
     <nav>
         <div class="nav-left">
@@ -105,6 +113,15 @@
                     <div class="folder-info">
                         <h3><span class="pl">Zarządzanie Ryzykiem</span><span class="en">Risk Management</span></h3>
                         <p><span class="pl">Orderflow SL, itd..</span><span class="en">Manual Cutting, Orderflow SL</span></p>
+                    </div>
+                </div>
+                
+                <!-- Przekierowanie do checklisty jako punkt 9 -->
+                <div class="folder-card" onclick="window.location.href='checklist.html'">
+    <div class="folder-num">9</div>
+                    <div class="folder-info">
+                        <h3><span class="pl">Pre-trade Checklist</span><span class="en">Pre-trade Checklist</span></h3>
+                        <p><span class="pl">Narzędzie do walidacji setupu przed wejściem</span><span class="en">Setup validation tool before entry</span></p>
                     </div>
                 </div>
             </div>
@@ -831,6 +848,7 @@
 
     </div>
 
+    <!-- Widżet opinii -->
     <div id="feedback-widget" class="feedback-widget">
         <div class="feedback-header">
             <span class="pl">Jeżeli znalazłeś jakiś błąd, zgłoś go tutaj 👇</span>
@@ -843,6 +861,9 @@
         </button>
     </div>
 
+    <!-- Skrypty -->
     <script src="script.js"></script>
+    <script src="script.js"></script>
+    <script src="stats.js"></script>
 </body>
 </html>
