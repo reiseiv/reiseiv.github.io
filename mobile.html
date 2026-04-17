@@ -6,7 +6,7 @@
     <title>Rei Academy Mobile</title>
     <style>
         /* * core css vars & mobile glassmorphism config 
-         * dark mode by default, clean awwwards vibe
+         * dark mode by default
          */
         :root {
             --bg-color: #06070d;
@@ -199,6 +199,61 @@
         .cvd-line { flex-grow: 1; height: 1px; background: var(--border-color); margin: 0 12px; position: relative; }
         .cvd-arrow { position: absolute; right: 0; top: -10px; background: var(--card-bg); padding: 0 4px; font-size: 14px; color: var(--up-color); }
         .cvd-arrow.down { color: var(--down-color); }
+
+        /* --- glassmorphism lock mechanics (only for vsa pics) --- */
+        .locked-container {
+            position: relative;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            margin: 24px 0;
+            transform: translateZ(0); /* safari border-radius rendering fix */
+            width: 100%;
+        }
+        
+        .locked-container > .course-img {
+            margin: 0 !important; /* reset margin when wrapped */
+        }
+
+        .lock-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 50;
+            background: rgba(18, 18, 22, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            transition: opacity 0.4s ease, visibility 0.4s ease, background 0.4s ease;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: none;
+            cursor: pointer;
+        }
+        body.light-theme .lock-overlay { background: rgba(230, 230, 235, 0.7); color: #111; }
+        .lock-overlay.unlocked { opacity: 0; visibility: hidden; pointer-events: none; }
+
+        .lock-icon {
+            font-size: 2.2rem;
+            margin-bottom: 12px;
+            transition: transform 0.8s cubic-bezier(0.1, 0.9, 0.2, 1);
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));
+        }
+        body.light-theme .lock-icon { filter: drop-shadow(0 4px 12px rgba(255,255,255,0.7)); }
+        
+        .lock-text { font-size: 0.85rem; font-weight: 600; line-height: 1.5; max-width: 85%; }
+        .lock-overlay.holding .lock-icon { transform: scale(1.25) rotate(5deg); }
+        
+        /* hold progress bar logic */
+        .lock-overlay::after {
+            content: ''; position: absolute; bottom: 0; left: 0; height: 4px; width: 0%;
+            background: var(--up-color); transition: width 0s linear;
+        }
+        .lock-overlay.holding::after { width: 100%; transition: width 0.8s linear; }
 
         /* floating tooltip overlay */
         .tooltip {
@@ -437,7 +492,7 @@
                     <p class="en">In short, on the chart it looks like this;</p>
                     
                     <!-- Replaced Canvas with Image Placeholder -->
-                    <img src="" alt="Ilustracja AMT" class="course-img">
+                    <img src="https://i.imgur.com/1CJoqUo.png" alt="Ilustracja AMT" class="course-img">
                 </div>
 
                 <div class="course-section">
@@ -496,7 +551,7 @@
                 <span class="en">Setup 1: D Shape (Balance) - Trading VAH / VAL</span>
             </h4>
             <!-- Replaced Canvas with Image Placeholder -->
-            <img src="" alt="Ilustracja VAH VAL" class="course-img">
+            <img src="https://i.imgur.com/Rc57K2p.png" alt="Ilustracja VAH VAL" class="course-img">
 
             <div class="course-text">
                 <div class="course-section">
@@ -504,10 +559,10 @@
                     <p class="en">"Mapping" with volume profile(XD) can be done in two ways;</p>
                     <ul>
                         <li><span class="pl">zaplanowane; ustawiasz na sesje/dni-wieki... - można uznać je za bardzo "znaczące"</span><span class="en">planned; you anchor it to sessions/days-ages... - they can be considered very "significant"</span>
-                            <img src="" alt="Mapowanie zaplanowane" class="course-img">
+                            <img src="https://i.imgur.com/030lzk2.png" alt="Mapowanie zaplanowane" class="course-img">
                         </li>
                         <li><span class="pl">bieżące: ustawiasz na bieżące strefy (balance, imbalance) - też są znaczące, ale raczej nie wyłapiesz tak tradu na kolejne 3h</span><span class="en">current: you anchor it to current zones (balance, imbalance) - also significant, but you probably won't catch a 3h long trade this way</span>
-                            <img src="" alt="Mapowanie bieżące" class="course-img">
+                            <img src="https://i.imgur.com/NJ7aUol.png" alt="Mapowanie bieżące" class="course-img">
                         </li>
                     </ul>
                 </div>
@@ -581,13 +636,13 @@
                 <span class="pl">Setup 2: Magnes POC i powrót do HVN</span>
                 <span class="en">Setup 2: POC Magnet and return to HVN</span>
             </h4>
-            <img src="" alt="Ilustracja Magnes POC" class="course-img">
+            <img src="https://i.imgur.com/3orrBSu.png" alt="Ilustracja Magnes POC" class="course-img">
 
             <h4 style="color:var(--heading-color); margin-bottom: 10px;">
                 <span class="pl">Setup 3: Odbicie od LVN (Imbalance)</span>
                 <span class="en">Setup 3: LVN Bounce (Imbalance)</span>
             </h4>
-            <img src="" alt="Ilustracja Odbicie LVN" class="course-img">
+            <img src="https://i.imgur.com/WuG1Yjc.png" alt="Ilustracja Odbicie LVN" class="course-img">
             
             <div class="next-section-wrapper">
                 <button class="next-btn" onclick="nav('cat-vwap')">
@@ -640,7 +695,7 @@
                 </div>
             </div>
             
-            <img src="" alt="Ilustracja VWAP" class="course-img">
+            <img src="https://i.imgur.com/P7I4m6A.png" alt="Ilustracja VWAP" class="course-img">
 
             <div class="next-section-wrapper">
                 <button class="next-btn" onclick="nav('cat-vsa')">
@@ -722,7 +777,7 @@
                 </div>
             </div>
 
-            <img src="" alt="Ilustracja VSA" class="course-img">
+            <img src="https://i.imgur.com/tBOo2X2.png" alt="Ilustracja VSA" class="course-img vsa-locked">
 
             <div class="course-text">
                 <div class="course-section">
@@ -752,7 +807,7 @@
                 </div>
             </div>
 
-            <img src="" alt="Ilustracja VSA No Demand Supply" class="course-img">
+            <img src="https://i.imgur.com/Va4pAHU.png" alt="Ilustracja VSA No Demand Supply" class="course-img vsa-locked">
             
             <div class="next-section-wrapper">
                 <button class="next-btn" onclick="nav('cat-of')">
@@ -1127,9 +1182,71 @@
             });
         }
 
+        // --- glassmorphism lock mechanics (vsa images only) ---
+        function initLocks() {
+            // target only vsa elements with specific class
+            const elementsToLock = document.querySelectorAll('.vsa-locked');
+            
+            elementsToLock.forEach(el => {
+                // prevent double wrapping just in case
+                if(el.parentElement.classList.contains('locked-container')) return;
+
+                const wrapper = document.createElement('div');
+                wrapper.className = 'locked-container';
+                
+                // inherit margins
+                if (el.style.marginTop) wrapper.style.marginTop = el.style.marginTop;
+
+                el.parentNode.insertBefore(wrapper, el);
+                wrapper.appendChild(el);
+
+                const overlay = document.createElement('div');
+                overlay.className = 'lock-overlay';
+                overlay.innerHTML = `
+                    <div class="lock-icon">🔒</div>
+                    <div class="lock-text">
+                        <span class="pl">To są tylko zdjęcia, funkcja działa o wiele lepiej na wersji PC.<br>Przytrzymaj, aby odblokować.</span>
+                        <span class="en">These are just pictures, the feature works way better on PC.<br>Hold to unlock.</span>
+                    </div>
+                `;
+                wrapper.appendChild(overlay);
+
+                let pressTimer;
+                const startPress = (e) => {
+                    if (overlay.classList.contains('unlocked')) return;
+                    overlay.classList.add('holding');
+                    pressTimer = setTimeout(() => {
+                        overlay.classList.add('unlocked');
+                        overlay.classList.remove('holding');
+                    }, 800);
+                };
+                
+                const cancelPress = () => {
+                    clearTimeout(pressTimer);
+                    overlay.classList.remove('holding');
+                };
+
+                // bind events for both mobile touch and desktop debug clicks
+                overlay.addEventListener('touchstart', startPress, {passive: true});
+                overlay.addEventListener('touchend', cancelPress);
+                overlay.addEventListener('touchcancel', cancelPress);
+                overlay.addEventListener('mousedown', startPress);
+                overlay.addEventListener('mouseup', cancelPress);
+                overlay.addEventListener('mouseleave', cancelPress);
+                overlay.addEventListener('contextmenu', e => e.preventDefault());
+            });
+            
+            // force english text if needed on load
+            if (currentLang === 'en') {
+                 document.body.classList.remove('lang-pl');
+                 document.body.classList.add('lang-en');
+            }
+        }
+
         // --- init app ---
         window.onload = () => {
             updateProg();
+            initLocks();
         };
 
         // --- feedback widget submission dummy logic ---
