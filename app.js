@@ -189,7 +189,7 @@ async function submitFeedback() {
     btn.style.pointerEvents = 'none'; // Prevent double-clicks / rate limit abuse on client side
     
     try {
-        const response = await fetch('https://cool-leaf-ade2.xxxkubes.workers.dev/', {
+        const response = await fetch('https://cool-leaf-ade2.reiseiv.workers.dev/', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
