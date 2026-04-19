@@ -175,6 +175,17 @@ function nav(viewId) {
     window.scrollTo(0,0);
     // Safely call chart render if ChartEngine script is loaded
     setTimeout(() => { if (typeof charts !== 'undefined') charts.forEach(c => c.render()); }, 50);
+    // 2. Wymuszenie "Reflow" (zmuszamy przeglądarkę do zauważenia, że usunęliśmy klasy, bez tego animacja nie wystartuje na nowo)
+    void document.body.offsetWidth;
+
+    // 3. Odpalamy kaskadę premium dla nowego widoku i nawigacji
+    // Szukamy elementów tylko w navbarze, breadcrumbsach i NOWO otwartej karcie
+    const elementsToAnimate = document.querySelectorAll(`nav.fade-up-element, #breadcrumbs.fade-up-element, #view-${viewId} .fade-up-element`);
+
+    elementsToAnimate.forEach((el, index) => {
+        el.style.animationDelay = `${index * 0.06}s`; // Odstęp kaskady (0.06s jest mega płynne)
+        el.classList.add('animate');
+    });
 }
 
 // Feedback submission via Cloudflare Workers (CORS handled on edge)

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Rei Academy Mobile</title>
+    <title>Rei Academy / mobile</title>
     <link rel="stylesheet" href="loader.css">
     <script src="loader.js"></script>
     <style>
@@ -298,7 +298,7 @@
 
     <div class="ambient-blobs"></div>
 
-    <nav>
+    <nav class="fade-up-element">
         <div class="nav-left">
             <div class="nav-logo" onclick="nav('home')">
                 <img src="https://i.pinimg.com/736x/5f/f7/d9/5ff7d9a02f87c055dc7d09bbfe17f80a.jpg" alt="Logo" class="logo-img">
@@ -314,15 +314,14 @@
 
     <div id="tooltip" class="tooltip"></div>
 
-    <div class="container fade-up-element">
-        <div class="breadcrumbs" id="breadcrumbs">
+    <div class="container">
+        <div class="breadcrumbs fade-up-element" id="breadcrumbs">
             <span class="pl">📍 Katalog Główny</span><span class="en">📍 Main Catalog</span>
         </div>
 
-        <!-- HOME -->
         <div id="view-home" class="view active">
             <div class="grid">
-                <div class="folder-card" data-cat="cat-mech" onclick="nav('cat-mech')">
+                <div class="folder-card fade-up-element" data-cat="cat-mech" onclick="nav('cat-mech')">
                     <div class="progress-badge"><span class="pl">✓ PRZEROBIONE</span><span class="en">✓ COMPLETED</span></div>
                     <div class="folder-num">1</div>
                     <div class="folder-info">
@@ -330,7 +329,7 @@
                         <p><span class="pl">Płynność, Makro, Opcje, Natura</span><span class="en">Liquidity, Macro, Options, Nature</span></p>
                     </div>
                 </div>
-                <div class="folder-card" data-cat="cat-amt" onclick="nav('cat-amt')">
+                <div class="folder-card fade-up-element" data-cat="cat-amt" onclick="nav('cat-amt')">
                     <div class="progress-badge"><span class="pl">✓ PRZEROBIONE</span><span class="en">✓ COMPLETED</span></div>
                     <div class="folder-num">2</div>
                     <div class="folder-info">
@@ -338,7 +337,7 @@
                         <p><span class="pl">Balance, Imbalance, Cykl Aukcji</span><span class="en">Balance, Imbalance, Auction Cycle</span></p>
                     </div>
                 </div>
-                <div class="folder-card" data-cat="cat-vp" onclick="nav('cat-vp')">
+                <div class="folder-card fade-up-element" data-cat="cat-vp" onclick="nav('cat-vp')">
                     <div class="progress-badge"><span class="pl">✓ PRZEROBIONE</span><span class="en">✓ COMPLETED</span></div>
                     <div class="folder-num">3</div>
                     <div class="folder-info">
@@ -346,7 +345,7 @@
                         <p><span class="pl">S&R, POC, Odbicia LVN</span><span class="en">S&R, POC, LVN Rejections</span></p>
                     </div>
                 </div>
-                <div class="folder-card" data-cat="cat-vwap" onclick="nav('cat-vwap')">
+                <div class="folder-card fade-up-element" data-cat="cat-vwap" onclick="nav('cat-vwap')">
                     <div class="progress-badge"><span class="pl">✓ PRZEROBIONE</span><span class="en">✓ COMPLETED</span></div>
                     <div class="folder-num">4</div>
                     <div class="folder-info">
@@ -354,7 +353,7 @@
                         <p><span class="pl">Instytucjonalne Bands, Pullbacki</span><span class="en">Institutional Bands, Pullbacks</span></p>
                     </div>
                 </div>
-                <div class="folder-card" data-cat="cat-vsa" onclick="nav('cat-vsa')">
+                <div class="folder-card fade-up-element" data-cat="cat-vsa" onclick="nav('cat-vsa')">
                     <div class="progress-badge"><span class="pl">✓ PRZEROBIONE</span><span class="en">✓ COMPLETED</span></div>
                     <div class="folder-num">5</div>
                     <div class="folder-info">
@@ -362,7 +361,7 @@
                         <p><span class="pl">Effort/Result, Climax, No Demand</span><span class="en">Effort/Result, Climax, No Demand</span></p>
                     </div>
                 </div>
-                <div class="folder-card" data-cat="cat-of" onclick="nav('cat-of')">
+                <div class="folder-card fade-up-element" data-cat="cat-of" onclick="nav('cat-of')">
                     <div class="progress-badge"><span class="pl">✓ PRZEROBIONE</span><span class="en">✓ COMPLETED</span></div>
                     <div class="folder-num">6</div>
                     <div class="folder-info">
@@ -370,7 +369,7 @@
                         <p><span class="pl">Absorpcja, Exhaustion, CVD</span><span class="en">Absorption, Exhaustion, CVD</span></p>
                     </div>
                 </div>
-                <div class="folder-card" data-cat="cat-fund" onclick="nav('cat-fund')">
+                <div class="folder-card fade-up-element" data-cat="cat-fund" onclick="nav('cat-fund')">
                     <div class="progress-badge"><span class="pl">✓ PRZEROBIONE</span><span class="en">✓ COMPLETED</span></div>
                     <div class="folder-num">7</div>
                     <div class="folder-info">
@@ -378,7 +377,7 @@
                         <p><span class="pl">Makro, Rekalibracja wartości</span><span class="en">Macro, Value Recalibration</span></p>
                     </div>
                 </div>
-                <div class="folder-card" data-cat="cat-risk" onclick="nav('cat-risk')">
+                <div class="folder-card fade-up-element" data-cat="cat-risk" onclick="nav('cat-risk')">
                     <div class="progress-badge"><span class="pl">✓ PRZEROBIONE</span><span class="en">✓ COMPLETED</span></div>
                     <div class="folder-num">8</div>
                     <div class="folder-info">
@@ -388,7 +387,7 @@
                 </div>
             </div>
             
-            <div class="community-wrapper">
+            <div class="community-wrapper fade-up-element">
                 <h4 style="margin-bottom: 16px;"><span class="pl">Nasze Community</span><span class="en">Our Community</span></h4>
                 <div class="links-group">
                     <a href="https://dsc.gg/rei" target="_blank" class="rei-link">👾 dsc.gg/rei</a>
@@ -416,10 +415,9 @@
             </div>
         </div>
 
-        <!-- 1. MECHANICS -->
         <div id="view-cat-mech" class="view">
-            <h2 class="section-title"><span class="pl">1. MECHANIKA RYNKU</span><span class="en">1. MARKET MECHANICS</span></h2>
-            <div class="course-text">
+            <h2 class="section-title fade-up-element"><span class="pl">1. MECHANIKA RYNKU</span><span class="en">1. MARKET MECHANICS</span></h2>
+            <div class="course-text fade-up-element">
                 <div class="course-section">
                     <div class="segment-tag tag-must-know">Must Know</div>
                     <h4><span class="pl">Część 1: Mechanizm płynności i orderflow pressure</span><span class="en">Part 1: Liquidity mechanism and orderflow pressure</span></h4>
@@ -483,7 +481,7 @@
                     <p class="en">the market is simply a continuous auction that goes from a boring balance to an aggressive imbalance to find the next balance again and so on. this is the ultimate mindset with which you should now move on to reading the rest of the categories.</p>
                 </div>
             </div>
-            <div class="next-section-wrapper">
+            <div class="next-section-wrapper fade-up-element">
                 <button class="next-btn" onclick="nav('cat-amt')">
                     <span class="pl">Czytaj dalej: 2. AMT <span>→</span></span>
                     <span class="en">Read more: 2. AMT <span>→</span></span>
@@ -491,17 +489,15 @@
             </div>
         </div>
 
-        <!-- 2. AMT -->
         <div id="view-cat-amt" class="view">
-            <h2 class="section-title">2. AMT (Auction Market Theory)</h2>
-            <div class="course-text">
+            <h2 class="section-title fade-up-element">2. AMT (Auction Market Theory)</h2>
+            <div class="course-text fade-up-element">
                 <div class="course-section">
                     <p style="text-align: center;"><strong class="em-up">balance</strong> -> <strong class="em-down">imbalance</strong> -> auction -> <strong class="em-up">new balance</strong></p>
                     
                     <p class="pl">W skrocie na wykresie wyglada to tak;</p>
                     <p class="en">In short, on the chart it looks like this;</p>
                     
-                    <!-- Replaced Canvas with Image Placeholder -->
                     <img src="https://i.imgur.com/1CJoqUo.png" alt="Ilustracja AMT" class="course-img">
                 </div>
 
@@ -530,7 +526,7 @@
                     <p class="en">amt is your map and logic and volume profile is the x-ray that shows all of this on the chart. we skip past regular candles and see exactly where the smart money parked and where the balance zones formed. now so you know how to map this in practice and read who actually controls the auction, we jump straight into the volume profile category.</p>
                 </div>
             </div>
-            <div class="next-section-wrapper">
+            <div class="next-section-wrapper fade-up-element">
                 <button class="next-btn" onclick="nav('cat-vp')">
                     <span class="pl">Czytaj dalej: 3. Volume Profile <span>→</span></span>
                     <span class="en">Read more: 3. Volume Profile <span>→</span></span>
@@ -538,10 +534,9 @@
             </div>
         </div>
 
-        <!-- 3. VP -->
         <div id="view-cat-vp" class="view">
-            <h2 class="section-title">3. VOLUME PROFILE</h2>
-            <div class="course-text">
+            <h2 class="section-title fade-up-element">3. VOLUME PROFILE</h2>
+            <div class="course-text fade-up-element">
                 <div class="course-section">
                     <p class="pl">Volume Profile czesto ustawia sie w te 4 kształty:</p>
                     <p class="en">Volume Profile often shapes up into these 4 patterns:</p>
@@ -556,14 +551,13 @@
                 </div>
             </div>
             
-            <h4 style="color:var(--heading-color); margin-bottom: 10px;">
+            <h4 style="color:var(--heading-color); margin-bottom: 10px;" class="fade-up-element">
                 <span class="pl">Setup 1: Kształt D (Balance) - Tradowanie VAH / VAL</span>
                 <span class="en">Setup 1: D Shape (Balance) - Trading VAH / VAL</span>
             </h4>
-            <!-- Replaced Canvas with Image Placeholder -->
-            <img src="https://i.imgur.com/Rc57K2p.png" alt="Ilustracja VAH VAL" class="course-img">
+            <img src="https://i.imgur.com/Rc57K2p.png" alt="Ilustracja VAH VAL" class="course-img fade-up-element">
 
-            <div class="course-text">
+            <div class="course-text fade-up-element">
                 <div class="course-section">
                     <p class="pl">"Mapowanie" profilem wolumenu(XD) można robić w dwa sposoby;</p>
                     <p class="en">"Mapping" with volume profile(XD) can be done in two ways;</p>
@@ -642,19 +636,19 @@
                 </div>
             </div>
 
-            <h4 style="color:var(--heading-color); margin-bottom: 10px;">
+            <h4 style="color:var(--heading-color); margin-bottom: 10px;" class="fade-up-element">
                 <span class="pl">Setup 2: Magnes POC i powrót do HVN</span>
                 <span class="en">Setup 2: POC Magnet and return to HVN</span>
             </h4>
-            <img src="https://i.imgur.com/3orrBSu.png" alt="Ilustracja Magnes POC" class="course-img">
+            <img src="https://i.imgur.com/3orrBSu.png" alt="Ilustracja Magnes POC" class="course-img fade-up-element">
 
-            <h4 style="color:var(--heading-color); margin-bottom: 10px;">
+            <h4 style="color:var(--heading-color); margin-bottom: 10px;" class="fade-up-element">
                 <span class="pl">Setup 3: Odbicie od LVN (Imbalance)</span>
                 <span class="en">Setup 3: LVN Bounce (Imbalance)</span>
             </h4>
-            <img src="https://i.imgur.com/WuG1Yjc.png" alt="Ilustracja Odbicie LVN" class="course-img">
+            <img src="https://i.imgur.com/WuG1Yjc.png" alt="Ilustracja Odbicie LVN" class="course-img fade-up-element">
             
-            <div class="next-section-wrapper">
+            <div class="next-section-wrapper fade-up-element">
                 <button class="next-btn" onclick="nav('cat-vwap')">
                     <span class="pl">Czytaj dalej: 4. AVWAP <span>→</span></span>
                     <span class="en">Read more: 4. AVWAP <span>→</span></span>
@@ -662,10 +656,9 @@
             </div>
         </div>
 
-        <!-- 4. AVWAP -->
         <div id="view-cat-vwap" class="view">
-            <h2 class="section-title">4. AVWAP</h2>
-            <div class="course-text">
+            <h2 class="section-title fade-up-element">4. AVWAP</h2>
+            <div class="course-text fade-up-element">
                 <div class="course-section">
                     <p class="pl">zwykłe średnie kroczące są spóźnione bo liczą tylko czas i cenę. dla nas liczy się <span class="tooltip-word" onmousemove="tt(event, 'VWAP', 'Volume Weighted Average Price - średnia cena ważona wolumenem.')" ontouchstart="tt(event, 'VWAP', 'Volume Weighted Average Price - średnia cena ważona wolumenem.')">vwap</span> czyli średnia cena ważona wolumenem. to jest jedyna „średnia” którą respektują instytucje bo pokazuje gdzie faktycznie handlował duży kapitał. jeśli cena jest powyżej vwap-u instytucjonalni kupujący są zadowoleni, jeśli poniżej to szukają okazji lub uciekają z pozycji. używamy <span class="tooltip-word" onmousemove="tt(event, 'Anchored VWAP', 'Zakotwiczony VWAP, mierzony od konkretnego wydarzenia, miejsca, lub początku sesji.')" ontouchstart="tt(event, 'Anchored VWAP', 'Zakotwiczony VWAP, mierzony od konkretnego wydarzenia, miejsca, lub początku sesji.')">anchored vwap</span> żeby przyczepić go do konkretnych punktów zwrotnych jak fomc czy szczyt sesji i widzieć kto od tego momentu przejął kontrolę nad rynkiem.</p>
                     <p class="en">regular moving averages are lagging because they only count time and price. for us, what matters is <span class="tooltip-word" onmousemove="tt(event, 'VWAP', 'Volume Weighted Average Price.')" ontouchstart="tt(event, 'VWAP', 'Volume Weighted Average Price.')">vwap</span>. this is the only "average" respected by institutions because it shows where big capital actually traded. if the price is above vwap, institutional buyers are happy, if below, they look for opportunities or run from positions. we use <span class="tooltip-word" onmousemove="tt(event, 'Anchored VWAP', 'VWAP anchored to a specific event, place, or session start.')" ontouchstart="tt(event, 'Anchored VWAP', 'VWAP anchored to a specific event, place, or session start.')">anchored vwap</span> to attach it to specific turning points like fomc or session high to see who took control of the market from that moment on.</p>
@@ -705,9 +698,9 @@
                 </div>
             </div>
             
-            <img src="https://i.imgur.com/P7I4m6A.png" alt="Ilustracja VWAP" class="course-img">
+            <img src="https://i.imgur.com/P7I4m6A.png" alt="Ilustracja VWAP" class="course-img fade-up-element">
 
-            <div class="next-section-wrapper">
+            <div class="next-section-wrapper fade-up-element">
                 <button class="next-btn" onclick="nav('cat-vsa')">
                     <span class="pl">Czytaj dalej: 5. VSA <span>→</span></span>
                     <span class="en">Read more: 5. VSA <span>→</span></span>
@@ -715,10 +708,9 @@
             </div>
         </div>
 
-        <!-- 5. VSA -->
         <div id="view-cat-vsa" class="view">
-            <h2 class="section-title">5. VOLUME SPREAD ANALYSIS</h2>
-            <div class="course-text">
+            <h2 class="section-title fade-up-element">5. VOLUME SPREAD ANALYSIS</h2>
+            <div class="course-text fade-up-element">
                 <div class="course-section">
                     <p class="pl">otwieramy nowy dzial czyli vsa volume spread analysis to genialne narzedzie ktore laczy czysty wykres candles z volume i uczy was patrzec na rynek przez pryzmat prawa wysilku i rezultatu</p>
                     <p class="en">we open a new section, vsa volume spread analysis. it's a brilliant tool that combines a pure candle chart with volume and teaches you to look at the market through the prism of the law of effort and result.</p>
@@ -787,9 +779,9 @@
                 </div>
             </div>
 
-            <img src="https://i.imgur.com/tBOo2X2.png" alt="Ilustracja VSA" class="course-img vsa-locked">
+            <img src="https://i.imgur.com/tBOo2X2.png" alt="Ilustracja VSA" class="course-img vsa-locked fade-up-element">
 
-            <div class="course-text">
+            <div class="course-text fade-up-element">
                 <div class="course-section">
                     <h4><span class="pl">Sygnały Odwrócenia (Stopping Vol & Climax)</span><span class="en">Reversal Signals (Stopping Vol & Climax)</span></h4>
                     
@@ -817,9 +809,9 @@
                 </div>
             </div>
 
-            <img src="https://i.imgur.com/Va4pAHU.png" alt="Ilustracja VSA No Demand Supply" class="course-img vsa-locked">
+            <img src="https://i.imgur.com/Va4pAHU.png" alt="Ilustracja VSA No Demand Supply" class="course-img vsa-locked fade-up-element">
             
-            <div class="next-section-wrapper">
+            <div class="next-section-wrapper fade-up-element">
                 <button class="next-btn" onclick="nav('cat-of')">
                     <span class="pl">Czytaj dalej: 6. Orderflow <span>→</span></span>
                     <span class="en">Read more: 6. Orderflow <span>→</span></span>
@@ -827,10 +819,9 @@
             </div>
         </div>
 
-        <!-- 6. ORDERFLOW -->
         <div id="view-cat-of" class="view">
-            <h2 class="section-title">6. ORDERFLOW & DELTA</h2>
-            <div class="course-text">
+            <h2 class="section-title fade-up-element">6. ORDERFLOW & DELTA</h2>
+            <div class="course-text fade-up-element">
                 <div class="course-section">
                     <h4><span class="pl">Absorpcja & Exhaustion</span><span class="en">Absorption & Exhaustion</span></h4>
                     
@@ -842,8 +833,7 @@
                 </div>
             </div>
             
-            <!-- footprint boxes centered layout -->
-            <div class="fp-wrapper">
+            <div class="fp-wrapper fade-up-element">
                 <div class="fp-box" style="width: 260px;">
                     <div style="text-align:center; font-weight:700; margin-bottom:10px; color:var(--heading-color);">
                         <span class="pl">Absorpcja Limitami</span><span class="en">Limit Absorption</span>
@@ -879,7 +869,7 @@
                 </div>
             </div>
 
-            <div class="course-text">
+            <div class="course-text fade-up-element">
                 <div class="course-section">
                     <h4><span class="pl">Imbalance & Diagonal Reading</span><span class="en">Imbalance & Diagonal Reading</span></h4>
                     <p class="pl">imbalance na footprint można zobaczyć po znaczącej różnicy między bid and ask np;</p>
@@ -940,7 +930,6 @@
                     <p class="pl">kolejnym waznym elementem ukladanki na footprincie jest <span class="tooltip-word" onmousemove="tt(event, 'Delta', 'Różnica między agresywnym kupnem a sprzedażą.')" ontouchstart="tt(event, 'Delta', 'Różnica między agresywnym kupnem a sprzedażą.')">delta</span> czyli po prostu roznica miedzy agresywnymi kupujacymi a sprzedajacymi w danej swieczce/candle lub na konkretnym poziomie cenowym</p>
                     <p class="en">another important piece of the puzzle on the footprint is <span class="tooltip-word" onmousemove="tt(event, 'Delta', 'Difference between aggressive buying and selling.')" ontouchstart="tt(event, 'Delta', 'Difference between aggressive buying and selling.')">delta</span>, meaning simply the difference between aggressive buyers and sellers in a given candle or at a specific price level</p>
                     
-                    <!-- delta centered layout -->
                     <div class="fp-wrapper">
                         <div class="fp-box" style="width: 260px;">
                             <div style="text-align:center; font-weight:700; margin-bottom:10px; color:var(--heading-color);">Delta = Ask - Bid</div>
@@ -1025,7 +1014,7 @@
                 </div>
             </div>
             
-            <div class="next-section-wrapper">
+            <div class="next-section-wrapper fade-up-element">
                 <button class="next-btn" onclick="nav('cat-fund')">
                     <span class="pl">Czytaj dalej: 7. Fundamenty <span>→</span></span>
                     <span class="en">Read more: 7. Fundamentals <span>→</span></span>
@@ -1033,10 +1022,9 @@
             </div>
         </div>
 
-        <!-- 7. FUNDAMENTALS -->
         <div id="view-cat-fund" class="view">
-            <h2 class="section-title"><span class="pl">7. FUNDAMENTY POD INTRADAY</span><span class="en">7. INTRADAY FUNDAMENTALS</span></h2>
-            <div class="course-text">
+            <h2 class="section-title fade-up-element"><span class="pl">7. FUNDAMENTY POD INTRADAY</span><span class="en">7. INTRADAY FUNDAMENTALS</span></h2>
+            <div class="course-text fade-up-element">
                 <div class="course-section">
                     <p class="pl">fundamenty w daytradingu to nie jest czytanie sprawozdan finansowych spolek to po prostu kalendarz makroekonomiczny i swiadomosc kiedy na rynek wpadnie huragan</p>
                     <p class="en">fundamentals in daytrading is not reading company financial reports, it's simply the macroeconomic calendar and being aware of when a hurricane will hit the market.</p>
@@ -1058,7 +1046,7 @@
                     <p class="en">then you watch how the market goes crazy, wait until the initial chaos passes and emotions settle down. when algorithms do their thing and the market starts building a new balance or a clear imbalance, only then do we enter the game on our terms.</p>
                 </div>
             </div>
-            <div class="next-section-wrapper">
+            <div class="next-section-wrapper fade-up-element">
                 <button class="next-btn" onclick="nav('cat-risk')">
                     <span class="pl">Czytaj dalej: 8. Zarządzanie Ryzykiem <span>→</span></span>
                     <span class="en">Read more: 8. Risk Management <span>→</span></span>
@@ -1066,10 +1054,9 @@
             </div>
         </div>
 
-        <!-- 8. RISK MANAGEMENT -->
         <div id="view-cat-risk" class="view">
-            <h2 class="section-title"><span class="pl">8. ZARZĄDZANIE RYZYKIEM</span><span class="en">8. RISK MANAGEMENT</span></h2>
-            <div class="course-text">
+            <h2 class="section-title fade-up-element"><span class="pl">8. ZARZĄDZANIE RYZYKIEM</span><span class="en">8. RISK MANAGEMENT</span></h2>
+            <div class="course-text fade-up-element">
                 <div class="course-section">
                     <p class="pl">polecam przeczytać po zapoznaniu sie z wcześniejszymi kanałami, zawiera ... które były tam wyjaśnione</p>
                     <p class="en">i recommend reading this after getting familiar with the previous channels, it contains concepts ... that were explained there.</p>
@@ -1092,7 +1079,7 @@
                     <p class="en">this could be big trades, absorption, lvn, hvn or any other thing (that fits.)</p>
                 </div>
             </div>
-            <div class="next-section-wrapper">
+            <div class="next-section-wrapper fade-up-element">
                 <button class="next-btn" onclick="nav('home')" style="background: var(--card-bg); border: 1px solid var(--border-color); color: var(--heading-color); box-shadow: none;">
                     <span class="pl">Wróć do Katalogu Głównego</span>
                     <span class="en">Back to Main Catalog</span>
@@ -1101,7 +1088,6 @@
         </div>
     </div>
 
-    <!-- feedback floating toggle -->
     <div class="feedback-toggle" onclick="document.getElementById('feedback-w').classList.toggle('show'); event.stopPropagation();">💬</div>
     
     <div id="feedback-w" class="feedback-widget" onclick="event.stopPropagation();">
@@ -1173,6 +1159,23 @@
             }
             updateBreadcrumbs();
             window.scrollTo({top: 0, behavior: 'smooth'});
+            
+            // 1. Zresetowanie klas, żeby kaskada weszła od nowa (Tego u Ciebie brakowało!)
+            document.querySelectorAll('.fade-up-element').forEach(el => {
+                el.classList.remove('animate');
+                el.style.animationDelay = '0s';
+            });
+ 
+            // 2. Wymuszenie reflow
+            void document.body.offsetWidth;
+
+            // 3. Dodanie animacji z odpowiednim opóźnieniem (Zmieniono viewId na id!)
+            const elementsToAnimate = document.querySelectorAll(`nav.fade-up-element, #breadcrumbs.fade-up-element, #view-${id} .fade-up-element`);
+
+            elementsToAnimate.forEach((el, index) => {
+                el.style.animationDelay = `${index * 0.06}s`;
+                el.classList.add('animate');
+            });
         }
 
         function updateBreadcrumbs() {
@@ -1202,7 +1205,7 @@
                 if(el.parentElement.classList.contains('locked-container')) return;
 
                 const wrapper = document.createElement('div');
-                wrapper.className = 'locked-container';
+                wrapper.className = 'locked-container fade-up-element'; // Klasa dodana tutaj dla płynności
                 
                 // inherit margins
                 if (el.style.marginTop) wrapper.style.marginTop = el.style.marginTop;
@@ -1259,54 +1262,54 @@
             initLocks();
         };
 
-async function submitFback() {
-    const txt = document.getElementById('feedback-text').value;
-    if (!txt.trim()) return;
+        async function submitFback() {
+            const txt = document.getElementById('feedback-text').value;
+            if (!txt.trim()) return;
 
-    const btn = document.getElementById('fback-btn');
-    const originalText = btn.innerText;
-    
-    btn.innerText = 'Wysyłanie...';
-    btn.disabled = true; 
+            const btn = document.getElementById('fback-btn');
+            const originalText = btn.innerText;
+            
+            btn.innerText = 'Wysyłanie...';
+            btn.disabled = true; 
 
-    try {
-        const response = await fetch("https://cool-leaf-ade2.reiseiv.workers.dev/", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                message: txt,
-                language: typeof currentLang !== 'undefined' ? currentLang : 'pl',
-                page: window.location.pathname.split('/').pop() || 'index.html'
-            })
-        });
+            try {
+                const response = await fetch("https://cool-leaf-ade2.reiseiv.workers.dev/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        message: txt,
+                        language: typeof currentLang !== 'undefined' ? currentLang : 'pl',
+                        page: window.location.pathname.split('/').pop() || 'index.html'
+                    })
+                });
 
-        if (response.ok) {
+                if (response.ok) {
 
-            document.getElementById('feedback-text').value = '';
-            btn.style.background = 'var(--up-color)';
-            btn.style.color = '#000';
-            btn.innerText = '✓ Wysłano';
-        } else {
+                    document.getElementById('feedback-text').value = '';
+                    btn.style.background = 'var(--up-color)';
+                    btn.style.color = '#000';
+                    btn.innerText = '✓ Wysłano';
+                } else {
 
-            const errorMsg = await response.text();
-            btn.innerText = 'Błąd!';
-            alert("Błąd: " + errorMsg);
-        }
-    } catch (error) {
+                    const errorMsg = await response.text();
+                    btn.innerText = 'Błąd!';
+                    alert("Błąd: " + errorMsg);
+                }
+            } catch (error) {
 
-        console.error("Błąd sieci:", error);
-        btn.innerText = 'Błąd sieci';
-    }
+                console.error("Błąd sieci:", error);
+                btn.innerText = 'Błąd sieci';
+            }
 
-    setTimeout(() => {
-        btn.disabled = false;
-        btn.style.background = ''; 
-        btn.style.color = '';
-        btn.innerText = typeof currentLang !== 'undefined' && currentLang === 'pl' ? 'Wyślij' : 'Submit';
-        document.getElementById('feedback-w').classList.remove('show');
-    }, 2000);
+            setTimeout(() => {
+                btn.disabled = false;
+                btn.style.background = ''; 
+                btn.style.color = '';
+                btn.innerText = typeof currentLang !== 'undefined' && currentLang === 'pl' ? 'Wyślij' : 'Submit';
+                document.getElementById('feedback-w').classList.remove('show');
+            }, 2000);
         }
     </script>
 </body>

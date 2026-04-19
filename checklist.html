@@ -3,14 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pre-trade Checklist | Rei Academy</title>
-        <link rel="stylesheet" href="loader.css">
+    <title>Rei Academy / checklist</title>
+
+    <link rel="stylesheet" href="loader.css">
     <script src="loader.js"></script>
-    <!-- 
-      Rei Academy - Pre-trade Checklist
-      Orderflow knowledge base & trading utilities.
-      Interactive checklist with localStorage, JSON export/import and ambient UI.
-    -->
+
     <style>
         /* Global variables */
         :root {
@@ -231,7 +228,7 @@
 
     <div class="ambient-blobs" id="ambient"></div>
 
-    <nav>
+    <nav class="fade-up-element">
         <a href="index.html" class="back-link"><span>←</span> Wróć do bazy</a>
         <div class="header-actions">
             <button class="btn-action" onclick="resetToExample()">
@@ -250,13 +247,13 @@
         </div>
     </nav>
 
-    <div class="container fade-up-element">
-        <div class="page-header">
+    <div class="container">
+        <div class="page-header fade-up-element">
             <h1>Pre-trade Checklist</h1>
             <p>Stwórz własną listę zasad przed wejściem w pozycję. Zmiany zapisują się automatycznie.</p>
         </div>
 
-        <div class="pro-tip">
+        <div class="pro-tip fade-up-element">
             <div class="pro-tip-icon">💡</div>
             <div class="pro-tip-content">
                 <strong>Tip ode mnie ;p</strong>
@@ -265,10 +262,9 @@
         </div>
 
         <div class="checklist-wrapper" id="checklist-container">
-            <!-- dynamic content -->
-        </div>
+            </div>
 
-        <button class="add-cat-btn" onclick="addCategory()" style="margin-top: 32px;">
+        <button class="add-cat-btn fade-up-element" onclick="addCategory()" style="margin-top: 32px;">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             Dodaj nową sekcję
         </button>
@@ -386,8 +382,9 @@
             container.innerHTML = '';
 
             state.forEach((cat, catIndex) => {
+                // DODANO KLASE: fade-up-element
                 const catDiv = document.createElement('div');
-                catDiv.className = 'category';
+                catDiv.className = 'category fade-up-element';
                 
                 // Category Header
                 const header = document.createElement('div');
@@ -469,6 +466,15 @@
                 catDiv.appendChild(addBtn);
                 container.appendChild(catDiv);
             });
+
+            // Animowanie elementów po przerenderowaniu, jeśli strona była już wczytana
+            if (document.body.classList.contains('ready')) {
+                document.querySelectorAll('#checklist-container .fade-up-element').forEach((el, index) => {
+                    el.style.animationDelay = `${index * 0.06}s`;
+                    void el.offsetWidth;
+                    el.classList.add('animate');
+                });
+            }
         }
 
         // State Mutations

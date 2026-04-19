@@ -4,11 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rei Academy</title>
-    <!-- 
-      Rei Academy
-      Orderflow knowledge base & trading utilities.
-      UI & core logic built from scratch. Chart rendering logic (Canvas) optimized with AI assistance.
-    -->
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="loader.css">
     <script src="loader.js"></script>
@@ -27,7 +22,6 @@
     </div>
 </div>
 
-    <!-- Animated theme (Awwwards vibe) -->
     <div class="ambient-blobs" id="ambient"></div>
 
     <nav class="fade-up-element">
@@ -58,14 +52,14 @@
 
     <div id="tooltip" class="tooltip"></div>
 
-    <div class="container fade-up-element">
-        <div class="breadcrumbs" id="breadcrumbs">
+    <div class="container">
+        <div class="breadcrumbs fade-up-element fade-delay-1" id="breadcrumbs">
             <span class="pl">📍 Katalog Główny</span><span class="en">📍 Main Catalog</span>
         </div>
 
         <div id="view-home" class="view active">
             <div class="grid">
-                <div class="folder-card" data-cat="cat-mech" onclick="nav('cat-mech')">
+                <div class="folder-card fade-up-element fade-delay-1" data-cat="cat-mech" onclick="nav('cat-mech')">
                     <div class="progress-badge"><span class="pl">✓ PRZEROBIONE</span><span class="en">✓ COMPLETED</span></div>
                     <div class="folder-num">1</div>
                     <div class="folder-info">
@@ -73,7 +67,7 @@
                         <p><span class="pl">Płynność, Makro, Opcje, Natura</span><span class="en">Liquidity, Macro, Options, Nature</span></p>
                     </div>
                 </div>
-                <div class="folder-card" data-cat="cat-amt" onclick="nav('cat-amt')">
+                <div class="folder-card fade-up-element fade-delay-2" data-cat="cat-amt" onclick="nav('cat-amt')">
                     <div class="progress-badge"><span class="pl">✓ PRZEROBIONE</span><span class="en">✓ COMPLETED</span></div>
                     <div class="folder-num">2</div>
                     <div class="folder-info">
@@ -81,7 +75,7 @@
                         <p><span class="pl">Balance, Imbalance, Cykl Aukcji</span><span class="en">Balance, Imbalance, Auction Cycle</span></p>
                     </div>
                 </div>
-                <div class="folder-card" data-cat="cat-vp" onclick="nav('cat-vp')">
+                <div class="folder-card fade-up-element fade-delay-3" data-cat="cat-vp" onclick="nav('cat-vp')">
                     <div class="progress-badge"><span class="pl">✓ PRZEROBIONE</span><span class="en">✓ COMPLETED</span></div>
                     <div class="folder-num">3</div>
                     <div class="folder-info">
@@ -89,7 +83,7 @@
                         <p><span class="pl">S&R, POC, Odbicia LVN</span><span class="en">S&R, POC, LVN Rejections</span></p>
                     </div>
                 </div>
-                <div class="folder-card" data-cat="cat-vwap" onclick="nav('cat-vwap')">
+                <div class="folder-card fade-up-element fade-delay-4" data-cat="cat-vwap" onclick="nav('cat-vwap')">
                     <div class="progress-badge"><span class="pl">✓ PRZEROBIONE</span><span class="en">✓ COMPLETED</span></div>
                     <div class="folder-num">4</div>
                     <div class="folder-info">
@@ -97,7 +91,7 @@
                         <p><span class="pl">Instytucjonalne Bands, Pullbacki</span><span class="en">Institutional Bands, Pullbacks</span></p>
                     </div>
                 </div>
-                <div class="folder-card" data-cat="cat-vsa" onclick="nav('cat-vsa')">
+                <div class="folder-card fade-up-element fade-delay-5" data-cat="cat-vsa" onclick="nav('cat-vsa')">
                     <div class="progress-badge"><span class="pl">✓ PRZEROBIONE</span><span class="en">✓ COMPLETED</span></div>
                     <div class="folder-num">5</div>
                     <div class="folder-info">
@@ -105,7 +99,7 @@
                         <p><span class="pl">Effort/Result, Climax, No Demand</span><span class="en">Effort/Result, Climax, No Demand</span></p>
                     </div>
                 </div>
-                <div class="folder-card" data-cat="cat-of" onclick="nav('cat-of')">
+                <div class="folder-card fade-up-element fade-delay-6" data-cat="cat-of" onclick="nav('cat-of')">
                     <div class="progress-badge"><span class="pl">✓ PRZEROBIONE</span><span class="en">✓ COMPLETED</span></div>
                     <div class="folder-num">6</div>
                     <div class="folder-info">
@@ -113,7 +107,7 @@
                         <p><span class="pl">Absorpcja, Exhaustion, CVD</span><span class="en">Absorption, Exhaustion, CVD</span></p>
                     </div>
                 </div>
-                <div class="folder-card" data-cat="cat-fund" onclick="nav('cat-fund')">
+                <div class="folder-card fade-up-element fade-delay-7" data-cat="cat-fund" onclick="nav('cat-fund')">
                     <div class="progress-badge"><span class="pl">✓ PRZEROBIONE</span><span class="en">✓ COMPLETED</span></div>
                     <div class="folder-num">7</div>
                     <div class="folder-info">
@@ -121,7 +115,7 @@
                         <p><span class="pl">Makro, Rekalibracja wartości</span><span class="en">Macro, Value Recalibration</span></p>
                     </div>
                 </div>
-                <div class="folder-card" data-cat="cat-risk" onclick="nav('cat-risk')">
+                <div class="folder-card fade-up-element fade-delay-8" data-cat="cat-risk" onclick="nav('cat-risk')">
                     <div class="progress-badge"><span class="pl">✓ PRZEROBIONE</span><span class="en">✓ COMPLETED</span></div>
                     <div class="folder-num">8</div>
                     <div class="folder-info">
@@ -130,8 +124,7 @@
                     </div>
                 </div>
                 
-                <!-- Przekierowanie do checklisty jako punkt 9 -->
-                <div class="folder-card" onclick="window.location.href='checklist.html'">
+                <div class="folder-card fade-up-element fade-delay-9" onclick="window.location.href='checklist.html'">
     <div class="folder-num">9</div>
                     <div class="folder-info">
                         <h3><span class="pl">Pre-trade Checklist</span><span class="en">Pre-trade Checklist</span></h3>
@@ -140,7 +133,7 @@
                 </div>
             </div>
             
-            <div class="community-wrapper">
+            <div class="community-wrapper fade-up-element fade-delay-10">
                 <div class="community-footer">
                     <h4><span class="pl">Nasze Community</span><span class="en">Our Community</span></h4>
                     <div class="links-group">
@@ -175,8 +168,8 @@
         </div>
 
         <div id="view-cat-mech" class="view">
-            <h2 class="section-title"><span class="pl">1. MECHANIKA RYNKU</span><span class="en">1. MARKET MECHANICS</span></h2>
-            <div class="course-text">
+            <h2 class="section-title fade-up-element fade-delay-1"><span class="pl">1. MECHANIKA RYNKU</span><span class="en">1. MARKET MECHANICS</span></h2>
+            <div class="course-text fade-up-element fade-delay-2">
                 <div class="course-section">
                     <div class="segment-tag tag-must-know">Must Know</div>
                     <h4><span class="pl">Część 1: Mechanizm płynności i orderflow pressure</span><span class="en">Part 1: Liquidity mechanism and orderflow pressure</span></h4>
@@ -240,7 +233,7 @@
                     <p class="en">the market is simply a continuous auction that goes from a boring balance to an aggressive imbalance to find the next balance again and so on. this is the ultimate mindset with which you should now move on to reading the rest of the categories.</p>
                 </div>
             </div>
-            <div class="next-section-wrapper">
+            <div class="next-section-wrapper fade-up-element fade-delay-3">
                 <button class="next-btn" onclick="nav('cat-amt')">
                     <span class="pl">Czytaj dalej: 2. AMT <span>→</span></span>
                     <span class="en">Read more: 2. AMT <span>→</span></span>
@@ -249,8 +242,8 @@
         </div>
 
         <div id="view-cat-amt" class="view">
-            <h2 class="section-title">2. AMT (Auction Market Theory)</h2>
-            <div class="course-text">
+            <h2 class="section-title fade-up-element fade-delay-1">2. AMT (Auction Market Theory)</h2>
+            <div class="course-text fade-up-element fade-delay-2">
                 <div class="course-section">
                     <p><strong class="em-up">balance</strong> -> <strong class="em-down">imbalance</strong> -> auction -> <strong class="em-up">new balance</strong></p>
                     
@@ -287,7 +280,7 @@
                     <p class="en">amt is your map and logic and volume profile is the x-ray that shows all of this on the chart. we skip past regular candles and see exactly where the smart money parked and where the balance zones formed. now so you know how to map this in practice and read who actually controls the auction, we jump straight into the volume profile category.</p>
                 </div>
             </div>
-            <div class="next-section-wrapper">
+            <div class="next-section-wrapper fade-up-element fade-delay-3">
                 <button class="next-btn" onclick="nav('cat-vp')">
                     <span class="pl">Czytaj dalej: 3. Volume Profile <span>→</span></span>
                     <span class="en">Read more: 3. Volume Profile <span>→</span></span>
@@ -296,8 +289,8 @@
         </div>
 
         <div id="view-cat-vp" class="view">
-            <h2 class="section-title">3. VOLUME PROFILE</h2>
-            <div class="course-text">
+            <h2 class="section-title fade-up-element fade-delay-1">3. VOLUME PROFILE</h2>
+            <div class="course-text fade-up-element fade-delay-2">
                 <div class="course-section">
                     <p class="pl">Volume Profile czesto ustawia sie w te 4 kształty:</p>
                     <p class="en">Volume Profile often shapes up into these 4 patterns:</p>
@@ -307,20 +300,20 @@
                         <li>B🌪️ - <span class="pl">presja w obie strony xD</span><span class="en">pressure both ways xD</span></li>
                         <li>D👉 - <span class="pl">market w balance ("konsolidacja")</span><span class="en">market in balance ("consolidation")</span></li>
                     </ul>
-                    <p class="pl">Przykładowy setup, z wykorzystaniem logiki auction market theory (tak w D, aż do wystąpienia breakoutu możesz tradować <span class="tooltip-word">S&R <span class="tip-i tip-i-up" onmousemove="tt(event, 'S&R', 'Support & Resistance - poziomy wsparcia (gdzie cena odbija w górę) i oporu (gdzie cena zawraca w dół).')" onmouseleave="htt()">i</span></span>).</p>
-                    <p class="en">Example setups, using auction market theory logic (yes in D shape, until a breakout occurs you can trade <span class="tooltip-word">S&R <span class="tip-i tip-i-up" onmousemove="tt(event, 'S&R', 'Support & Resistance - levels where price bounces up or rejects down.')" onmouseleave="htt()">i</span></span>).</p>
+                    <p class="pl">Przykładowy setup, z wykorzystaniem logiki auction market theory (tak w D, aż do wystąpienia breakoutu możesz tradować <span class="tooltip-word" onmousemove="tt(event, 'S&R', 'Support & Resistance - poziomy wsparcia (gdzie cena odbija w górę) i oporu (gdzie cena zawraca w dół).')" onmouseleave="htt()">i</span>).</p>
+                    <p class="en">Example setups, using auction market theory logic (yes in D shape, until a breakout occurs you can trade <span class="tooltip-word" onmousemove="tt(event, 'S&R', 'Support & Resistance - levels where price bounces up or rejects down.')" onmouseleave="htt()">i</span>).</p>
                 </div>
             </div>
             
-            <h4 style="color:var(--heading-color); margin-bottom: 10px;">
+            <h4 style="color:var(--heading-color); margin-bottom: 10px;" class="fade-up-element fade-delay-3">
                 <span class="pl">Setup 1: Kształt D (Balance) - Tradowanie VAH / VAL</span>
                 <span class="en">Setup 1: D Shape (Balance) - Trading VAH / VAL</span>
             </h4>
-            <div class="chart-wrapper" style="height: 400px;">
+            <div class="chart-wrapper fade-up-element fade-delay-4" style="height: 400px;">
                 <canvas id="canvas-vaval" class="chart-canvas"></canvas>
             </div>
 
-            <div class="course-text">
+            <div class="course-text fade-up-element fade-delay-5">
                 <div class="course-section">
                     <p class="pl">"Mapowanie" profilem wolumenu(XD) można robić w dwa sposoby;</p>
                     <p class="en">"Mapping" with volume profile(XD) can be done in two ways;</p>
@@ -403,23 +396,23 @@
                 </div>
             </div>
 
-            <h4 style="color:var(--heading-color); margin-bottom: 10px;">
+            <h4 style="color:var(--heading-color); margin-bottom: 10px;" class="fade-up-element fade-delay-6">
                 <span class="pl">Setup 2: Magnes POC i powrót do HVN</span>
                 <span class="en">Setup 2: POC Magnet and return to HVN</span>
             </h4>
-            <div class="chart-wrapper" style="height: 400px;">
+            <div class="chart-wrapper fade-up-element fade-delay-7" style="height: 400px;">
                 <canvas id="canvas-poc" class="chart-canvas"></canvas>
             </div>
 
-            <h4 style="color:var(--heading-color); margin-bottom: 10px;">
+            <h4 style="color:var(--heading-color); margin-bottom: 10px;" class="fade-up-element fade-delay-8">
                 <span class="pl">Setup 3: Odbicie od LVN (Imbalance)</span>
                 <span class="en">Setup 3: LVN Bounce (Imbalance)</span>
             </h4>
-            <div class="chart-wrapper" style="height: 400px;">
+            <div class="chart-wrapper fade-up-element fade-delay-9" style="height: 400px;">
                 <canvas id="canvas-lvn" class="chart-canvas"></canvas>
             </div>
             
-            <div class="next-section-wrapper">
+            <div class="next-section-wrapper fade-up-element fade-delay-10">
                 <button class="next-btn" onclick="nav('cat-vwap')">
                     <span class="pl">Czytaj dalej: 4. AVWAP <span>→</span></span>
                     <span class="en">Read more: 4. AVWAP <span>→</span></span>
@@ -428,8 +421,8 @@
         </div>
 
         <div id="view-cat-vwap" class="view">
-            <h2 class="section-title">4. AVWAP</h2>
-            <div class="course-text">
+            <h2 class="section-title fade-up-element fade-delay-1">4. AVWAP</h2>
+            <div class="course-text fade-up-element fade-delay-2">
                 <div class="course-section">
                     <p class="pl">zwykłe średnie kroczące są spóźnione bo liczą tylko czas i cenę. dla nas liczy się <span class="tooltip-word">vwap <span class="tip-i tip-i-up" onmousemove="tt(event, 'VWAP', 'Volume Weighted Average Price - średnia cena ważona wolumenem.')" onmouseleave="htt()">i</span></span> czyli średnia cena ważona wolumenem. to jest jedyna „średnia” którą respektują instytucje bo pokazuje gdzie faktycznie handlował duży kapitał. jeśli cena jest powyżej vwap-u instytucjonalni kupujący są zadowoleni, jeśli poniżej to szukają okazji lub uciekają z pozycji. używamy <span class="tooltip-word">anchored vwap <span class="tip-i tip-i-up" onmousemove="tt(event, 'Anchored VWAP', 'Zakotwiczony VWAP, mierzony od konkretnego wydarzenia, miejsca, lub początku sesji.')" onmouseleave="htt()">i</span></span> żeby przyczepić go do konkretnych punktów zwrotnych jak fomc czy szczyt sesji i widzieć kto od tego momentu przejął kontrolę nad rynkiem.</p>
                     <p class="en">regular moving averages are lagging because they only count time and price. for us, what matters is <span class="tooltip-word">vwap <span class="tip-i tip-i-up" onmousemove="tt(event, 'VWAP', 'Volume Weighted Average Price.')" onmouseleave="htt()">i</span></span>. this is the only "average" respected by institutions because it shows where big capital actually traded. if the price is above vwap, institutional buyers are happy, if below, they look for opportunities or run from positions. we use <span class="tooltip-word">anchored vwap <span class="tip-i tip-i-up" onmousemove="tt(event, 'Anchored VWAP', 'VWAP anchored to a specific event, place, or session start.')" onmouseleave="htt()">i</span></span> to attach it to specific turning points like fomc or session high to see who took control of the market from that moment on.</p>
@@ -467,9 +460,11 @@
                     <p class="pl">co do samego tradowania mean reversion pamietajcie o jednej waznej rzeczy to dziala swietnie kiedy rynek jest w szerokim balansie i po prostu oddycha od bandy do bandy ale jesli mamy silny imbalance i pprst plynie w jednym kierunku to cena moze przebywac bardzo daleko od vwap przez cala sesje i nigdy do niego nie wrocic dlatego w trendzie vwap sluzy nam jako trampolina na pullbackach a nie jako cel do ktorego gramy counter-trend</p>
                     <p class="en">as for trading mean reversion itself, remember one important thing: it works great when the market is in a wide balance and simply breathes from band to band, but if we have a strong imbalance and it just flows in one direction, the price can stay very far from vwap all session and never return to it. therefore, in a trend, vwap serves us as a trampoline on pullbacks, not as a target to which we play counter-trend.</p>
                 </div>
-                <div class="chart-wrapper" style="height: 400px;"><canvas id="canvas-vwap" class="chart-canvas"></canvas></div>
             </div>
-            <div class="next-section-wrapper">
+            
+            <div class="chart-wrapper fade-up-element fade-delay-3" style="height: 400px;"><canvas id="canvas-vwap" class="chart-canvas"></canvas></div>
+
+            <div class="next-section-wrapper fade-up-element fade-delay-4">
                 <button class="next-btn" onclick="nav('cat-vsa')">
                     <span class="pl">Czytaj dalej: 5. VSA <span>→</span></span>
                     <span class="en">Read more: 5. VSA <span>→</span></span>
@@ -478,8 +473,8 @@
         </div>
 
         <div id="view-cat-vsa" class="view">
-            <h2 class="section-title">5. VOLUME SPREAD ANALYSIS</h2>
-            <div class="course-text">
+            <h2 class="section-title fade-up-element fade-delay-1">5. VOLUME SPREAD ANALYSIS</h2>
+            <div class="course-text fade-up-element fade-delay-2">
                 <div class="course-section">
                     <p class="pl">otwieramy nowy dzial czyli vsa volume spread analysis to genialne narzedzie ktore laczy czysty wykres candles z volume i uczy was patrzec na rynek przez pryzmat prawa wysilku i rezultatu</p>
                     <p class="en">we open a new section, vsa volume spread analysis. it's a brilliant tool that combines a pure candle chart with volume and teaches you to look at the market through the prism of the law of effort and result.</p>
@@ -548,11 +543,11 @@
                 </div>
             </div>
 
-            <div class="chart-wrapper" style="height: 420px;">
+            <div class="chart-wrapper fade-up-element fade-delay-3" style="height: 420px;">
                 <canvas id="canvas-vsa1" class="chart-canvas"></canvas>
             </div>
 
-            <div class="course-text">
+            <div class="course-text fade-up-element fade-delay-4">
                 <div class="course-section">
                     <h4><span class="pl">Sygnały Odwrócenia (Stopping Vol & Climax)</span><span class="en">Reversal Signals (Stopping Vol & Climax)</span></h4>
                     
@@ -580,11 +575,11 @@
                 </div>
             </div>
 
-            <div class="chart-wrapper" style="height: 420px;">
+            <div class="chart-wrapper fade-up-element fade-delay-5" style="height: 420px;">
                 <canvas id="canvas-vsa2" class="chart-canvas"></canvas>
             </div>
             
-            <div class="next-section-wrapper">
+            <div class="next-section-wrapper fade-up-element fade-delay-6">
                 <button class="next-btn" onclick="nav('cat-of')">
                     <span class="pl">Czytaj dalej: 6. Orderflow <span>→</span></span>
                     <span class="en">Read more: 6. Orderflow <span>→</span></span>
@@ -593,8 +588,8 @@
         </div>
 
         <div id="view-cat-of" class="view">
-            <h2 class="section-title">6. ORDERFLOW & DELTA</h2>
-            <div class="course-text">
+            <h2 class="section-title fade-up-element fade-delay-1">6. ORDERFLOW & DELTA</h2>
+            <div class="course-text fade-up-element fade-delay-2">
                 <div class="course-section">
                     <h4><span class="pl">Absorpcja & Exhaustion</span><span class="en">Absorption & Exhaustion</span></h4>
                     
@@ -606,7 +601,7 @@
                 </div>
             </div>
             
-            <div class="fp-wrapper">
+            <div class="fp-wrapper fade-up-element fade-delay-3">
                 <div class="fp-box">
                     <div style="text-align:center; font-weight:700; margin-bottom:10px; color:var(--heading-color);">
                         <span class="pl">Absorpcja Limitami</span><span class="en">Limit Absorption</span>
@@ -642,7 +637,7 @@
                 </div>
             </div>
 
-            <div class="course-text">
+            <div class="course-text fade-up-element fade-delay-4">
                 <div class="course-section">
                     <h4><span class="pl">Imbalance & Diagonal Reading</span><span class="en">Imbalance & Diagonal Reading</span></h4>
                     <p class="pl">imbalance na footprint można zobaczyć po znaczącej różnicy między bid and ask np;</p>
@@ -787,7 +782,7 @@
                 </div>
             </div>
             
-            <div class="next-section-wrapper">
+            <div class="next-section-wrapper fade-up-element fade-delay-5">
                 <button class="next-btn" onclick="nav('cat-fund')">
                     <span class="pl">Czytaj dalej: 7. Fundamenty <span>→</span></span>
                     <span class="en">Read more: 7. Fundamentals <span>→</span></span>
@@ -796,8 +791,8 @@
         </div>
 
         <div id="view-cat-fund" class="view">
-            <h2 class="section-title"><span class="pl">7. FUNDAMENTY POD INTRADAY</span><span class="en">7. INTRADAY FUNDAMENTALS</span></h2>
-            <div class="course-text">
+            <h2 class="section-title fade-up-element fade-delay-1"><span class="pl">7. FUNDAMENTY POD INTRADAY</span><span class="en">7. INTRADAY FUNDAMENTALS</span></h2>
+            <div class="course-text fade-up-element fade-delay-2">
                 <div class="course-section">
                     <p class="pl">fundamenty w daytradingu to nie jest czytanie sprawozdan finansowych spolek to po prostu kalendarz makroekonomiczny i swiadomosc kiedy na rynek wpadnie huragan</p>
                     <p class="en">fundamentals in daytrading is not reading company financial reports, it's simply the macroeconomic calendar and being aware of when a hurricane will hit the market.</p>
@@ -819,7 +814,7 @@
                     <p class="en">then you watch how the market goes crazy, wait until the initial chaos passes and emotions settle down. when algorithms do their thing and the market starts building a new balance or a clear imbalance, only then do we enter the game on our terms.</p>
                 </div>
             </div>
-            <div class="next-section-wrapper">
+            <div class="next-section-wrapper fade-up-element fade-delay-3">
                 <button class="next-btn" onclick="nav('cat-risk')">
                     <span class="pl">Czytaj dalej: 8. Zarządzanie Ryzykiem <span>→</span></span>
                     <span class="en">Read more: 8. Risk Management <span>→</span></span>
@@ -828,8 +823,8 @@
         </div>
 
         <div id="view-cat-risk" class="view">
-            <h2 class="section-title"><span class="pl">8. ZARZĄDZANIE RYZYKIEM</span><span class="en">8. RISK MANAGEMENT</span></h2>
-            <div class="course-text">
+            <h2 class="section-title fade-up-element fade-delay-1"><span class="pl">8. ZARZĄDZANIE RYZYKIEM</span><span class="en">8. RISK MANAGEMENT</span></h2>
+            <div class="course-text fade-up-element fade-delay-2">
                 <div class="course-section">
                     <p class="pl">polecam przeczytać po zapoznaniu sie z wcześniejszymi kanałami, zawiera ... które były tam wyjaśnione</p>
                     <p class="en">i recommend reading this after getting familiar with the previous channels, it contains concepts ... that were explained there.</p>
@@ -852,8 +847,8 @@
                     <p class="en">this could be big trades, absorption, lvn, hvn or any other thing (that fits.)</p>
                 </div>
             </div>
-            <div class="next-section-wrapper">
-                <button class="next-btn" onclick="nav('home')" style="background: var(--card-bg); border: 1px solid var(--border-color); color: var(--heading-color); box-shadow: none;">
+            <div class="next-section-wrapper fade-up-element fade-delay-3">
+                <button class="next-btn" onclick="nav('home')" style="background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); box-shadow: none;">
                     <span class="pl">Wróć do Katalogu Głównego</span>
                     <span class="en">Back to Main Catalog</span>
                 </button>
@@ -862,8 +857,7 @@
 
     </div>
 
-    <!-- bug report widget -->
-<div id="feedback-widget" class="feedback-widget collapsed">
+    <div id="feedback-widget" class="feedback-widget collapsed">
         <button class="feedback-toggle" onclick="toggleFeedback()" aria-label="Zgłoś błąd">
             <span style="font-size: 1.3rem;">💬</span>
         </button>
@@ -883,7 +877,6 @@
         </div>
     </div>
 
-    <!-- Skrypty -->
     <script src="app.js"></script>
     <script src="chartengine.js"></script>
     <script src="script.js"></script>

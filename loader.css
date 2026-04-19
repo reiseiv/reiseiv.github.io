@@ -10,20 +10,18 @@
 .loader-bar-bg { width: 150px; height: 1px; background: rgba(255,255,255,0.1); position: relative; overflow: hidden; }
 .loader-bar-fill { position: absolute; top: 0; left: 0; height: 100%; width: 0%; background: #fff; transition: width 0.8s ease; }
 
+/* Zwykły stan - ukryte i przesunięte niżej dla lepszego efektu */
 .fade-up-element {
-    opacity: 0; 
+    opacity: 0;
+    transform: translateY(30px); /* 30px daje bardziej "premium" wjazd */
 }
 
-body.ready .fade-up-element {
-    animation: fadeUpAnim 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+/* ZAPALNIK - to nadaje JS, żeby wymusić start */
+.fade-up-element.animate {
+    animation: premiumCascade 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-@keyframes fadeUpAnim {
-    0% { opacity: 0; transform: translateY(20px); }
+@keyframes premiumCascade {
+    0% { opacity: 0; transform: translateY(30px); }
     100% { opacity: 1; transform: translateY(0); }
 }
-
-.fade-delay-1 { animation-delay: 0.1s; }
-.fade-delay-2 { animation-delay: 0.2s; }
-.fade-delay-3 { animation-delay: 0.3s; }
-.fade-delay-4 { animation-delay: 0.4s; }
