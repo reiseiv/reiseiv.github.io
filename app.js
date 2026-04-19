@@ -1,3 +1,16 @@
+window.addEventListener('load', () => {
+    const fill = document.getElementById('loaderFill');
+    if(fill) fill.style.width = '100%'; // Pasek idzie do końca
+    
+    setTimeout(() => {
+        const loader = document.getElementById('loader');
+        if(loader) loader.classList.add('fade-out'); // Zdejmij loader
+        document.body.classList.add('ready'); // Odpal animacje fade-up kafelków
+        setTimeout(() => loader?.remove(), 900); // Usuń z DOM
+    }, 800); 
+});
+
+
 // Basic devtools/context menu block
 document.addEventListener('contextmenu', e => e.preventDefault());
 document.onkeydown = function(e) {

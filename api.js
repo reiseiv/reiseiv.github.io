@@ -4,7 +4,7 @@ if (window.location.pathname.includes("mobile")) {
 }
 
 (function() {
-    const WORKER_URL = 'https://stats.xxxkubes.workers.dev/api/ping';
+    const WORKER_URL = 'https://stats.reiseiv.workers.dev/api/ping';
     
     let vid = localStorage.getItem('rei_vid');
     if (!vid) { 
