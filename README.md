@@ -6,7 +6,7 @@
 
 ## 💬 Community
 
-Wpadajcie do nas pogadać, zadać pytania i pośledzić, co się dzieje:
+naprawde super by bylo jakbys dolaczyl do naszego community..!
 
 * 👾 **Discord:** [dsc.gg/rei](https://dsc.gg/rei)
 * 🔗 **Wizytówka:** [guns.lol/reiseiv](https://guns.lol/reiseiv)
