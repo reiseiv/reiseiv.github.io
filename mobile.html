@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Rei Academy Mobile</title>
+    <link rel="stylesheet" href="loader.css">
+    <script src="loader.js"></script>
     <style>
         /* * core css vars & mobile glassmorphism config 
          * dark mode by default
@@ -282,10 +284,18 @@
         .feedback-widget textarea { width: 100%; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 12px; color: var(--text-color); margin: 12px 0; font-family: inherit; resize: none; outline: none; }
         .feedback-widget button { width: 100%; background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); padding: 12px; border-radius: 999px; font-weight: 600; }
         .feedback-toggle { position: fixed; bottom: 16px; right: 16px; width: 48px; height: 48px; border-radius: 50%; background: var(--nav-bg); border: 1px solid var(--border-color); display: flex; justify-content: center; align-items: center; font-size: 1.2rem; z-index: 95; backdrop-filter: blur(10px); color: var(--text-color); box-shadow: var(--shadow-sm); }
-    </style>
+
+</style>
 </head>
 <body class="lang-pl" onclick="htt()"> 
     
+<div id="loader">
+    <div class="loader-content">
+        <span class="loader-title">WCZYTYWANIE</span>
+        <div class="loader-bar-bg"><div class="loader-bar-fill" id="loaderFill"></div></div>
+    </div>
+</div>
+
     <div class="ambient-blobs"></div>
 
     <nav>
@@ -304,7 +314,7 @@
 
     <div id="tooltip" class="tooltip"></div>
 
-    <div class="container">
+    <div class="container fade-up-element">
         <div class="breadcrumbs" id="breadcrumbs">
             <span class="pl">📍 Katalog Główny</span><span class="en">📍 Main Catalog</span>
         </div>
