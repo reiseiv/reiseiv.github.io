@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rei Academy / checklist</title>
     <link rel="stylesheet" href="style.css">
-    
+    <link rel="stylesheet" href="loader.css">
+    <script src="loader.js"></script>
     <style>
         /* * LOKALNE STYLE SPECYFICZNE TYLKO DLA CHECKLISTY */
         :root {
@@ -240,7 +241,12 @@
     </style>
 </head>
 <body class="lang-pl">
-
+<div id="loader">
+        <div class="loader-content">
+            <span class="loader-title">Academy / checklist</span>
+            <div class="loader-bar-bg"><div class="loader-bar-fill" id="loaderFill"></div></div>
+        </div>
+    </div>
     <div class="ambient-blobs" id="ambient"></div>
 
     <nav class="fade-up-element" style="transition: all 0.5s ease;">
