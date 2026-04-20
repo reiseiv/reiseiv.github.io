@@ -1,3 +1,35 @@
+    document.addEventListener("DOMContentLoaded", () => {
+        // 1. ZWIĘKSZONY RUCH TŁA (Ambient)
+        const ambient = document.getElementById('ambient');
+        let currentX = 0, currentY = 0, targetX = 0, targetY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            targetX = (e.clientX / window.innerWidth - 0.5) * 180; 
+            targetY = (e.clientY / window.innerHeight - 0.5) * 180;
+        });
+
+        function animateAmbient() {
+            currentX += (targetX - currentX) * 0.05;
+            currentY += (targetY - currentY) * 0.05;
+            if (ambient) {
+                ambient.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+            }
+            requestAnimationFrame(animateAmbient);
+        }
+        animateAmbient();
+
+        // 2. EFEKT SPOTLIGHT NA KARTACH (Glassmorphism 2.0 Hover)
+        document.querySelectorAll('.folder-card').forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+    });
 
 // Basic devtools/context menu block
 document.addEventListener('contextmenu', e => e.preventDefault());

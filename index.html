@@ -3,15 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rei Academy</title>
+    <title>Rei Academy / main</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="loader.css">
     <script src="loader.js"></script>
-    <script>
-  if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-    window.location.href = "mobile.html";
-  }
-</script>
 </head>
 <body class="lang-pl">
 
@@ -58,74 +53,78 @@
         </div>
 
         <div id="view-home" class="view active">
-            <div class="grid">
-                <div class="folder-card fade-up-element fade-delay-1" data-cat="cat-mech" onclick="nav('cat-mech')">
-                    <div class="progress-badge"><span class="pl">✓ PRZEROBIONE</span><span class="en">✓ COMPLETED</span></div>
+            
+            <div class="grid bento-grid">
+                
+                <div class="folder-card span-4 fade-up-element fade-delay-1" data-cat="cat-mech" onclick="nav('cat-mech')">
                     <div class="folder-num">1</div>
+                    <div class="progress-badge"><span class="pl">✓ PRZEROBIONE</span><span class="en">✓ COMPLETED</span></div>
                     <div class="folder-info">
                         <h3><span class="pl">Mechanika Rynku</span><span class="en">Market Mechanics</span></h3>
                         <p><span class="pl">Płynność, Makro, Opcje, Natura</span><span class="en">Liquidity, Macro, Options, Nature</span></p>
                     </div>
                 </div>
-                <div class="folder-card fade-up-element fade-delay-2" data-cat="cat-amt" onclick="nav('cat-amt')">
-                    <div class="progress-badge"><span class="pl">✓ PRZEROBIONE</span><span class="en">✓ COMPLETED</span></div>
+                <div class="folder-card span-5 fade-up-element fade-delay-2" data-cat="cat-amt" onclick="nav('cat-amt')">
                     <div class="folder-num">2</div>
+                    <div class="progress-badge"><span class="pl">✓ PRZEROBIONE</span><span class="en">✓ COMPLETED</span></div>
                     <div class="folder-info">
                         <h3><span class="pl">AMT</span><span class="en">AMT</span></h3>
                         <p><span class="pl">Balance, Imbalance, Cykl Aukcji</span><span class="en">Balance, Imbalance, Auction Cycle</span></p>
                     </div>
                 </div>
-                <div class="folder-card fade-up-element fade-delay-3" data-cat="cat-vp" onclick="nav('cat-vp')">
-                    <div class="progress-badge"><span class="pl">✓ PRZEROBIONE</span><span class="en">✓ COMPLETED</span></div>
+                <div class="folder-card span-3 fade-up-element fade-delay-3" data-cat="cat-vp" onclick="nav('cat-vp')">
                     <div class="folder-num">3</div>
+                    <div class="progress-badge"><span class="pl">✓ PRZEROBIONE</span><span class="en">✓ COMPLETED</span></div>
                     <div class="folder-info">
                         <h3><span class="pl">Volume Profile</span><span class="en">Volume Profile</span></h3>
                         <p><span class="pl">S&R, POC, Odbicia LVN</span><span class="en">S&R, POC, LVN Rejections</span></p>
                     </div>
                 </div>
-                <div class="folder-card fade-up-element fade-delay-4" data-cat="cat-vwap" onclick="nav('cat-vwap')">
-                    <div class="progress-badge"><span class="pl">✓ PRZEROBIONE</span><span class="en">✓ COMPLETED</span></div>
+
+                <div class="folder-card span-7 fade-up-element fade-delay-4" data-cat="cat-vwap" onclick="nav('cat-vwap')">
                     <div class="folder-num">4</div>
+                    <div class="progress-badge"><span class="pl">✓ PRZEROBIONE</span><span class="en">✓ COMPLETED</span></div>
                     <div class="folder-info">
                         <h3><span class="pl">AVWAP</span><span class="en">AVWAP</span></h3>
                         <p><span class="pl">Instytucjonalne Bands, Pullbacki</span><span class="en">Institutional Bands, Pullbacks</span></p>
                     </div>
                 </div>
-                <div class="folder-card fade-up-element fade-delay-5" data-cat="cat-vsa" onclick="nav('cat-vsa')">
-                    <div class="progress-badge"><span class="pl">✓ PRZEROBIONE</span><span class="en">✓ COMPLETED</span></div>
+                <div class="folder-card span-5 fade-up-element fade-delay-5" data-cat="cat-vsa" onclick="nav('cat-vsa')">
                     <div class="folder-num">5</div>
+                    <div class="progress-badge"><span class="pl">✓ PRZEROBIONE</span><span class="en">✓ COMPLETED</span></div>
                     <div class="folder-info">
                         <h3><span class="pl">VSA</span><span class="en">VSA</span></h3>
                         <p><span class="pl">Effort/Result, Climax, No Demand</span><span class="en">Effort/Result, Climax, No Demand</span></p>
                     </div>
                 </div>
-                <div class="folder-card fade-up-element fade-delay-6" data-cat="cat-of" onclick="nav('cat-of')">
-                    <div class="progress-badge"><span class="pl">✓ PRZEROBIONE</span><span class="en">✓ COMPLETED</span></div>
+
+                <div class="folder-card span-5 fade-up-element fade-delay-6" data-cat="cat-of" onclick="nav('cat-of')">
                     <div class="folder-num">6</div>
+                    <div class="progress-badge"><span class="pl">✓ PRZEROBIONE</span><span class="en">✓ COMPLETED</span></div>
                     <div class="folder-info">
                         <h3><span class="pl">Orderflow</span><span class="en">Orderflow</span></h3>
                         <p><span class="pl">Absorpcja, Exhaustion, CVD</span><span class="en">Absorption, Exhaustion, CVD</span></p>
                     </div>
                 </div>
-                <div class="folder-card fade-up-element fade-delay-7" data-cat="cat-fund" onclick="nav('cat-fund')">
-                    <div class="progress-badge"><span class="pl">✓ PRZEROBIONE</span><span class="en">✓ COMPLETED</span></div>
+                <div class="folder-card span-7 fade-up-element fade-delay-7" data-cat="cat-fund" onclick="nav('cat-fund')">
                     <div class="folder-num">7</div>
+                    <div class="progress-badge"><span class="pl">✓ PRZEROBIONE</span><span class="en">✓ COMPLETED</span></div>
                     <div class="folder-info">
                         <h3><span class="pl">Fundamenty Intraday</span><span class="en">Intraday Fundamentals</span></h3>
                         <p><span class="pl">Makro, Rekalibracja wartości</span><span class="en">Macro, Value Recalibration</span></p>
                     </div>
                 </div>
-                <div class="folder-card fade-up-element fade-delay-8" data-cat="cat-risk" onclick="nav('cat-risk')">
-                    <div class="progress-badge"><span class="pl">✓ PRZEROBIONE</span><span class="en">✓ COMPLETED</span></div>
+
+                <div class="folder-card span-8 fade-up-element fade-delay-8" data-cat="cat-risk" onclick="nav('cat-risk')">
                     <div class="folder-num">8</div>
+                    <div class="progress-badge"><span class="pl">✓ PRZEROBIONE</span><span class="en">✓ COMPLETED</span></div>
                     <div class="folder-info">
                         <h3><span class="pl">Zarządzanie Ryzykiem</span><span class="en">Risk Management</span></h3>
                         <p><span class="pl">Orderflow SL, itd..</span><span class="en">Manual Cutting, Orderflow SL</span></p>
                     </div>
                 </div>
-                
-                <div class="folder-card fade-up-element fade-delay-9" onclick="window.location.href='checklist.html'">
-    <div class="folder-num">9</div>
+                <div class="folder-card span-4 fade-up-element fade-delay-9" onclick="window.location.href='checklist.html'">
+                    <div class="folder-num">9</div>
                     <div class="folder-info">
                         <h3><span class="pl">Pre-trade Checklist</span><span class="en">Pre-trade Checklist</span></h3>
                         <p><span class="pl">Narzędzie do walidacji setupu przed wejściem</span><span class="en">Setup validation tool before entry</span></p>
@@ -877,9 +876,12 @@
         </div>
     </div>
 
+    <script src="data.js"></script>
     <script src="app.js"></script>
     <script src="chartengine.js"></script>
     <script src="script.js"></script>
     <script src="api.js"></script>
+
+
 </body>
 </html>

@@ -1,15 +1,15 @@
-/* Global variables. Color palette & aesthetics inspired by Deepcharts vibe. */
+/* Global variables. Color palette & aesthetics inspired by modern Awwwards/Glassmorphism 2.0 vibe. */
 :root {
-    --bg-color: #06070d;
+    --bg-color: #030408;
     --text-color: #ececf1;
     --secondary-text: #8b8e9f;
     --heading-color: var(--text-color);
-    --card-bg: rgba(255, 255, 255, 0.02);
-    --nav-bg: rgba(6, 7, 13, 0.75);
-    --border-color: rgba(255, 255, 255, 0.06);
+    --card-bg: rgba(255, 255, 255, 0.015);
+    --nav-bg: rgba(3, 4, 8, 0.75);
+    --border-color: rgba(255, 255, 255, 0.04);
     --chart-bg: #090a10;
 
-    --radius-lg: 18px;
+    --radius-lg: 24px;
     --radius-md: 14px;
     --radius-sm: 10px;
     --ring: 0 0 0 3px rgba(0, 230, 118, 0.18);
@@ -18,7 +18,7 @@
     
     --up-color: #00e676;
     --down-color: #c084fc;
-    --up-bg: rgba(0, 230, 118, 0.12);
+    --up-bg: rgba(0, 230, 118, 0.08);
     --down-bg: rgba(192, 132, 252, 0.12);
     
     --vp-color: rgba(192, 132, 252, 0.15);
@@ -79,20 +79,19 @@ body {
     position: relative;
 }
 
-/* Zastępujemy stare statyczne body::before nowym elementem div .ambient-blobs (Awwwards style parallax) */
+/* INTENSYWNIEJSZE TŁO (Mocniejsze, nasycone kolory Chromatic) */
 .ambient-blobs {
     position: fixed;
     inset: -220px;
     z-index: 0;
     pointer-events: none;
     background:
-        radial-gradient(900px circle at 15% 10%, rgba(0, 230, 118, 0.14) 0%, transparent 60%),
-        radial-gradient(700px circle at 80% 20%, rgba(192, 132, 252, 0.12) 0%, transparent 58%),
-        radial-gradient(900px circle at 50% 85%, rgba(245, 158, 11, 0.07) 0%, transparent 65%);
-    filter: blur(60px);
-    opacity: 0.9;
+        radial-gradient(900px circle at 15% 30%, rgba(90, 30, 255, 0.45) 0%, transparent 60%),
+        radial-gradient(1000px circle at 85% 15%, rgba(0, 230, 118, 0.35) 0%, transparent 60%),
+        radial-gradient(900px circle at 50% 90%, rgba(255, 0, 128, 0.25) 0%, transparent 65%);
+    filter: blur(70px);
+    opacity: 1;
     transform: translateZ(0);
-    transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
     will-change: transform;
 }
 body.light-theme .ambient-blobs {
@@ -141,36 +140,179 @@ nav {
 .theme-toggle:hover, .lang-toggle:hover { transform: translateY(-1px); border-color: var(--up-color); }
 
 .container { max-width: 1000px; margin: 96px auto 56px auto; padding: 0 24px; position: relative; z-index: 1; }
-.breadcrumbs { font-size: 0.85rem; margin-bottom: 30px; color: var(--secondary-text); font-weight: 500; display: flex; gap: 8px; align-items: center; letter-spacing: 0.2px; }
-.breadcrumbs span { cursor: pointer; color: var(--up-color); transition: 0.2s; font-weight: 600; }
-.breadcrumbs span:hover { filter: brightness(1.2); }
 
-/* SPA view transitions */
-.view { display: none; }
-.view.active { display: block; animation: smoothFade 0.25s ease-out; }
+/* BREADCRUMBS PREMIUM (Katalog Główny) */
+.breadcrumbs { 
+    font-size: 0.85rem; 
+    margin-bottom: 30px; 
+    color: var(--secondary-text); 
+    font-weight: 500; 
+    display: flex; 
+    gap: 8px; 
+    align-items: center; 
+    letter-spacing: 0.2px; 
+}
+.breadcrumbs span { 
+    cursor: pointer; 
+    color: var(--text-color); 
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); 
+    font-weight: 600; 
+    padding: 6px 14px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color);
+    border-radius: 999px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: inset 0 1px 1px rgba(255,255,255,0.02);
+}
+body.light-theme .breadcrumbs span { background: rgba(0,0,0,0.03); color: #1d1d1f; }
+.breadcrumbs span:hover { 
+    color: var(--up-color); 
+    border-color: rgba(0, 230, 118, 0.3);
+    background: rgba(0, 230, 118, 0.05);
+    box-shadow: 0 0 16px rgba(0, 230, 118, 0.15), inset 0 1px 1px rgba(255,255,255,0.05);
+    transform: translateY(-1px);
+}
+
+/* SPA view transitions + BETONOWY FIX NA WIDOKI */
+.view { display: none !important; }
+.view.active { display: block !important; animation: smoothFade 0.25s ease-out; }
 @keyframes smoothFade { from { opacity: 0; } to { opacity: 1; } }
 
-.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 18px; }
-#view-home .grid { gap: 24px; margin-top: 40px; }
-#view-home .folder-card { padding: 28px 24px; }
-#view-home .community-wrapper { margin-top: 80px; }
-
-.folder-card {
-    background: var(--card-bg); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-    border-radius: var(--radius-lg); padding: 20px; cursor: pointer; border: 1px solid var(--border-color);
-    display: flex; align-items: flex-start; gap: 16px; transition: border-color 0.18s ease, transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
-    box-shadow: var(--shadow-sm); position: relative; overflow: hidden;
+/* =========================================
+   BENTO GRID (12-Column Asymmetric System)
+   ========================================= */
+.grid { display: grid; gap: 16px; margin-top: 18px; }
+.bento-grid { 
+    grid-template-columns: repeat(12, 1fr); 
+    grid-auto-rows: 190px; 
+    gap: 20px; 
+    margin-top: 40px; 
 }
-.folder-card:hover { border-color: var(--up-color); transform: translateY(-2px); background: rgba(255,255,255,0.03); box-shadow: var(--shadow-md); }
-body.light-theme .folder-card:hover { background: rgba(255,255,255,0.95); }
 
-.progress-badge { position: absolute; top: 12px; right: 12px; font-size: 0.65rem; color: var(--up-color); display: none; align-items: center; gap: 4px; font-weight: 700; background: var(--up-bg); padding: 3px 8px; border-radius: 20px; }
+/* Precyzyjne asymetryczne szerokości kart */
+.span-3 { grid-column: span 3; }
+.span-4 { grid-column: span 4; }
+.span-5 { grid-column: span 5; }
+.span-7 { grid-column: span 7; }
+.span-8 { grid-column: span 8; }
+
+/* SPOTLIGHT EFFECT (Światło podążające za myszką na kartach) */
+.folder-card {
+    background: rgba(255,255,255,0.015);
+    backdrop-filter: blur(24px); 
+    -webkit-backdrop-filter: blur(24px);
+    border-radius: var(--radius-lg); 
+    padding: 30px; 
+    cursor: pointer; 
+    border: 1px solid var(--border-color);
+    box-shadow: inset 0 1px 1px rgba(255,255,255,0.03), 0 10px 30px rgba(0,0,0,0.2);
+    display: flex; 
+    flex-direction: column; 
+    justify-content: flex-end;
+    position: relative; 
+    overflow: hidden;
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.3s;
+}
+
+/* Pseudo-element odpowiedzialny za "światło" latarki */
+.folder-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(
+        600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
+        rgba(255, 255, 255, 0.08), 
+        transparent 40%
+    );
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.folder-card:hover { 
+    border-color: rgba(255,255,255,0.15); 
+    transform: translateY(-4px); 
+    box-shadow: inset 0 1px 1px rgba(255,255,255,0.06), 0 14px 40px rgba(0,0,0,0.5); 
+}
+
+/* Pojawienie się światła przy najechaniu */
+.folder-card:hover::before {
+    opacity: 1;
+}
+
+/* Jasny motyw dla nowych kart Bento */
+body.light-theme .folder-card {
+    background: linear-gradient(160deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.4) 100%);
+    box-shadow: inset 0 1px 1px rgba(255,255,255,0.8), 0 10px 30px rgba(0,0,0,0.05);
+}
+body.light-theme .folder-card:hover { 
+    background: rgba(255,255,255,0.95);
+    box-shadow: inset 0 1px 1px #fff, 0 14px 40px rgba(0,0,0,0.1); 
+}
+body.light-theme .folder-card::before {
+    background: radial-gradient(
+        600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
+        rgba(0, 0, 0, 0.05), 
+        transparent 40%
+    );
+}
+
+/* Teksty i badge muszą być nad światłem z ::before */
+.folder-num, .folder-info, .progress-badge {
+    position: relative;
+    z-index: 2;
+}
+
+/* Duży znak wodny w tle zamiast małego numerka */
+.folder-num { 
+    position: absolute; 
+    top: -10px; 
+    left: 20px; 
+    font-size: 8rem; 
+    font-weight: 800; 
+    color: rgba(255,255,255,0.015);
+    background: transparent;
+    transition: color 0.4s ease;
+    user-select: none;
+    display: block;
+    width: auto;
+    height: auto;
+}
+.folder-card:hover .folder-num { color: rgba(255,255,255,0.03); background: transparent; }
+body.light-theme .folder-num { color: rgba(0,0,0,0.03); }
+body.light-theme .folder-card:hover .folder-num { color: rgba(0,0,0,0.05); }
+
+/* Zawartość tekstowa karty */
+.folder-info h3 { margin-bottom: 8px; font-size: 1.3rem; font-weight: 600; letter-spacing: -0.5px; color: var(--heading-color); }
+.folder-info p { color: var(--secondary-text); font-size: 0.9rem; font-weight: 400; letter-spacing: 0.2px; line-height: 1.4; }
+
+/* Glowing Progress Badge */
+.progress-badge { 
+    position: absolute; 
+    top: 24px; 
+    right: 24px; 
+    font-size: 0.7rem; 
+    color: var(--up-color); 
+    display: none; 
+    align-items: center; 
+    gap: 6px; 
+    font-weight: 600; 
+    letter-spacing: 0.5px;
+    background: rgba(0, 230, 118, 0.05); 
+    border: 1px solid rgba(0, 230, 118, 0.15);
+    padding: 6px 12px; 
+    border-radius: 999px; 
+    box-shadow: 0 0 12px rgba(0, 230, 118, 0.1);
+}
 .folder-card.completed .progress-badge { display: flex; }
 
-.folder-num { font-size: 1.15rem; font-weight: 700; color: var(--secondary-text); background: var(--border-color); width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: var(--radius-sm); transition: 0.18s; flex-shrink: 0; }
-.folder-card:hover .folder-num { color: var(--bg-color); background: var(--up-color); }
-.folder-info h3 { margin-bottom: 6px; font-size: 1.1rem; font-weight: 600; letter-spacing: -0.3px; color: var(--text-color); }
-.folder-info p { color: var(--secondary-text); font-size: 0.85rem; line-height: 1.5; font-weight: 400; }
+/* =========================================
+   REST OF THE STYLES
+   ========================================= */
+
+#view-home .community-wrapper { margin-top: 80px; }
 
 .segment-tag {
     display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 999px;
@@ -231,7 +373,10 @@ h2.section-title { font-size: 1.85rem; margin-bottom: 20px; font-weight: 700; le
     background: var(--card-bg); backdrop-filter: blur(8px); padding: 30px;
     border-radius: var(--radius-lg); border: 1px solid var(--border-color); font-weight: 400;
     max-width: 880px; margin-left: auto; margin-right: auto; text-rendering: optimizeLegibility;
+    box-shadow: inset 0 1px 1px rgba(255,255,255,0.02), 0 10px 30px rgba(0,0,0,0.1);
 }
+body.light-theme .course-text { background: rgba(255,255,255,0.8); box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+
 .course-text p { margin-bottom: 20px; text-wrap: pretty; }
 .course-text p:last-child { margin-bottom: 0; }
 
@@ -253,7 +398,8 @@ h2.section-title { font-size: 1.85rem; margin-bottom: 20px; font-weight: 700; le
 
 /* Footprint rendering grids */
 .fp-wrapper { display: flex; justify-content: center; gap: 24px; margin: 30px 0; flex-wrap: wrap; }
-.fp-box { background: var(--card-bg); backdrop-filter: blur(8px); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 22px; font-family: 'SF Mono', ui-monospace, 'JetBrains Mono', monospace; font-size: 0.85rem; box-shadow: none; }
+.fp-box { background: var(--card-bg); backdrop-filter: blur(8px); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 22px; font-family: 'SF Mono', ui-monospace, 'JetBrains Mono', monospace; font-size: 0.85rem; box-shadow: inset 0 1px 1px rgba(255,255,255,0.02); }
+body.light-theme .fp-box { background: #fff; }
 .fp-row { display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding: 6px 0; }
 .fp-val { width: 40px; text-align: center; }
 .fp-val.bid { color: var(--down-color); }
@@ -264,6 +410,7 @@ h2.section-title { font-size: 1.85rem; margin-bottom: 20px; font-weight: 700; le
 
 /* DOM ladder styles */
 .dom-table { width: 100%; max-width: 450px; margin: 0 auto; border-collapse: separate; border-spacing: 0; font-family: 'SF Mono', ui-monospace, 'JetBrains Mono', monospace; font-size: 0.85rem; border: 1px solid var(--border-color); border-radius: var(--radius-lg); overflow: hidden; background: var(--card-bg); }
+body.light-theme .dom-table { background: #fff; }
 .dom-table th, .dom-table td { padding: 12px 16px; border-bottom: 1px solid var(--border-color); border-right: 1px solid var(--border-color); text-align: center; }
 .dom-table th { background: rgba(255,255,255,0.02); font-weight: 600; color: var(--text-color); }
 .dom-table tr:last-child td { border-bottom: none; }
@@ -271,7 +418,8 @@ h2.section-title { font-size: 1.85rem; margin-bottom: 20px; font-weight: 700; le
 .dom-ask { color: var(--up-color); font-weight: 500; }
 .dom-bid { color: var(--down-color); font-weight: 500; }
 
-.cvd-box { max-width: 550px; margin: 0 auto; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 30px; box-shadow: none; }
+.cvd-box { max-width: 550px; margin: 0 auto; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 30px; box-shadow: inset 0 1px 1px rgba(255,255,255,0.02); }
+body.light-theme .cvd-box { background: #fff; }
 .cvd-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; font-weight: 600; font-size: 0.95rem; }
 .cvd-line { flex-grow: 1; height: 2px; background: var(--border-color); margin: 0 20px; position: relative; border-radius: 2px; }
 .cvd-arrow { position: absolute; right: 0; top: -7px; color: var(--up-color); font-size: 16px; background: var(--bg-color); padding: 0 4px; }
@@ -286,14 +434,35 @@ h2.section-title { font-size: 1.85rem; margin-bottom: 20px; font-weight: 700; le
 }
 .tooltip strong { display: block; color: var(--tip-accent); margin-bottom: 6px; font-size: 0.95rem; font-weight: 600; letter-spacing: -0.2px; }
 
+/* PRZYCISKI "CZYTAJ DALEJ" - WERSJA PREMIUM GLASSMORPHISM */
 .next-section-wrapper { margin-top: 50px; display: flex; justify-content: flex-end; padding-top: 30px; border-top: 1px solid var(--border-color); }
-.next-btn { background: var(--btn-gradient); color: #000000; border: none; padding: 14px 30px; border-radius: 999px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: transform 0.18s ease, filter 0.18s ease; box-shadow: none; font-family: inherit; }
-.light-theme .next-btn { color: #ffffff; }
-.next-btn:hover { transform: translateY(-2px); filter: saturate(1.05); }
-.next-btn span { transition: transform 0.18s; }
+.next-btn { 
+    background: rgba(255, 255, 255, 0.03); 
+    color: var(--text-color); 
+    border: 1px solid var(--border-color); 
+    padding: 14px 30px; 
+    border-radius: 999px; 
+    font-weight: 600; 
+    font-size: 0.95rem; 
+    cursor: pointer; 
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); 
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: inset 0 1px 1px rgba(255,255,255,0.03), 0 4px 14px rgba(0,0,0,0.2); 
+    font-family: inherit; 
+}
+.light-theme .next-btn { background: rgba(0,0,0,0.05); color: #1d1d1f; border-color: rgba(0,0,0,0.1); box-shadow: none; }
+.next-btn:hover { 
+    transform: translateY(-2px); 
+    border-color: rgba(0, 230, 118, 0.4); 
+    color: var(--up-color);
+    background: rgba(0, 230, 118, 0.05);
+    box-shadow: inset 0 1px 1px rgba(255,255,255,0.06), 0 8px 24px rgba(0, 230, 118, 0.15); 
+}
+.next-btn span { transition: transform 0.2s ease; display: inline-flex; align-items: center; }
 .next-btn:hover span { transform: translateX(4px); }
 
-/* Feedback Widget - Serverless integration / edit. animated version*/
+/* Feedback Widget */
 .feedback-widget {
     position: fixed; right: 24px; bottom: 24px; z-index: 90;
     display: flex; flex-direction: column; align-items: flex-end;
@@ -354,11 +523,6 @@ body.light-theme .feedback-widget textarea { background: #fff; }
     border-color: var(--up-color); color: var(--up-color); transform: translateY(-2px); 
 }
 
-@media (max-width: 768px) {
-    .feedback-widget { right: 16px; bottom: 16px; }
-    .feedback-content { right: 0; width: calc(100vw - 32px); padding: 16px; }
-}
-
 /* Accessibility: respect user motion preferences */
 @media (prefers-reduced-motion: reduce) {
     * { scroll-behavior: auto !important; }
@@ -366,4 +530,18 @@ body.light-theme .feedback-widget textarea { background: #fff; }
     * { transition-duration: 0.001ms !important; animation-duration: 0.001ms !important; }
     .ambient-blobs { transition: none !important; will-change: auto; }
 }
+/* PC domyślnie pokazuje Canvas, a ukrywa statyczne obrazy komórkowe */
+.mobile-element { display: none !important; }
+.desktop-element { display: block !important; }
 
+/* Mobile domyślnie chowa kod z Canvasem, a pokazuje zoptymalizowane screeny */
+@media (max-width: 900px) {
+    .desktop-element { display: none !important; }
+    .mobile-element { 
+        display: block !important; 
+        width: 100%; 
+        height: auto; 
+        border-radius: var(--radius-md); 
+        margin: 20px 0; 
+    }
+}
