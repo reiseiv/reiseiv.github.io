@@ -13,36 +13,29 @@
             --danger-color: #ff3b30;
         }
 
-        /* Nav Override dla Checklisty */
+        /* Nav Override dla Checklisty - Gładki i jednolity hover */
         nav .back-link {
-            display: flex; align-items: center; gap: 8px; color: var(--text-color);
-            text-decoration: none; font-weight: 600; font-size: 0.95rem; transition: all 0.3s ease;
-            padding: 8px 18px; border-radius: 999px; background: rgba(255,255,255,0.02);
-            border: 1px solid var(--border-color); backdrop-filter: blur(8px);
-            box-shadow: inset 0 1px 1px rgba(255,255,255,0.02);
+            display: flex; align-items: center; gap: 8px; color: var(--secondary-text);
+            text-decoration: none; font-weight: 600; font-size: 0.95rem; transition: all 0.2s ease;
+            padding: 8px 16px; border-radius: 999px; background: transparent; border: 1px solid transparent;
         }
         nav .back-link:hover { 
-            color: var(--up-color); border-color: rgba(0,230,118,0.3); 
-            background: rgba(0,230,118,0.05); transform: translateY(-1px);
+            color: var(--text-color); background: rgba(255,255,255,0.05); border-color: var(--border-color);
         }
-        nav .back-link span { transition: transform 0.2s; display: inline-block; }
-        nav .back-link:hover span { transform: translateX(-4px); }
+        body.light-theme nav .back-link:hover { color: #000; background: rgba(0,0,0,0.05); }
 
         .header-actions { display: flex; gap: 12px; align-items: center; }
         
         .btn-action {
             background: rgba(255, 255, 255, 0.03); color: var(--text-color); border: 1px solid var(--border-color);
-            padding: 8px 18px; border-radius: 999px; font-weight: 600; font-size: 0.85rem; cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); backdrop-filter: blur(12px); display: inline-flex; align-items: center; gap: 6px;
-            box-shadow: inset 0 1px 1px rgba(255,255,255,0.03);
+            padding: 8px 16px; border-radius: 999px; font-weight: 600; font-size: 0.85rem; cursor: pointer;
+            transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 6px;
         }
         .btn-action:hover { 
-            border-color: var(--up-color); color: var(--up-color); 
-            transform: translateY(-2px); background: rgba(0,230,118,0.05); 
-            box-shadow: inset 0 1px 1px rgba(255,255,255,0.06), 0 4px 14px rgba(0, 230, 118, 0.1);
+            border-color: rgba(255,255,255,0.25); background: rgba(255,255,255,0.1); 
         }
-        body.light-theme .btn-action { background: rgba(0,0,0,0.05); color: #1d1d1f; border-color: rgba(0,0,0,0.1); box-shadow: none; }
-        body.light-theme .btn-action:hover { background: rgba(0,230,118,0.1); border-color: var(--up-color); color: var(--up-color); }
+        body.light-theme .btn-action { background: transparent; color: var(--text-color); border-color: rgba(0,0,0,0.15); }
+        body.light-theme .btn-action:hover { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.3); color: #000; }
 
         /* GŁÓWNY KONTENER I ANIMACJE DLA ZEN MODE */
         .container { 
@@ -55,7 +48,6 @@
         .page-header { margin-bottom: 40px; margin-top: 20px; transition: all 0.4s ease; }
         .page-header h1 { font-size: 2.2rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 8px; color: var(--heading-color); }
         .page-header p { color: var(--secondary-text); font-size: 1.05rem; }
-        .pro-tip { transition: all 0.4s ease; overflow: hidden; }
 
         /* KATEGORIE - MASONRY LAYOUT ZAMIAST GRID */
         .checklist-wrapper { 
@@ -77,6 +69,14 @@
             page-break-inside: avoid;
             margin-bottom: 32px; /* Zamiast gap */
             width: 100%;
+
+            /* Własna animacja zapobiegająca znikaniu podczas usuwania w JS */
+            animation: slideIn 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         .category::before {
@@ -178,10 +178,9 @@
            ZEN MODE (TRYB PREZENTACJI - F11 / FULLSCREEN)
            ========================================= */
         
-        /* Ukrywanie zbędnych elementów UI */
         body.zen-mode nav,
         body.zen-mode .page-header,
-        body.zen-mode .pro-tip,
+        body.zen-mode .premium-tip,
         body.zen-mode .add-cat-btn {
             opacity: 0 !important;
             max-height: 0 !important;
@@ -191,31 +190,28 @@
             border: none !important;
         }
 
-        body.zen-mode nav { top: -100px; } /* Zjeżdża poza ekran */
+        body.zen-mode nav { top: -100px; } 
 
-        /* Płynne szerokie Masonry Grid dla list */
         body.zen-mode .container {
-            max-width: 1500px !important; /* Rozciąga się na boki */
+            max-width: 1500px !important; 
             margin-top: 40px !important;
         }
 
         body.zen-mode .checklist-wrapper {
-            column-count: 3; /* Trzy dynamiczne kolumny, idealnie dopasowane wysokością */
+            column-count: 3; 
             column-gap: 24px;
         }
         
         body.zen-mode .category {
-            margin-bottom: 24px; /* Mniejsze przerwy w Zen Mode */
+            margin-bottom: 24px; 
         }
 
-        /* Blokada edycji w Zen Mode */
         body.zen-mode .category-title,
         body.zen-mode .item-text {
-            pointer-events: none; /* Zablokowanie kursora i edycji */
+            pointer-events: none; 
             user-select: none;
         }
 
-        /* Ukrycie przycisków usuwania i dodawania punktów */
         body.zen-mode .cat-actions,
         body.zen-mode .item-actions,
         body.zen-mode .add-item-btn {
@@ -226,7 +222,6 @@
             pointer-events: none !important;
         }
 
-        /* Responsywność dla Zen Mode na mniejszych, pełnych ekranach (np. laptopy 13") */
         @media (max-width: 1400px) {
             body.zen-mode .checklist-wrapper { column-count: 2; }
         }
@@ -247,14 +242,17 @@
             <div class="loader-bar-bg"><div class="loader-bar-fill" id="loaderFill"></div></div>
         </div>
     </div>
-    <div class="ambient-blobs" id="ambient"></div>
+
+    <div id="ambient-wrapper">
+        <div class="ambient-blobs"></div>
+    </div>
 
     <nav class="fade-up-element" style="transition: all 0.5s ease;">
         <div class="nav-left">
             <a href="index.html" class="back-link">
                 <span>←</span> 
-                <span class="pl">Wróć do bazy</span>
-                <span class="en">Back to base</span>
+                <span class="pl">Wróć</span>
+                <span class="en">Back</span>
             </a>
         </div>
         <div class="nav-right header-actions">
@@ -272,7 +270,7 @@
                 <span class="txt en">Import</span>
             </label>
             <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(event)">
-            <button class="btn-action" onclick="exportData()" style="border-color: color-mix(in srgb, var(--up-color) 40%, transparent); color: var(--up-color);">
+            <button class="btn-action" onclick="exportData()">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                 <span class="txt pl">Zapisz JSON</span>
                 <span class="txt en">Save JSON</span>
@@ -287,12 +285,12 @@
             <p>Stwórz własną listę zasad przed wejściem w pozycję. Zmiany zapisują się automatycznie.</p>
         </div>
 
-        <div class="pro-tip">
-            <div class="pro-tip-icon">💡</div>
-            <div class="pro-tip-content">
+        <div class="premium-tip fade-up-element fade-delay-2" style="margin-top: 0; margin-bottom: 40px; transition: all 0.4s ease; overflow: hidden;">
+            <div class="tip-icon">💡</div>
+            <div class="tip-content">
                 <strong>Tip ode mnie ;p</strong>
-                <p>jestem troszke neurodivergent(adhd) i zanim ogarnąłem psychologie strasznie często łapałem się na wchodzeniu w trady na totalnym autopilocie... checklista mega mi w tym pomogła i tu nawet nie chodzi o to, żeby trzymać się jej sztywno 1:1 (chyba że ktoś tak woli). jej głównym zadaniem jest po prostu fizycznie wyrwać cię z tego autopilota i przypomnieć ci, jak w ogóle powinieneś myśleć zanim podejmiesz trade. łapcie moją starą checkliste jako szablon ;) 
-                   <br>  → a i sprawdzcie sobie f11...</p> 
+                <span class="pl">jestem troszke neurodivergent(adhd) i zanim ogarnąłem psychologie strasznie często łapałem się na wchodzeniu w trady na totalnym autopilocie... checklista mega mi w tym pomogła i tu nawet nie chodzi o to, żeby trzymać się jej sztywno 1:1 (chyba że ktoś tak woli). jej głównym zadaniem jest po prostu fizycznie wyrwać cię z tego autopilota i przypomnieć ci, jak w ogóle powinieneś myśleć zanim podejmiesz trade. łapcie moją starą checkliste jako szablon ;)<br>→ a i sprawdzcie sobie f11...</span>
+                <span class="en">i'm a bit neurodivergent (adhd) and before i grasped psychology, i caught myself entering trades on pure autopilot... this checklist helped me immensely. it's not even about sticking to it 1:1 rigidly (unless you prefer). its main job is to physically pull you out of autopilot and remind you how you should think before taking a trade. grab my old checklist as a template ;)<br>→ oh, and check out f11...</span>
             </div>
         </div>
 
@@ -314,7 +312,6 @@
         // LOGIKA ZEN MODE (FULLSCREEN API)
         // =========================================
         
-        // Przechwytujemy natywne F11, żeby sprowokować przeglądarkowe Fullscreen API
         document.addEventListener('keydown', (e) => {
             if (e.key === 'F11') {
                 e.preventDefault();
@@ -328,7 +325,6 @@
             }
         });
 
-        // Kiedy okno wchodzi/wychodzi z Fullscreen, dodajemy naszą klasę "zen-mode"
         document.addEventListener('fullscreenchange', () => {
             if (document.fullscreenElement) {
                 document.body.classList.add('zen-mode');
@@ -426,14 +422,28 @@
             setTimeout(() => banner.classList.remove('show'), 3000);
         }
 
+        function toggleItem(catIdx, itemIdx, isChecked, element) {
+            state[catIdx].items[itemIdx].checked = isChecked;
+            saveData();
+            
+            if (element) {
+                const itemDiv = element.closest('.check-item');
+                if (isChecked) {
+                    itemDiv.classList.add('is-checked');
+                } else {
+                    itemDiv.classList.remove('is-checked');
+                }
+            }
+        }
+
         function render() {
             const container = document.getElementById('checklist-container');
             container.innerHTML = '';
 
             state.forEach((cat, catIndex) => {
                 const catDiv = document.createElement('div');
-                catDiv.className = 'category fade-up-element';
-                catDiv.style.animationDelay = `${catIndex * 0.1}s`;
+                // Usunięto fade-up-element, aby element nie znikał podczas przebudowywań JS
+                catDiv.className = 'category'; 
                 
                 catDiv.addEventListener('mousemove', e => {
                     const rect = catDiv.getBoundingClientRect();
@@ -460,7 +470,7 @@
                 const delCatBtn = document.createElement('button');
                 delCatBtn.className = 'icon-btn danger';
                 delCatBtn.innerHTML = trashIcon;
-                delCatBtn.onclick = () => deleteCategory(catIndex);
+                delCatBtn.onclick = (e) => { e.stopPropagation(); deleteCategory(catIndex); };
                 
                 actions.appendChild(delCatBtn);
                 header.appendChild(title);
@@ -480,7 +490,7 @@
                     const cbInput = document.createElement('input');
                     cbInput.type = 'checkbox';
                     cbInput.checked = item.checked;
-                    cbInput.onchange = (e) => toggleItem(catIndex, itemIndex, e.target.checked);
+                    cbInput.onchange = (e) => toggleItem(catIndex, itemIndex, e.target.checked, e.target);
                     
                     const cbCustom = document.createElement('div');
                     cbCustom.className = 'checkbox-custom';
@@ -502,7 +512,7 @@
                     const delItemBtn = document.createElement('button');
                     delItemBtn.className = 'icon-btn danger';
                     delItemBtn.innerHTML = trashIcon;
-                    delItemBtn.onclick = () => deleteItem(catIndex, itemIndex);
+                    delItemBtn.onclick = (e) => { e.stopPropagation(); deleteItem(catIndex, itemIndex); };
                     
                     itemActions.appendChild(delItemBtn);
 
@@ -521,12 +531,6 @@
                 catDiv.appendChild(addBtn);
                 container.appendChild(catDiv);
             });
-        }
-
-        function toggleItem(catIdx, itemIdx, isChecked) {
-            state[catIdx].items[itemIdx].checked = isChecked;
-            saveData();
-            render();
         }
 
         function addCategory() {
