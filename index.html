@@ -821,6 +821,14 @@
     <script src="chartengine.js"></script>
     <script src="script.js"></script>
     <script src="api.js"></script>
-
+<script src="https://unpkg.com/smooth-scrollbar@8.8.4/dist/smooth-scrollbar.js"></script>
+<script>
+    Scrollbar.init(document.querySelector('main'), {
+        damping: 0.07,      // "tłumienie" – im wyższa wartość, tym bardziej "sprężyste"
+        thumbMinSize: 20,
+        renderByPixels: true,
+        alwaysShowTracks: false
+    });
+</script>
 </body>
 </html>
