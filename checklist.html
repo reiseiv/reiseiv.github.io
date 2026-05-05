@@ -2,621 +2,273 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rei Academy / checklist</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Rei Academy / Checklist</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="loader.css">
-    <script src="loader.js"></script>
+    
     <style>
-        /* * LOKALNE STYLE SPECYFICZNE TYLKO DLA CHECKLISTY */
-        :root {
-            --danger-color: #ff3b30;
-        }
-
-        /* Nav Override dla Checklisty - Gładki i jednolity hover */
-        nav .back-link {
-            display: flex; align-items: center; gap: 8px; color: var(--secondary-text);
-            text-decoration: none; font-weight: 600; font-size: 0.95rem; transition: all 0.2s ease;
-            padding: 8px 16px; border-radius: 999px; background: transparent; border: 1px solid transparent;
-        }
-        nav .back-link:hover { 
-            color: var(--text-color); background: rgba(255,255,255,0.05); border-color: var(--border-color);
-        }
-        body.light-theme nav .back-link:hover { color: #000; background: rgba(0,0,0,0.05); }
-
-        .header-actions { display: flex; gap: 12px; align-items: center; }
+        /* =========================================
+           CHECKLIST ARCHITECTURE (Zen & Responsive)
+           ========================================= */
         
+        .premium-tip { align-items: flex-start !important; transition: opacity 0.3s ease, max-height 0.3s ease; }
+        .course-text ul { margin-left: 32px !important; }
+
+        /* Header Actions */
+        .header-actions { display: flex; gap: 8px; align-items: center; }
         .btn-action {
-            background: rgba(255, 255, 255, 0.03); color: var(--text-color); border: 1px solid var(--border-color);
-            padding: 8px 16px; border-radius: 999px; font-weight: 600; font-size: 0.85rem; cursor: pointer;
-            transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 6px;
+            background: rgba(255, 255, 255, 0.02);
+            color: var(--text-secondary);
+            border: 1px solid var(--glass-border);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center; gap: 6px;
+            text-transform: uppercase; letter-spacing: 0.05em;
         }
-        .btn-action:hover { 
-            border-color: rgba(255,255,255,0.25); background: rgba(255,255,255,0.1); 
+        .btn-action:hover {
+            border-color: var(--accent-glow);
+            color: var(--text-primary);
+            background: rgba(147, 51, 234, 0.1);
         }
-        body.light-theme .btn-action { background: transparent; color: var(--text-color); border-color: rgba(0,0,0,0.15); }
-        body.light-theme .btn-action:hover { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.3); color: #000; }
 
-        /* GŁÓWNY KONTENER I ANIMACJE DLA ZEN MODE */
         .container { 
-            max-width: 800px; 
-            margin: 120px auto 0; 
-            padding: 0 24px; 
-            transition: max-width 0.6s cubic-bezier(0.25, 1, 0.5, 1), margin-top 0.6s cubic-bezier(0.25, 1, 0.5, 1); 
+            max-width: 1000px; 
+            margin: 110px auto 40px; 
+            padding: 0 24px;
+            transition: all 0.5s var(--ease-smooth);
         }
-
-        .page-header { margin-bottom: 40px; margin-top: 20px; transition: all 0.4s ease; }
-        .page-header h1 { font-size: 2.2rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 8px; color: var(--heading-color); }
-        .page-header p { color: var(--secondary-text); font-size: 1.05rem; }
-
-        /* KATEGORIE - MASONRY LAYOUT ZAMIAST GRID */
+        
+        .page-header { transition: opacity 0.3s ease, max-height 0.3s ease; }
+        .page-header h1 { font-family: var(--font-display); font-size: 2.2rem; font-weight: 700; margin-bottom: 12px; }
+        
+        /* Dynamic Grid System (Responsive Masonry) */
         .checklist-wrapper { 
-            column-count: 1; /* Domyślnie 1 kolumna (pionowa lista) */
-            column-gap: 32px;
-            transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); 
+            gap: 24px; 
+            align-items: start;
         }
-        
+
+        @media (max-width: 768px) {
+            .checklist-wrapper { grid-template-columns: 1fr; }
+            .container { margin-top: 90px; padding: 0 16px; }
+        }
+
         .category {
-            background: rgba(255,255,255,0.015); border: 1px solid var(--border-color);
-            border-radius: var(--radius-lg); padding: 30px; backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
-            box-shadow: inset 0 1px 1px rgba(255,255,255,0.03), 0 10px 30px rgba(0,0,0,0.2);
-            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-            position: relative; overflow: hidden;
-            
-            /* Masonry Fixes */
-            display: flex; flex-direction: column;
-            break-inside: avoid-column; /* Zapobiega łamaniu karty w połowie w widoku kolumnowym */
-            page-break-inside: avoid;
-            margin-bottom: 32px; /* Zamiast gap */
-            width: 100%;
-
-            /* Własna animacja zapobiegająca znikaniu podczas usuwania w JS */
-            animation: slideIn 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+            background: var(--glass-bg); border: 1px solid var(--glass-border);
+            border-radius: 20px; padding: 24px; position: relative; overflow: hidden;
+            transition: all 0.3s var(--transition-base);
+            height: fit-content;
         }
+        .category:hover { border-color: var(--glass-border-hover); transform: translateY(-2px); }
 
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .category-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .category-title { font-family: var(--font-display); font-size: 1.1rem; font-weight: 600; color: var(--text-primary); outline: none; flex-grow: 1; }
+
+        .check-item { display: flex; align-items: flex-start; gap: 12px; padding: 10px; border-radius: 10px; transition: all 0.2s ease; border: 1px solid transparent; }
+        .check-item:hover { background: rgba(255,255,255,0.03); border-color: var(--glass-border); }
         
-        .category::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background: radial-gradient(
-                600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
-                rgba(255, 255, 255, 0.08), 
-                transparent 40%
-            );
-            z-index: 0; pointer-events: none; opacity: 0; transition: opacity 0.3s ease;
-        }
+        .checkbox-wrapper { position: relative; width: 20px; height: 20px; flex-shrink: 0; margin-top: 2px; }
+        .checkbox-wrapper input { opacity: 0; position: absolute; inset: 0; cursor: pointer; z-index: 2; }
+        .checkbox-custom { position: absolute; inset: 0; border: 2px solid var(--text-muted); border-radius: 5px; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; }
+        .checkbox-wrapper input:checked + .checkbox-custom { background: #34d399; border-color: #34d399; }
+        .checkbox-custom i { font-size: 0.6rem; color: #000; opacity: 0; }
+        .checkbox-wrapper input:checked + .checkbox-custom i { opacity: 1; }
         
-        .category:hover { border-color: rgba(255,255,255,0.1); box-shadow: inset 0 1px 1px rgba(255,255,255,0.06), 0 14px 40px rgba(0,0,0,0.4); transform: translateY(-2px); }
-        .category:hover::before { opacity: 1; }
-        
-        body.light-theme .category { background: linear-gradient(160deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.4) 100%); box-shadow: inset 0 1px 1px rgba(255,255,255,0.8), 0 10px 30px rgba(0,0,0,0.05); }
-        body.light-theme .category:hover { background: rgba(255,255,255,0.95); box-shadow: inset 0 1px 1px #fff, 0 14px 40px rgba(0,0,0,0.1); }
-        body.light-theme .category::before { background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(0, 0, 0, 0.05), transparent 40%); }
+        .item-text { font-size: 0.9rem; color: var(--text-secondary); outline: none; flex-grow: 1; line-height: 1.4; }
+        .check-item.is-checked .item-text { color: var(--text-muted); text-decoration: line-through; opacity: 0.6; }
 
-        .category-header, .item-list, .add-item-btn { position: relative; z-index: 1; }
+        .add-item-btn, .add-cat-btn { background: transparent; border: 1px dashed var(--glass-border); color: var(--text-muted); padding: 12px; border-radius: 12px; width: 100%; cursor: pointer; font-size: 0.8rem; font-weight: 600; transition: all 0.3s ease; margin-top: 12px; text-transform: uppercase; }
+        .add-item-btn:hover, .add-cat-btn:hover { border-color: var(--accent-glow); color: var(--text-primary); background: rgba(147, 51, 234, 0.05); }
 
-        .category-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; border-bottom: 1px solid var(--border-color); padding-bottom: 16px; }
-        .category-title { font-size: 1.3rem; font-weight: 700; color: var(--heading-color); outline: none; flex-grow: 1; transition: 0.2s; padding: 6px 8px; border-radius: 8px; letter-spacing: -0.5px; }
-        .category-title:focus { background: rgba(255,255,255,0.05); box-shadow: inset 0 1px 1px rgba(255,255,255,0.02); }
-        body.light-theme .category-title:focus { background: rgba(0,0,0,0.05); }
-        
-        .cat-actions { display: flex; gap: 8px; opacity: 0; transition: 0.3s; }
-        .category:hover .cat-actions { opacity: 1; }
-
-        .icon-btn {
-            background: transparent; border: 1px solid transparent; color: var(--secondary-text); cursor: pointer;
-            width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; transition: 0.2s;
-        }
-        .icon-btn:hover { background: rgba(255,255,255,0.05); color: var(--text-color); border-color: var(--border-color); }
-        .icon-btn.danger:hover { background: rgba(255, 59, 48, 0.1); color: var(--danger-color); border-color: rgba(255, 59, 48, 0.2); }
-
-        .item-list { display: flex; flex-direction: column; gap: 10px; }
-        
-        .check-item {
-            display: flex; align-items: flex-start; gap: 14px; padding: 12px 14px; border-radius: 12px;
-            transition: background 0.2s, transform 0.2s, border-color 0.2s; position: relative;
-            border: 1px solid transparent;
-        }
-        .check-item:hover { background: rgba(255,255,255,0.02); border-color: var(--border-color); transform: translateX(6px); }
-        body.light-theme .check-item:hover { background: rgba(0,0,0,0.03); }
-
-        .checkbox-wrapper { position: relative; width: 24px; height: 24px; flex-shrink: 0; margin-top: 1px; }
-        .checkbox-wrapper input { opacity: 0; position: absolute; width: 100%; height: 100%; cursor: pointer; z-index: 2; }
-        .checkbox-custom {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 2px solid var(--secondary-text);
-            border-radius: 6px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; align-items: center; justify-content: center;
-        }
-        .checkbox-custom svg { width: 13px; height: 13px; stroke: var(--bg-color); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; fill: none; stroke-dasharray: 16; stroke-dashoffset: 16; transition: stroke-dashoffset 0.3s 0.1s ease-out; }
-        
-        .checkbox-wrapper input:checked + .checkbox-custom { background: var(--up-color); border-color: var(--up-color); box-shadow: 0 0 16px rgba(0, 230, 118, 0.4); }
-        .checkbox-wrapper input:checked + .checkbox-custom svg { stroke-dashoffset: 0; }
-
-        .item-text { font-size: 0.98rem; color: var(--text-color); outline: none; flex-grow: 1; padding: 2px 6px; border-radius: 6px; transition: 0.2s; position: relative; line-height: 1.5; }
-        .item-text:focus { background: rgba(255,255,255,0.05); }
-        body.light-theme .item-text:focus { background: rgba(0,0,0,0.05); }
-        .item-text::after {
-            content: ''; position: absolute; left: 6px; top: 50%; width: 0; height: 2px; background: var(--secondary-text);
-            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1); opacity: 0; pointer-events: none;
-        }
-        .check-item.is-checked .item-text { color: var(--secondary-text); }
-        .check-item.is-checked .item-text::after { width: calc(100% - 12px); opacity: 0.6; }
-
-        .item-actions { opacity: 0; transition: 0.3s; display: flex; overflow: hidden; }
-        .check-item:hover .item-actions { opacity: 1; }
-
-        .add-item-btn {
-            background: transparent; border: 1px dashed var(--border-color); color: var(--secondary-text);
-            padding: 12px; border-radius: 12px; width: 100%; text-align: left; cursor: pointer;
-            font-size: 0.9rem; font-weight: 600; transition: all 0.3s ease; margin-top: 16px; overflow: hidden;
-        }
-        .add-item-btn:hover { border-color: var(--up-color); color: var(--up-color); background: rgba(0, 230, 118, 0.05); padding-left: 20px; }
-        
-        .add-cat-btn {
-            background: rgba(255,255,255,0.015); border: 1px dashed var(--border-color); color: var(--text-color);
-            padding: 24px; border-radius: var(--radius-lg); width: 100%; cursor: pointer; font-size: 1.05rem; font-weight: 600;
-            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); display: flex; align-items: center; justify-content: center; gap: 10px; backdrop-filter: blur(12px);
-            box-shadow: inset 0 1px 1px rgba(255,255,255,0.02); overflow: hidden;
-        }
-        .add-cat-btn:hover { 
-            border-color: var(--up-color); color: var(--up-color); background: rgba(0, 230, 118, 0.05); 
-            box-shadow: 0 10px 30px rgba(0, 230, 118, 0.1), inset 0 1px 1px rgba(255,255,255,0.05); transform: translateY(-2px); 
-        }
-        body.light-theme .add-cat-btn:hover { background: rgba(0, 230, 118, 0.1); }
-
-        .status-banner {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px);
-            background: rgba(0, 230, 118, 0.9); backdrop-filter: blur(12px); color: #000; padding: 12px 28px; border-radius: 999px;
-            font-weight: 700; font-size: 0.95rem; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1000;
-            box-shadow: inset 0 1px 1px rgba(255,255,255,0.5), 0 10px 30px rgba(0, 230, 118, 0.4); opacity: 0; pointer-events: none; border: 1px solid rgba(255,255,255,0.2);
-        }
+        .status-banner { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px); background: #34d399; color: #000; padding: 12px 24px; border-radius: 50px; font-weight: 700; font-size: 0.85rem; transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1); z-index: 1000; opacity: 0; }
         .status-banner.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
         /* =========================================
-           ZEN MODE (TRYB PREZENTACJI - F11 / FULLSCREEN)
+           ZEN MODE (FULL ISOLATION)
            ========================================= */
-        
-        body.zen-mode nav,
+        body.zen-mode .top-nav,
         body.zen-mode .page-header,
         body.zen-mode .premium-tip,
-        body.zen-mode .add-cat-btn {
-            opacity: 0 !important;
-            max-height: 0 !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            pointer-events: none !important;
-            border: none !important;
+        body.zen-mode .add-cat-btn,
+        body.zen-mode .icon-btn,
+        body.zen-mode .add-item-btn {
+            display: none !important;
         }
 
-        body.zen-mode nav { top: -100px; } 
-
         body.zen-mode .container {
-            max-width: 1500px !important; 
+            max-width: 95vw !important;
             margin-top: 40px !important;
         }
 
         body.zen-mode .checklist-wrapper {
-            column-count: 3; 
-            column-gap: 24px;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)) !important;
         }
-        
+
         body.zen-mode .category {
-            margin-bottom: 24px; 
-        }
-
-        body.zen-mode .category-title,
-        body.zen-mode .item-text {
-            pointer-events: none; 
-            user-select: none;
-        }
-
-        body.zen-mode .cat-actions,
-        body.zen-mode .item-actions,
-        body.zen-mode .add-item-btn {
-            opacity: 0 !important;
-            max-height: 0 !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            pointer-events: none !important;
-        }
-
-        @media (max-width: 1400px) {
-            body.zen-mode .checklist-wrapper { column-count: 2; }
-        }
-        @media (max-width: 900px) {
-            body.zen-mode .checklist-wrapper { column-count: 1; }
-        }
-
-        @media (max-width: 600px) {
-            .cat-actions, .item-actions { opacity: 1; }
-            .header-actions span.txt { display: none; }
+            border-color: rgba(255, 255, 255, 0.05);
+            background: rgba(10, 5, 20, 0.4);
         }
     </style>
 </head>
-<body class="lang-pl">
-<div id="loader">
-        <div class="loader-content">
-            <span class="loader-title">Academy / checklist</span>
-            <div class="loader-bar-bg"><div class="loader-bar-fill" id="loaderFill"></div></div>
-        </div>
-    </div>
+<body>
+    <div id="ambient-wrapper"><div class="ambient-blobs"></div></div>
 
-    <div id="ambient-wrapper">
-        <div class="ambient-blobs"></div>
-    </div>
-
-    <nav class="fade-up-element" style="transition: all 0.5s ease;">
+    <nav class="top-nav content-fade">
         <div class="nav-left">
-            <a href="index.html" class="back-link">
-                <span>←</span> 
-                <span class="pl">Wróć</span>
-                <span class="en">Back</span>
-            </a>
+            <a href="index.html" class="nav-logo" style="text-decoration: none; color: var(--text-primary);">Rei Academy</a>
+            <div class="made-with">made with ❤️ - rei</div>
         </div>
         <div class="nav-right header-actions">
-            <span style="color: var(--secondary-text); font-size: 0.8rem; margin-right: 12px; font-weight: 500;" class="pl">Wciśnij F11</span>
-            <span style="color: var(--secondary-text); font-size: 0.8rem; margin-right: 12px; font-weight: 500;" class="en">Press F11</span>
-
-            <button class="btn-action" onclick="resetToExample()">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
-                <span class="txt pl">Szablon</span>
-                <span class="txt en">Reset</span>
-            </button>
-            <label for="import-file" class="btn-action">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                <span class="txt pl">Importuj</span>
-                <span class="txt en">Import</span>
-            </label>
+            <button class="btn-action" onclick="resetToExample()"><i class="fa-solid fa-rotate-left"></i> Szablon</button>
+            <label for="import-file" class="btn-action" style="margin:0; cursor: pointer;"><i class="fa-solid fa-file-import"></i> Import</label>
             <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(event)">
-            <button class="btn-action" onclick="exportData()">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                <span class="txt pl">Zapisz JSON</span>
-                <span class="txt en">Save JSON</span>
-            </button>
-            <button class="theme-toggle" onclick="toggleTheme()" id="theme-btn" style="display:none;"></button>
+            <button class="btn-action" onclick="exportData()"><i class="fa-solid fa-file-export"></i> Eksport</button>
         </div>
     </nav>
 
-    <div class="container fade-up-element fade-delay-1">
-        <div class="page-header" style="overflow: hidden;">
+    <div class="container content-fade">
+        <div class="page-header">
             <h1>Pre-trade Checklist</h1>
-            <p>Stwórz własną listę zasad przed wejściem w pozycję. Zmiany zapisują się automatycznie.</p>
+            <p>Sterylizacja decyzyjna. Wyeliminuj autopilota przed każdym uderzeniem w rynek.</p>
         </div>
 
-        <div class="premium-tip fade-up-element fade-delay-2" style="margin-top: 0; margin-bottom: 40px; transition: all 0.4s ease; overflow: hidden;">
+        <div class="premium-tip" style="margin-bottom: 40px;">
             <div class="tip-icon">💡</div>
             <div class="tip-content">
                 <strong>Tip ode mnie ;p</strong>
-                <span class="pl">jestem troszke neurodivergent(adhd) i zanim ogarnąłem psychologie strasznie często łapałem się na wchodzeniu w trady na totalnym autopilocie... checklista mega mi w tym pomogła i tu nawet nie chodzi o to, żeby trzymać się jej sztywno 1:1 (chyba że ktoś tak woli). jej głównym zadaniem jest po prostu fizycznie wyrwać cię z tego autopilota i przypomnieć ci, jak w ogóle powinieneś myśleć zanim podejmiesz trade. łapcie moją starą checkliste jako szablon ;)<br>→ a i sprawdzcie sobie f11...</span>
-                <span class="en">i'm a bit neurodivergent (adhd) and before i grasped psychology, i caught myself entering trades on pure autopilot... this checklist helped me immensely. it's not even about sticking to it 1:1 rigidly (unless you prefer). its main job is to physically pull you out of autopilot and remind you how you should think before taking a trade. grab my old checklist as a template ;)<br>→ oh, and check out f11...</span>
+                Szablon oparty jest na logice Fabio i Cimiego, od których się wiele nauczyłem[cite: 13]. Jestem troszkę neurodivergent i zanim ogarnąłem psychologię, strasznie często wchodziłem w trady na totalnym autopilocie[cite: 13]. Korzystanie z checklist – nawet tych w głowie – strasznie mi pomogło i pomaga do dziś[cite: 13]. Fizycznie wyrywa Cię to z amoku[cite: 13]. Wciśnij F11 dla pełnej izolacji.
             </div>
         </div>
 
-        <div class="checklist-wrapper" id="checklist-container">
-            </div>
+        <div class="checklist-wrapper" id="checklist-container"></div>
 
-        <button class="add-cat-btn" onclick="addCategory()" style="margin-top: 32px; margin-bottom: 32px; overflow: hidden;">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Dodaj nową sekcję
+        <button class="add-cat-btn" onclick="addCategory()">
+            <i class="fa-solid fa-plus"></i> Dodaj nową sekcję
         </button>
     </div>
 
-    <div class="status-banner" id="status-banner">✓ Zapisano pomyślnie</div>
+    <div class="status-banner" id="status-banner">Zapisano pomyślnie</div>
 
     <script src="app.js"></script>
-
     <script>
-        // =========================================
-        // LOGIKA ZEN MODE (FULLSCREEN API)
-        // =========================================
-        
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'F11') {
-                e.preventDefault();
-                if (!document.fullscreenElement) {
-                    document.documentElement.requestFullscreen().catch(err => {
-                        console.log(`Błąd włączania pełnego ekranu: ${err.message}`);
-                    });
-                } else {
-                    document.exitFullscreen();
-                }
-            }
-        });
-
-        document.addEventListener('fullscreenchange', () => {
-            if (document.fullscreenElement) {
-                document.body.classList.add('zen-mode');
-                showToast("🧘‍♂️ Zen Mode Aktywny");
-            } else {
-                document.body.classList.remove('zen-mode');
-            }
-        });
-
-        // =========================================
-        // RESZTA KODU CHECKLISTY
-        // =========================================
-
-        const trashIcon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>`;
-
         const defaultChecklist = [
-            {
-                id: generateId(),
-                title: "1. MARKET STATE (Context)",
-                items: [
-                    { id: generateId(), text: "Is the market out of balance (impulse + looking for a new balance)?", checked: false },
-                    { id: generateId(), text: "Is the market in balance (consolidation, mean reversion)?", checked: false },
-                    { id: generateId(), text: "Is there a clear impulse leg (the latest strong move)?", checked: false },
-                    { id: generateId(), text: "Do I see a Failed Breakout or a Breakout + continuation?", checked: false }
-                ]
-            },
-            {
-                id: generateId(),
-                title: "2. LOCATION (Volume Profile)",
-                items: [
-                    { id: generateId(), text: "Has the price reached an LVN (Low Volume Node) from the impulse leg?", checked: false },
-                    { id: generateId(), text: "Is it close to the POC of the previous range?", checked: false },
-                    { id: generateId(), text: "Unfinished Auction / Single Prints in the zone?", checked: false },
-                    { id: generateId(), text: "Is the price bouncing off VAL or VAH?", checked: false },
-                    { id: generateId(), text: "HVN above/below the price (potential resistance/support)?", checked: false }
-                ]
-            },
-            {
-                id: generateId(),
-                title: "3. AGGRESSION (Order Flow / Footprint)",
-                items: [
-                    { id: generateId(), text: "Do I see Absorption (high volume + delta in the opposite direction)?", checked: false },
-                    { id: generateId(), text: "Delta Divergence (price moving one way, delta the other)?", checked: false },
-                    { id: generateId(), text: "Big Prints / Aggressive prints in the direction of the setup?", checked: false },
-                    { id: generateId(), text: "Imbalance / Stacked Imbalances (min. 200-300%)?", checked: false },
-                    { id: generateId(), text: "Does CVD (Cumulative Volume Delta) confirm the direction?", checked: false }
-                ]
-            },
-            {
-                id: generateId(),
-                title: "4. EXECUTION & RISK",
-                items: [
-                    { id: generateId(), text: "Stop Loss at LVN / after an aggressive print?", checked: false },
-                    { id: generateId(), text: "RR minimum 1:2 (preferably 1:3+)?", checked: false },
-                    { id: generateId(), text: "Position size calculated?", checked: false },
-                    { id: generateId(), text: "Is the session appropriate (London/NY open, avoiding news events)?", checked: false },
-                    { id: generateId(), text: "All 3/3 green? → ENTRY", checked: false }
-                ]
-            }
+            { id: "1", title: "1. MARKET STATE (Context)", items: [
+                { id: "1-1", text: "Is the market out of balance (impulse + looking for a new balance)?", checked: false },
+                { id: "1-2", text: "Is the market in balance (consolidation, mean reversion)?", checked: false },
+                { id: "1-3", text: "Is there a clear impulse leg (the latest strong move)?", checked: false },
+                { id: "1-4", text: "Do I see a Failed Breakout or a Breakout + continuation?", checked: false }
+            ]},
+            { id: "2", title: "2. LOCATION (Volume Profile)", items: [
+                { id: "2-1", text: "Has the price reached an LVN (Low Volume Node) from the impulse leg?", checked: false },
+                { id: "2-2", text: "Is it close to the POC of the previous range?", checked: false },
+                { id: "2-3", text: "Unfinished Auction / Single Prints in the zone?", checked: false },
+                { id: "2-4", text: "Is the price bouncing off VAL or VAH?", checked: false },
+                { id: "2-5", text: "HVN above/below the price (potential resistance/support)?", checked: false }
+            ]},
+            { id: "3", title: "3. AGGRESSION (Order Flow / Footprint)", items: [
+                { id: "3-1", text: "Do I see Absorption (high volume + delta in the opposite direction)?", checked: false },
+                { id: "3-2", text: "Delta Divergence (price moving one way, delta the other)?", checked: false },
+                { id: "3-3", text: "Big Prints / Aggressive prints in the direction of the setup?", checked: false },
+                { id: "3-4", text: "Imbalance / Stacked Imbalances (min. 200-300%)?", checked: false },
+                { id: "3-5", text: "Does CVD (Cumulative Volume Delta) confirm the direction?", checked: false }
+            ]},
+            { id: "4", title: "4. EXECUTION & RISK", items: [
+                { id: "4-1", text: "Stop Loss at LVN / after an aggressive print?", checked: false },
+                { id: "4-2", text: "RR minimum 1:2 (preferably 1:3+)?", checked: false },
+                { id: "4-3", text: "Position size calculated?", checked: false },
+                { id: "4-4", text: "Is the session appropriate (London/NY open, avoiding news events)?", checked: false },
+                { id: "4-5", text: "All 3/3 green? → ENTRY", checked: false }
+            ]}
         ];
 
-        let state = [];
+        let state = JSON.parse(localStorage.getItem('rei_checklist')) || defaultChecklist;
 
-        function generateId() { return Math.random().toString(36).substr(2, 9); }
-
-        function saveData() {
-            localStorage.setItem('rei_checklist', JSON.stringify(state));
+        function saveData() { 
+            localStorage.setItem('rei_checklist', JSON.stringify(state)); 
         }
 
-        function loadData() {
-            const saved = localStorage.getItem('rei_checklist');
-            if (saved) {
-                try {
-                    state = JSON.parse(saved);
-                } catch (e) {
-                    state = JSON.parse(JSON.stringify(defaultChecklist));
-                }
-            } else {
-                state = JSON.parse(JSON.stringify(defaultChecklist)); 
-            }
-            render();
-        }
-
-        function showToast(message, isError = false) {
-            const banner = document.getElementById('status-banner');
-            banner.textContent = message;
-            if (isError) {
-                banner.style.background = 'rgba(255, 59, 48, 0.9)';
-                banner.style.color = '#fff';
-            } else {
-                banner.style.background = 'rgba(0, 230, 118, 0.9)';
-                banner.style.color = '#000';
-            }
-            banner.classList.add('show');
-            setTimeout(() => banner.classList.remove('show'), 3000);
-        }
-
-        function toggleItem(catIdx, itemIdx, isChecked, element) {
-            state[catIdx].items[itemIdx].checked = isChecked;
-            saveData();
-            
-            if (element) {
-                const itemDiv = element.closest('.check-item');
-                if (isChecked) {
-                    itemDiv.classList.add('is-checked');
-                } else {
-                    itemDiv.classList.remove('is-checked');
-                }
-            }
+        function showToast(msg) {
+            const b = document.getElementById('status-banner');
+            b.textContent = msg; b.classList.add('show');
+            setTimeout(() => b.classList.remove('show'), 2000);
         }
 
         function render() {
             const container = document.getElementById('checklist-container');
             container.innerHTML = '';
-
-            state.forEach((cat, catIndex) => {
+            state.forEach((cat, cIdx) => {
                 const catDiv = document.createElement('div');
-                // Usunięto fade-up-element, aby element nie znikał podczas przebudowywań JS
-                catDiv.className = 'category'; 
-                
-                catDiv.addEventListener('mousemove', e => {
-                    const rect = catDiv.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    catDiv.style.setProperty('--mouse-x', `${x}px`);
-                    catDiv.style.setProperty('--mouse-y', `${y}px`);
-                });
-
-                const header = document.createElement('div');
-                header.className = 'category-header';
-                
-                const title = document.createElement('div');
-                title.className = 'category-title';
-                title.contentEditable = true;
-                title.textContent = cat.title;
-                title.spellcheck = false;
-                title.onblur = (e) => { cat.title = e.target.textContent; saveData(); };
-                title.onkeydown = (e) => { if(e.key === 'Enter') { e.preventDefault(); title.blur(); } };
-
-                const actions = document.createElement('div');
-                actions.className = 'cat-actions';
-                
-                const delCatBtn = document.createElement('button');
-                delCatBtn.className = 'icon-btn danger';
-                delCatBtn.innerHTML = trashIcon;
-                delCatBtn.onclick = (e) => { e.stopPropagation(); deleteCategory(catIndex); };
-                
-                actions.appendChild(delCatBtn);
-                header.appendChild(title);
-                header.appendChild(actions);
-                catDiv.appendChild(header);
-
-                const list = document.createElement('div');
-                list.className = 'item-list';
-
-                cat.items.forEach((item, itemIndex) => {
+                catDiv.className = 'category';
+                catDiv.innerHTML = `
+                    <div class="category-header">
+                        <div class="category-title" contentEditable="true" onblur="state[${cIdx}].title=this.textContent;saveData()">${cat.title}</div>
+                        <button class="icon-btn" style="background:none; border:none; color:var(--text-muted); cursor:pointer;" onclick="deleteCategory(${cIdx})"><i class="fa-solid fa-trash-can"></i></button>
+                    </div>
+                    <div class="item-list"></div>
+                `;
+                const list = catDiv.querySelector('.item-list');
+                cat.items.forEach((item, iIdx) => {
                     const itemDiv = document.createElement('div');
                     itemDiv.className = `check-item ${item.checked ? 'is-checked' : ''}`;
-                    
-                    const cbWrapper = document.createElement('div');
-                    cbWrapper.className = 'checkbox-wrapper';
-                    
-                    const cbInput = document.createElement('input');
-                    cbInput.type = 'checkbox';
-                    cbInput.checked = item.checked;
-                    cbInput.onchange = (e) => toggleItem(catIndex, itemIndex, e.target.checked, e.target);
-                    
-                    const cbCustom = document.createElement('div');
-                    cbCustom.className = 'checkbox-custom';
-                    cbCustom.innerHTML = `<svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"></polyline></svg>`;
-                    
-                    cbWrapper.appendChild(cbInput);
-                    cbWrapper.appendChild(cbCustom);
-
-                    const textDiv = document.createElement('div');
-                    textDiv.className = 'item-text';
-                    textDiv.contentEditable = true;
-                    textDiv.textContent = item.text;
-                    textDiv.spellcheck = false;
-                    textDiv.onblur = (e) => { item.text = e.target.textContent; saveData(); };
-                    textDiv.onkeydown = (e) => { if(e.key === 'Enter') { e.preventDefault(); textDiv.blur(); } };
-
-                    const itemActions = document.createElement('div');
-                    itemActions.className = 'item-actions';
-                    const delItemBtn = document.createElement('button');
-                    delItemBtn.className = 'icon-btn danger';
-                    delItemBtn.innerHTML = trashIcon;
-                    delItemBtn.onclick = (e) => { e.stopPropagation(); deleteItem(catIndex, itemIndex); };
-                    
-                    itemActions.appendChild(delItemBtn);
-
-                    itemDiv.appendChild(cbWrapper);
-                    itemDiv.appendChild(textDiv);
-                    itemDiv.appendChild(itemActions);
+                    itemDiv.innerHTML = `
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" ${item.checked ? 'checked' : ''} onchange="toggleItem(${cIdx}, ${iIdx}, this.checked)">
+                            <div class="checkbox-custom"><i class="fa-solid fa-check"></i></div>
+                        </div>
+                        <div class="item-text" contentEditable="true" onblur="state[${cIdx}].items[${iIdx}].text=this.textContent;saveData()">${item.text}</div>
+                        <button class="icon-btn" style="background:none; border:none; color:rgba(255,255,255,0.1); cursor:pointer;" onclick="deleteItem(${cIdx}, ${iIdx})"><i class="fa-solid fa-xmark"></i></button>
+                    `;
                     list.appendChild(itemDiv);
                 });
-
                 const addBtn = document.createElement('button');
                 addBtn.className = 'add-item-btn';
-                addBtn.textContent = '+ Dodaj punkt';
-                addBtn.onclick = () => addItem(catIndex);
-
-                catDiv.appendChild(list);
+                addBtn.innerHTML = '<i class="fa-solid fa-plus"></i> Dodaj punkt';
+                addBtn.onclick = () => addItem(cIdx);
                 catDiv.appendChild(addBtn);
                 container.appendChild(catDiv);
             });
         }
 
-        function addCategory() {
-            state.push({ id: generateId(), title: "Nowa kategoria", items: [] });
-            saveData();
-            render();
-            setTimeout(() => {
-                const titles = document.querySelectorAll('.category-title');
-                if(titles.length > 0) titles[titles.length - 1].focus();
-            }, 50);
-        }
-
-        function deleteCategory(catIdx) {
-            if(confirm("Na pewno chcesz usunąć całą kategorię?")) {
-                state.splice(catIdx, 1);
-                saveData();
-                render();
-            }
-        }
-
-        function addItem(catIdx) {
-            state[catIdx].items.push({ id: generateId(), text: "Nowy punkt", checked: false });
-            saveData();
-            render();
-            setTimeout(() => {
-                const cats = document.querySelectorAll('.category');
-                const itemsText = cats[catIdx].querySelectorAll('.item-text');
-                if(itemsText.length > 0) {
-                    const lastItem = itemsText[itemsText.length - 1];
-                    lastItem.focus();
-                    document.execCommand('selectAll', false, null);
-                }
-            }, 50);
-        }
-
-        function deleteItem(catIdx, itemIdx) {
-            state[catIdx].items.splice(itemIdx, 1);
-            saveData();
-            render();
-        }
-
-        function resetToExample() {
-            if(confirm("To nadpisze Twoje obecne zmiany i przywróci szablon. Kontynuować?")) {
-                state = JSON.parse(JSON.stringify(defaultChecklist));
-                saveData();
-                render();
-                showToast("✓ Szablon przywrócony");
-            }
-        }
-
+        function toggleItem(c, i, val) { state[c].items[i].checked = val; render(); saveData(); }
+        function addItem(c) { state[c].items.push({id: Date.now(), text: "Nowy punkt", checked: false}); render(); saveData(); }
+        function addCategory() { state.push({id: Date.now(), title: "Nowa sekcja", items: []}); render(); saveData(); }
+        function deleteCategory(c) { if(confirm("Usunąć sekcję?")) { state.splice(c, 1); render(); saveData(); } }
+        function deleteItem(c, i) { state[c].items.splice(i, 1); render(); saveData(); }
+        function resetToExample() { if(confirm("Przywrócić szablon?")) { state = defaultChecklist; render(); saveData(); } }
+        
         function exportData() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state, null, 2));
-            const downloadAnchorNode = document.createElement('a');
-            downloadAnchorNode.setAttribute("href",     dataStr);
-            downloadAnchorNode.setAttribute("download", "rei_checklist.json");
-            document.body.appendChild(downloadAnchorNode); 
-            downloadAnchorNode.click();
-            downloadAnchorNode.remove();
-            showToast("✓ Checklista zapisana na dysku");
+            const blob = new Blob([JSON.stringify(state, null, 2)], {type: "application/json"});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a'); a.href = url; a.download = "rei_checklist.json"; a.click();
+            showToast("✓ Eksport zakończony");
         }
 
-        function importData(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
+        function importData(e) {
+            const file = e.target.files[0];
             const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const importedState = JSON.parse(e.target.result);
-                    if(Array.isArray(importedState)) {
-                        state = importedState;
-                        saveData();
-                        render();
-                        showToast("✓ Checklista wgrana pomyślnie");
-                    } else {
-                        throw new Error("Invalid format");
-                    }
-                } catch (error) {
-                    showToast("❌ Błąd: Nieprawidłowy plik JSON", true);
-                }
-                document.getElementById('import-file').value = "";
-            };
+            reader.onload = (ev) => { try { state = JSON.parse(ev.target.result); render(); saveData(); showToast("✓ Zaimportowano"); } catch(err) { showToast("❌ Błąd pliku"); }};
             reader.readAsText(file);
         }
 
-        document.addEventListener('DOMContentLoaded', loadData);
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'F11') {
+                e.preventDefault();
+                document.body.classList.toggle('zen-mode');
+                showToast(document.body.classList.contains('zen-mode') ? "🧘 Zen Mode Aktywny" : "Terminal Przywrócony");
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', render);
     </script>
 </body>
 </html>
