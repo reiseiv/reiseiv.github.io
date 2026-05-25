@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#05020a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Rei Academy / Mobile Terminal</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Baza CSS Desktop -->
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* =========================================
+           MOBILE OVERRIDES (Sterylizacja Dotykowa)
+           ========================================= */
+        body {
+            -webkit-tap-highlight-color: transparent;
+            overscroll-behavior-y: none;
+        }
+
+        /* Ukrycie telemetrii na rzecz przestrzeni ekranowej */
+        .session-container { display: none !important; }
+
+        /* Kompaktowy, jednorzędowy header pod Notch / Dynamic Island */
+        .top-nav {
+            padding: max(16px, env(safe-area-inset-top)) 16px 16px 16px;
+            flex-direction: row !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            background: rgba(5, 2, 10, 0.85); 
+        }
+        
+        .nav-left { width: auto; justify-content: flex-start; }
+        .made-with { display: none; }
+        .nav-logo { font-size: 1.1rem; }
+        
+        .nav-right { width: auto; justify-content: flex-end; }
+        
+        /* Upakowanie ikon i przycisku Ko-fi */
+        .social-nav { gap: 8px; } 
+        .nav-icon { width: 28px; height: 28px; font-size: 1rem; } 
+        .kofi-nav-btn { padding: 6px 12px; font-size: 0.75rem; margin-left: 0; }
+
+        /* Marginesy pod kompaktowy top-nav */
+        .portfolio-main {
+            padding-top: calc(100px + env(safe-area-inset-top));
+            padding-bottom: max(40px, env(safe-area-inset-bottom));
+        }
+        .container { padding: 0 16px; }
+
+        /* Bento Grid -> 1 Kolumna */
+        .bento-grid {
+            grid-template-columns: 1fr !important;
+            grid-auto-rows: auto !important;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+        .span-3, .span-4, .span-5, .span-7, .span-8 { grid-column: span 1 !important; }
+
+        .folder-card { padding: 24px 20px; min-height: 130px; }
+        .folder-num { font-size: 6rem; top: -10px; left: 10px; }
+        .folder-info h3 { font-size: 1.15rem; }
+        
+        .progress-badge { top: 12px; right: 12px; font-size: 0.55rem; padding: 4px 8px; }
+
+        /* Moduły edukacyjne & Kontenery tekstowe */
+        .cover-title { font-size: 2.2rem; }
+        .section-title { font-size: 1.4rem; margin-bottom: 20px; }
+        .course-text { padding: 24px 16px; border-radius: 16px; }
+        .course-text p { font-size: 0.9rem; }
+        
+        .premium-tip { flex-direction: column; padding: 16px; gap: 12px; }
+        .tip-icon { font-size: 1.2rem; }
+
+        /* Nawigacja wewnątrz modułu - przyciski blokowe pod palec */
+        .nav-actions { flex-direction: column; gap: 12px; margin-top: 24px; }
+        .nav-btn { width: 100%; text-align: center; padding: 14px 20px; }
+
+        /* Orderflow Taśma & Symulatory */
+        .fp-wrapper { flex-direction: column; gap: 16px; margin: 24px 0; }
+        .fp-box { width: 100%; min-width: unset; padding: 16px; }
+        
+        .sim-board { padding: 20px 12px; margin: 24px 0; }
+        .sim-title { font-size: 0.95rem; margin-bottom: 16px; }
+        
+        .tape-row { font-size: 1.2rem; gap: 10px; justify-content: space-around; }
+        .tape-bid, .tape-ask { width: 90px; padding: 10px 0; }
+
+        /* Rozwiązanie "Fat Finger" dla Tooltipów (Docked Bottom) */
+        .tooltip {
+            top: auto !important;
+            bottom: max(20px, env(safe-area-inset-bottom)) !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            width: calc(100vw - 32px);
+            max-width: 400px;
+            text-align: center;
+            font-size: 0.85rem;
+            padding: 16px;
+        }
+
+        .community-wrapper { margin-top: 40px; gap: 24px; }
+        .kofi-card { padding: 24px 16px; border-radius: 16px; }
+    </style>
+</head>
+<body>
+    <!-- Environmental Isolation Wrapper -->
+    <div id="ambient-wrapper">
+        <div class="ambient-blobs"></div>
+    </div>
+
+    <!-- Cover Page Sequence -->
+    <div class="cover-page">
+        <div class="cover-particles"></div>
+        <div class="cover-content">
+            
+            <!-- Pasek postępu na wejściu -->
+            <div class="loader-container">
+                <div class="loader-title-small">SYSTEM INITIALIZATION</div>
+                <div class="loader-bar-bg">
+                    <div class="loader-bar-fill" id="loaderFill"></div>
+                </div>
+            </div>
+            
+            <h1 class="cover-title">
+                <span class="title-line">ANALYTICAL</span>
+                <span class="title-line">STERILITY</span>
+            </h1>
+            
+            <div class="cover-meta">
+                <span class="meta-item">Zero Trust</span>
+                <span class="meta-divider">×</span>
+                <span class="meta-item">EV Optimization</span>
+                <span class="meta-divider">×</span>
+                <span class="meta-item">Orderflow</span>
+            </div>
+
+            <button class="enter-btn">
+                <span class="enter-text">Wejdź do Akademii</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Global Tooltip Container (Mobile Docked) -->
+    <div id="tooltip" class="tooltip"></div>
+
+    <!-- Application Core & Routing Output -->
+    <main class="portfolio-main" style="display: none;">
+        
+        <nav class="top-nav">
+            <div class="nav-left">
+                <div class="nav-logo" onclick="App.navigate('home')">Rei Academy</div>
+            </div>
+            <div class="nav-right">
+                
+                <!-- Ukryta telemetria na mobile, kod zostaje dla zgodności DOM -->
+                <div class="session-container">
+                    <div class="session-item" id="london-session">
+                        <div class="dot"></div> LON: <span class="session-time">--:--</span>
+                    </div>
+                    <div class="session-item" id="ny-session">
+                        <div class="dot"></div> NY: <span class="session-time">--:--</span>
+                    </div>
+                </div>
+                
+                <div class="social-nav">
+                    <a href="https://x.com/reiseiv_" target="_blank" class="nav-icon"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="https://dsc.gg/rei" target="_blank" class="nav-icon"><i class="fa-brands fa-discord"></i></a>
+                    <a href="http://ko-fi.com/reiseiv" target="_blank" class="kofi-nav-btn"><i class="fa-solid fa-mug-hot"></i> Zasil</a>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container">
+            <div class="breadcrumbs" id="breadcrumbs-content"></div>
+            <div id="app-root"></div>
+        </div>
+    </main>
+
+    <!-- Source Execution -->
+    <script src="content.js"></script>
+    <script src="simulators.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

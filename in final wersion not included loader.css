@@ -1,0 +1,27 @@
+#loader {
+    position: fixed; inset: 0; z-index: 9999;
+    background: #030303; display: flex; justify-content: center; align-items: center;
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), filter 0.8s ease;
+}
+
+#loader.fade-out { opacity: 0; filter: blur(10px); pointer-events: none; }
+.loader-content { display: flex; flex-direction: column; align-items: center; gap: 15px; }
+.loader-title { font-size: 10px; letter-spacing: 4px; color: #86868b; }
+.loader-bar-bg { width: 150px; height: 1px; background: rgba(255,255,255,0.1); position: relative; overflow: hidden; }
+.loader-bar-fill { position: absolute; top: 0; left: 0; height: 100%; width: 0%; background: #fff; transition: width 0.8s ease; }
+
+/* Zwykły stan - ukryte i przesunięte niżej dla lepszego efektu */
+.fade-up-element {
+    opacity: 0;
+    transform: translateY(30px); /* 30px daje bardziej "premium" wjazd */
+}
+
+/* ZAPALNIK - to nadaje JS, żeby wymusić start */
+.fade-up-element.animate {
+    animation: premiumCascade 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes premiumCascade {
+    0% { opacity: 0; transform: translateY(30px); }
+    100% { opacity: 1; transform: translateY(0); }
+}

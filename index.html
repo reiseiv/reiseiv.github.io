@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rei Academy / Masterclass</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script>
+  if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+    window.location.href = "mobile.html";
+  }
+</script>
+</head>
+<body>
+    <div id="tooltip" class="tooltip"></div>
+
+    <div id="ambient-wrapper">
+        <div class="ambient-blobs"></div>
+    </div>
+
+<div class="cover-page">
+        <div class="cover-particles"></div>
+        <div class="cover-content">
+            
+            <div class="loader-container">
+                <div class="loader-title-small">LOADING...</div>
+                <div class="loader-bar-bg">
+                    <div class="loader-bar-fill" id="loaderFill"></div>
+                </div>
+            </div>
+            
+            <h1 class="cover-title">
+                <span class="title-line">ANALYTICAL EDGE</span>
+                <span class="title-line"></span>
+            </h1>
+            
+            <div class="cover-meta">
+                <span class="meta-item">Volume</span>
+                <span class="meta-divider">×</span>
+                <span class="meta-item">EV Optimization</span>
+                <span class="meta-divider">×</span>
+                <span class="meta-item">Orderflow</span>
+            </div>
+
+            <button class="enter-btn">
+                <span class="enter-text">Wejdź do Akademii</span>
+            </button>
+        </div>
+    </div>
+
+    <main class="portfolio-main" style="display: none;">
+        
+        <nav class="top-nav">
+            <div class="nav-left">
+                <div class="nav-logo" onclick="App.navigate('home')">Rei Academy</div>
+                <div class="made-with">made with ❤️ - rei</div>
+            </div>
+            <div class="nav-right">
+                
+                <div class="session-container">
+                    <div class="session-item" id="london-session">
+                        <div class="dot"></div> LON: <span class="session-time">--:--</span>
+                    </div>
+                    <div class="session-item" id="ny-session">
+                        <div class="dot"></div> NY: <span class="session-time">--:--</span>
+                    </div>
+                </div>
+                
+                <div class="social-nav">
+                    <a href="https://x.com/reiseiv_" target="_blank" class="nav-icon"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="https://dsc.gg/rei" target="_blank" class="nav-icon"><i class="fa-brands fa-discord"></i></a>
+                    <a href="http://ko-fi.com/reiseiv" target="_blank" class="kofi-nav-btn"><i class="fa-solid fa-mug-hot"></i> Zasil Projekt</a>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container">
+            <div class="breadcrumbs" id="breadcrumbs-content"></div>
+            <div id="app-root"></div>
+        </div>
+    </main>
+
+    <script src="content.js"></script>
+    <script src="app.js"></script>
+    <script src="simulators.js"></script>
+</body>
+</html>

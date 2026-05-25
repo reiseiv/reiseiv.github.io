@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Rei Academy / Checklist</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    
+    <style>
+        /* =========================================
+           CHECKLIST ARCHITECTURE (Zen & Responsive)
+           ========================================= */
+        
+        .premium-tip { align-items: flex-start !important; transition: opacity 0.3s ease, max-height 0.3s ease; }
+        .course-text ul { margin-left: 32px !important; }
+
+        /* Header Actions */
+        .header-actions { display: flex; gap: 8px; align-items: center; }
+        .btn-action {
+            background: rgba(255, 255, 255, 0.02);
+            color: var(--text-secondary);
+            border: 1px solid var(--glass-border);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center; gap: 6px;
+            text-transform: uppercase; letter-spacing: 0.05em;
+        }
+        .btn-action:hover {
+            border-color: var(--accent-glow);
+            color: var(--text-primary);
+            background: rgba(147, 51, 234, 0.1);
+        }
+
+        .container { 
+            max-width: 1000px; 
+            margin: 110px auto 40px; 
+            padding: 0 24px;
+            transition: all 0.5s var(--ease-smooth);
+        }
+        
+        .page-header { transition: opacity 0.3s ease, max-height 0.3s ease; }
+        .page-header h1 { font-family: var(--font-display); font-size: 2.2rem; font-weight: 700; margin-bottom: 12px; }
+        
+        /* Dynamic Grid System (Responsive Masonry) */
+        .checklist-wrapper { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); 
+            gap: 24px; 
+            align-items: start;
+        }
+
+        @media (max-width: 768px) {
+            .checklist-wrapper { grid-template-columns: 1fr; }
+            .container { margin-top: 90px; padding: 0 16px; }
+        }
+
+        .category {
+            background: var(--glass-bg); border: 1px solid var(--glass-border);
+            border-radius: 20px; padding: 24px; position: relative; overflow: hidden;
+            transition: all 0.3s var(--transition-base);
+            height: fit-content;
+        }
+        .category:hover { border-color: var(--glass-border-hover); transform: translateY(-2px); }
+
+        .category-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .category-title { font-family: var(--font-display); font-size: 1.1rem; font-weight: 600; color: var(--text-primary); outline: none; flex-grow: 1; }
+
+        .check-item { display: flex; align-items: flex-start; gap: 12px; padding: 10px; border-radius: 10px; transition: all 0.2s ease; border: 1px solid transparent; }
+        .check-item:hover { background: rgba(255,255,255,0.03); border-color: var(--glass-border); }
+        
+        .checkbox-wrapper { position: relative; width: 20px; height: 20px; flex-shrink: 0; margin-top: 2px; }
+        .checkbox-wrapper input { opacity: 0; position: absolute; inset: 0; cursor: pointer; z-index: 2; }
+        .checkbox-custom { position: absolute; inset: 0; border: 2px solid var(--text-muted); border-radius: 5px; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; }
+        .checkbox-wrapper input:checked + .checkbox-custom { background: #34d399; border-color: #34d399; }
+        .checkbox-custom i { font-size: 0.6rem; color: #000; opacity: 0; }
+        .checkbox-wrapper input:checked + .checkbox-custom i { opacity: 1; }
+        
+        .item-text { font-size: 0.9rem; color: var(--text-secondary); outline: none; flex-grow: 1; line-height: 1.4; }
+        .check-item.is-checked .item-text { color: var(--text-muted); text-decoration: line-through; opacity: 0.6; }
+
+        .add-item-btn, .add-cat-btn { background: transparent; border: 1px dashed var(--glass-border); color: var(--text-muted); padding: 12px; border-radius: 12px; width: 100%; cursor: pointer; font-size: 0.8rem; font-weight: 600; transition: all 0.3s ease; margin-top: 12px; text-transform: uppercase; }
+        .add-item-btn:hover, .add-cat-btn:hover { border-color: var(--accent-glow); color: var(--text-primary); background: rgba(147, 51, 234, 0.05); }
+
+        .status-banner { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px); background: #34d399; color: #000; padding: 12px 24px; border-radius: 50px; font-weight: 700; font-size: 0.85rem; transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1); z-index: 1000; opacity: 0; }
+        .status-banner.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+        /* =========================================
+           ZEN MODE (FULL ISOLATION)
+           ========================================= */
+        body.zen-mode .top-nav,
+        body.zen-mode .page-header,
+        body.zen-mode .premium-tip,
+        body.zen-mode .add-cat-btn,
+        body.zen-mode .icon-btn,
+        body.zen-mode .add-item-btn {
+            display: none !important;
+        }
+
+        body.zen-mode .container {
+            max-width: 95vw !important;
+            margin-top: 40px !important;
+        }
+
+        body.zen-mode .checklist-wrapper {
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)) !important;
+        }
+
+        body.zen-mode .category {
+            border-color: rgba(255, 255, 255, 0.05);
+            background: rgba(10, 5, 20, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div id="ambient-wrapper"><div class="ambient-blobs"></div></div>
+
+    <nav class="top-nav content-fade">
+        <div class="nav-left">
+            <a href="index.html" class="nav-logo" style="text-decoration: none; color: var(--text-primary);">Rei Academy</a>
+            <div class="made-with">made with ❤️ - rei</div>
+        </div>
+        <div class="nav-right header-actions">
+            <button class="btn-action" onclick="resetToExample()"><i class="fa-solid fa-rotate-left"></i> Szablon</button>
+            <label for="import-file" class="btn-action" style="margin:0; cursor: pointer;"><i class="fa-solid fa-file-import"></i> Import</label>
+            <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(event)">
+            <button class="btn-action" onclick="exportData()"><i class="fa-solid fa-file-export"></i> Eksport</button>
+        </div>
+    </nav>
+
+    <div class="container content-fade">
+        <div class="page-header">
+            <h1>Pre-trade Checklist</h1>
+            <p>Sterylizacja decyzyjna. Wyeliminuj autopilota przed każdym uderzeniem w rynek.</p>
+        </div>
+
+        <div class="premium-tip" style="margin-bottom: 40px;">
+            <div class="tip-icon">💡</div>
+            <div class="tip-content">
+                <strong>Tip ode mnie ;p</strong>
+                Szablon oparty jest na logice Fabio i Cimiego, od których się wiele nauczyłem[cite: 13]. Jestem troszkę neurodivergent i zanim ogarnąłem psychologię, strasznie często wchodziłem w trady na totalnym autopilocie[cite: 13]. Korzystanie z checklist – nawet tych w głowie – strasznie mi pomogło i pomaga do dziś[cite: 13]. Fizycznie wyrywa Cię to z amoku[cite: 13]. Wciśnij F11 dla pełnej izolacji.
+            </div>
+        </div>
+
+        <div class="checklist-wrapper" id="checklist-container"></div>
+
+        <button class="add-cat-btn" onclick="addCategory()">
+            <i class="fa-solid fa-plus"></i> Dodaj nową sekcję
+        </button>
+    </div>
+
+    <div class="status-banner" id="status-banner">Zapisano pomyślnie</div>
+
+    <script src="app.js"></script>
+    <script>
+        const defaultChecklist = [
+            { id: "1", title: "1. MARKET STATE (Context)", items: [
+                { id: "1-1", text: "Is the market out of balance (impulse + looking for a new balance)?", checked: false },
+                { id: "1-2", text: "Is the market in balance (consolidation, mean reversion)?", checked: false },
+                { id: "1-3", text: "Is there a clear impulse leg (the latest strong move)?", checked: false },
+                { id: "1-4", text: "Do I see a Failed Breakout or a Breakout + continuation?", checked: false }
+            ]},
+            { id: "2", title: "2. LOCATION (Volume Profile)", items: [
+                { id: "2-1", text: "Has the price reached an LVN (Low Volume Node) from the impulse leg?", checked: false },
+                { id: "2-2", text: "Is it close to the POC of the previous range?", checked: false },
+                { id: "2-3", text: "Unfinished Auction / Single Prints in the zone?", checked: false },
+                { id: "2-4", text: "Is the price bouncing off VAL or VAH?", checked: false },
+                { id: "2-5", text: "HVN above/below the price (potential resistance/support)?", checked: false }
+            ]},
+            { id: "3", title: "3. AGGRESSION (Order Flow / Footprint)", items: [
+                { id: "3-1", text: "Do I see Absorption (high volume + delta in the opposite direction)?", checked: false },
+                { id: "3-2", text: "Delta Divergence (price moving one way, delta the other)?", checked: false },
+                { id: "3-3", text: "Big Prints / Aggressive prints in the direction of the setup?", checked: false },
+                { id: "3-4", text: "Imbalance / Stacked Imbalances (min. 200-300%)?", checked: false },
+                { id: "3-5", text: "Does CVD (Cumulative Volume Delta) confirm the direction?", checked: false }
+            ]},
+            { id: "4", title: "4. EXECUTION & RISK", items: [
+                { id: "4-1", text: "Stop Loss at LVN / after an aggressive print?", checked: false },
+                { id: "4-2", text: "RR minimum 1:2 (preferably 1:3+)?", checked: false },
+                { id: "4-3", text: "Position size calculated?", checked: false },
+                { id: "4-4", text: "Is the session appropriate (London/NY open, avoiding news events)?", checked: false },
+                { id: "4-5", text: "All 3/3 green? → ENTRY", checked: false }
+            ]}
+        ];
+
+        let state = JSON.parse(localStorage.getItem('rei_checklist')) || defaultChecklist;
+
+        function saveData() { 
+            localStorage.setItem('rei_checklist', JSON.stringify(state)); 
+        }
+
+        function showToast(msg) {
+            const b = document.getElementById('status-banner');
+            b.textContent = msg; b.classList.add('show');
+            setTimeout(() => b.classList.remove('show'), 2000);
+        }
+
+        function render() {
+            const container = document.getElementById('checklist-container');
+            container.innerHTML = '';
+            state.forEach((cat, cIdx) => {
+                const catDiv = document.createElement('div');
+                catDiv.className = 'category';
+                catDiv.innerHTML = `
+                    <div class="category-header">
+                        <div class="category-title" contentEditable="true" onblur="state[${cIdx}].title=this.textContent;saveData()">${cat.title}</div>
+                        <button class="icon-btn" style="background:none; border:none; color:var(--text-muted); cursor:pointer;" onclick="deleteCategory(${cIdx})"><i class="fa-solid fa-trash-can"></i></button>
+                    </div>
+                    <div class="item-list"></div>
+                `;
+                const list = catDiv.querySelector('.item-list');
+                cat.items.forEach((item, iIdx) => {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = `check-item ${item.checked ? 'is-checked' : ''}`;
+                    itemDiv.innerHTML = `
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" ${item.checked ? 'checked' : ''} onchange="toggleItem(${cIdx}, ${iIdx}, this.checked)">
+                            <div class="checkbox-custom"><i class="fa-solid fa-check"></i></div>
+                        </div>
+                        <div class="item-text" contentEditable="true" onblur="state[${cIdx}].items[${iIdx}].text=this.textContent;saveData()">${item.text}</div>
+                        <button class="icon-btn" style="background:none; border:none; color:rgba(255,255,255,0.1); cursor:pointer;" onclick="deleteItem(${cIdx}, ${iIdx})"><i class="fa-solid fa-xmark"></i></button>
+                    `;
+                    list.appendChild(itemDiv);
+                });
+                const addBtn = document.createElement('button');
+                addBtn.className = 'add-item-btn';
+                addBtn.innerHTML = '<i class="fa-solid fa-plus"></i> Dodaj punkt';
+                addBtn.onclick = () => addItem(cIdx);
+                catDiv.appendChild(addBtn);
+                container.appendChild(catDiv);
+            });
+        }
+
+        function toggleItem(c, i, val) { state[c].items[i].checked = val; render(); saveData(); }
+        function addItem(c) { state[c].items.push({id: Date.now(), text: "Nowy punkt", checked: false}); render(); saveData(); }
+        function addCategory() { state.push({id: Date.now(), title: "Nowa sekcja", items: []}); render(); saveData(); }
+        function deleteCategory(c) { if(confirm("Usunąć sekcję?")) { state.splice(c, 1); render(); saveData(); } }
+        function deleteItem(c, i) { state[c].items.splice(i, 1); render(); saveData(); }
+        function resetToExample() { if(confirm("Przywrócić szablon?")) { state = defaultChecklist; render(); saveData(); } }
+        
+        function exportData() {
+            const blob = new Blob([JSON.stringify(state, null, 2)], {type: "application/json"});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a'); a.href = url; a.download = "rei_checklist.json"; a.click();
+            showToast("✓ Eksport zakończony");
+        }
+
+        function importData(e) {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.onload = (ev) => { try { state = JSON.parse(ev.target.result); render(); saveData(); showToast("✓ Zaimportowano"); } catch(err) { showToast("❌ Błąd pliku"); }};
+            reader.readAsText(file);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'F11') {
+                e.preventDefault();
+                document.body.classList.toggle('zen-mode');
+                showToast(document.body.classList.contains('zen-mode') ? "🧘 Zen Mode Aktywny" : "Terminal Przywrócony");
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', render);
+    </script>
+</body>
+</html>
